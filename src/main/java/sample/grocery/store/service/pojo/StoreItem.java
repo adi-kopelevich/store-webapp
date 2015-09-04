@@ -74,4 +74,30 @@ public class StoreItem {
         this.tags = tags;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StoreItem storeItem = (StoreItem) o;
+
+        if (id != storeItem.id) return false;
+        if (price != storeItem.price) return false;
+        if (quantity != storeItem.quantity) return false;
+        if (name != null ? !name.equals(storeItem.name) : storeItem.name != null) return false;
+        if (brand != null ? !brand.equals(storeItem.brand) : storeItem.brand != null) return false;
+        return !(tags != null ? !tags.equals(storeItem.tags) : storeItem.tags != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (brand != null ? brand.hashCode() : 0);
+        result = 31 * result + price;
+        result = 31 * result + quantity;
+        result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        return result;
+    }
 }

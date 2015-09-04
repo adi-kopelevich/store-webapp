@@ -8,6 +8,7 @@ import sample.grocery.store.service.pojo.StoreItem;
 import sample.grocery.store.service.utils.StoreItmeUtils;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBElement;
 import java.util.List;
@@ -21,6 +22,8 @@ public class ItemsServiceImpl implements ItemsService {
     private static final String RESOURCE_NOT_FOUND_MSG = "Resource with given ID not found - ";
 
     ItemPersistency persistency = ItemPersistencyMapImpl.getInstance();
+
+    @Context
 
     @GET
 //    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -50,6 +53,7 @@ public class ItemsServiceImpl implements ItemsService {
     @Consumes({MediaType.APPLICATION_XML})
     public void addItem(JAXBElement<StoreItem> itemJAXBElement) {
         StoreItem storeItem = StoreItmeUtils.fromJAXBtoStoreItem(itemJAXBElement);
+        boolean alreadyExists = persistency.getItem(storeItem.getId()) != null;
         persistency.putItem(storeItem);
     }
 
