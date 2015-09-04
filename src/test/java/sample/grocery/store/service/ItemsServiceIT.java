@@ -6,6 +6,7 @@ import org.junit.rules.ExpectedException;
 import sample.grocery.store.service.client.ItemServiceClient;
 import sample.grocery.store.service.pojo.StoreItem;
 
+import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,10 +18,12 @@ public class ItemsServiceIT {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    ItemsService itemsService = new ItemServiceClient();
+    ItemsService itemsService;
 
     @Before
     public void setUp() throws Exception {
+        itemsService = new ItemServiceClient();
+        itemsService = new ItemServiceClient(MediaType.APPLICATION_JSON);
         itemsService.clearAll();
     }
 
@@ -37,7 +40,7 @@ public class ItemsServiceIT {
         String itemBrand = "Tnuva";
         int itemPrice = 10;
         int itemqQuantity = 200;
-        List<String> itemTags = Arrays.asList("star", "sale");
+        List<String> itemTags = Arrays.asList("quality", "holiday");
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         itemsService.addItem(item);
@@ -60,7 +63,7 @@ public class ItemsServiceIT {
         String itemBrand = "Tnuva";
         int itemPrice = 10;
         int itemqQuantity = 200;
-        List<String> itemTags = Arrays.asList("star", "sale");
+        List<String> itemTags = Arrays.asList("quality", "holiday");
 
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
@@ -76,7 +79,7 @@ public class ItemsServiceIT {
         String itemBrand = "Tnuva";
         int itemPrice = 10;
         int itemqQuantity = 200;
-        List<String> itemTags = Arrays.asList("star", "sale");
+        List<String> itemTags = Arrays.asList("quality", "holiday");
 
         StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
         itemsService.addItem(originalItem);

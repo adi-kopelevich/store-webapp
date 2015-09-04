@@ -22,11 +22,18 @@ public class ItemServiceClient implements ItemsService {
     private static final String RESOUCEE = "items";
     private static WebResource r;
 
+    private String mediaType = MediaType.APPLICATION_XML;
+
     public ItemServiceClient() {
         String serviceURL = new StringBuffer(PROTOCOL).append("://").
                 append(HOST).append(":").append(PORT).
                 append("/").append(CONTEXT).append("/rest/").append(RESOUCEE).toString();
         this.r = Client.create().resource(serviceURL);
+    }
+
+    public ItemServiceClient(String mediaType) {
+        new ItemServiceClient();
+        this.mediaType = mediaType;
     }
 
 
@@ -35,7 +42,7 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public StoreItem getItem(int itemId) {
-        ClientResponse response = r.path(String.valueOf(itemId)).accept(MediaType.APPLICATION_XML)
+        ClientResponse response = r.path(String.valueOf(itemId)).accept(mediaType)
                 .get(ClientResponse.class);
 
         int responseStatus = response.getStatus();
@@ -48,7 +55,7 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public void addItem(StoreItem item) {
-        ClientResponse response = r.type(MediaType.APPLICATION_XML)
+        ClientResponse response = r.type(mediaType)
                 .post(ClientResponse.class, item);
 
         if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
@@ -69,7 +76,7 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public void updateItem(StoreItem item) {
-        ClientResponse response = r.type(MediaType.APPLICATION_XML)
+        ClientResponse response = r.type(mediaType)
                 .put(ClientResponse.class, item);
 
         if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {

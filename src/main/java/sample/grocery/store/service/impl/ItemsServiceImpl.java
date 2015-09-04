@@ -26,16 +26,14 @@ public class ItemsServiceImpl implements ItemsService {
     @Context
 
     @GET
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<StoreItem> getAllItems() {
         return persistency.getItems();
     }
 
     @GET
     @Path("/{paramId}")
-//    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public StoreItem getItem(@PathParam("paramId") int itemId) {
         StoreItem item = persistency.getItem(itemId);
         if (item == null) {
@@ -44,12 +42,13 @@ public class ItemsServiceImpl implements ItemsService {
         return item;
     }
 
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
     public void addItem(StoreItem item) {
         addItem(StoreItmeUtils.fromStoreItemtoJAXB(item));
     }
 
     @POST
-//    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_XML})
     public void addItem(JAXBElement<StoreItem> itemJAXBElement) {
         StoreItem storeItem = StoreItmeUtils.fromJAXBtoStoreItem(itemJAXBElement);
@@ -63,6 +62,8 @@ public class ItemsServiceImpl implements ItemsService {
         persistency.removeItem(itemId);
     }
 
+    @PUT
+    @Consumes({MediaType.APPLICATION_JSON})
     public void updateItem(StoreItem item) {
         updateItem(StoreItmeUtils.fromStoreItemtoJAXB(item));
     }
