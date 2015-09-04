@@ -1,9 +1,8 @@
 package sample.grocery.store.service;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.sun.jersey.api.NotFoundException;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 import sample.grocery.store.service.client.ItemServiceClient;
 import sample.grocery.store.service.pojo.StoreItem;
 
@@ -14,6 +13,9 @@ import java.util.List;
  * Created by kopelevi on 04/09/2015.
  */
 public class ItemsServiceIT {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     ItemsService itemsService = new ItemServiceClient();
 
@@ -41,6 +43,49 @@ public class ItemsServiceIT {
         itemsService.addItem(item);
         StoreItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(item, retItem);
+    }
+
+    @Test
+    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+        expectedException.expect(NotFoundException.class);
+        int itemId = 333;
+        itemsService.getItem(itemId);
+    }
+
+    @Test
+    public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
+        expectedException.expect(NotFoundException.class);
+        int itemId = 3;
+        String itemName = "Milk";
+        String itemBrand = "Tnuva";
+        int itemPrice = 10;
+        int itemqQuantity = 200;
+        List<String> itemTags = Arrays.asList("star", "sale");
+
+        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+
+        itemsService.addItem(item);
+        itemsService.removeItem(itemId);
+        itemsService.getItem(itemId); // should throw exception
+    }
+
+    @Test
+    public void whenUpdateingAnItemThenChangesAreRetrivable() throws Exception {
+        int itemId = 3;
+        String itemName = "Milk";
+        String itemBrand = "Tnuva";
+        int itemPrice = 10;
+        int itemqQuantity = 200;
+        List<String> itemTags = Arrays.asList("star", "sale");
+
+        StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        itemsService.addItem(originalItem);
+
+        StoreItem updatedItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
+        itemsService.updateItem(updatedItem);
+
+        StoreItem retItem = itemsService.getItem(itemId);
+        Assert.assertEquals(updatedItem, retItem);
     }
 
 }

@@ -1,5 +1,6 @@
 package sample.grocery.store.service.client;
 
+import com.sun.jersey.api.NotFoundException;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -34,18 +35,15 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public StoreItem getItem(int itemId) {
-        ClientResponse response = r.path(String.valueOf(itemId)). accept(MediaType.APPLICATION_XML)
+        ClientResponse response = r.path(String.valueOf(itemId)).accept(MediaType.APPLICATION_XML)
                 .get(ClientResponse.class);
 
-        if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + response.getStatus());
+        int responseStatus = response.getStatus();
+        if (responseStatus == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
+            throw new NotFoundException();
+        } else if (responseStatus != ClientResponse.Status.OK.getStatusCode()) {
+            throw new RuntimeException("Failed to get a valid resposne from the server");
         }
-//
-//        GenericType<JAXBElement<StoreItem>> generic = new GenericType<JAXBElement<StoreItem>>() {};
-//        JAXBElement<StoreItem> jaxbContact = r.path(itemId).get(generic);
-//        return jaxbContact.getValue();
-
         return response.getEntity(StoreItem.class);
     }
 
@@ -53,26 +51,37 @@ public class ItemServiceClient implements ItemsService {
         ClientResponse response = r.type(MediaType.APPLICATION_XML)
                 .post(ClientResponse.class, item);
 
-        if (response.getStatus() != 204) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + response.getStatus());
+        if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+            throw new RuntimeException("Failed to get a valid resposne from the server");
         }
     }
 
     public void removeItem(int itemId) {
+        ClientResponse response = r.path(String.valueOf(itemId))
+                .delete(ClientResponse.class);
 
+        int responseStatus = response.getStatus();
+        if (responseStatus == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
+            throw new NotFoundException();
+        } else if (responseStatus != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+            throw new RuntimeException("Failed to get a valid resposne from the server");
+        }
     }
 
     public void updateItem(StoreItem item) {
+        ClientResponse response = r.type(MediaType.APPLICATION_XML)
+                .put(ClientResponse.class, item);
 
+        if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+            throw new RuntimeException("Failed to get a valid resposne from the server");
+        }
     }
 
     public void clearAll() {
         ClientResponse response = r.delete(ClientResponse.class);
 
-        if (response.getStatus() != 204) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + response.getStatus());
+        if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+            throw new RuntimeException("Failed to get a valid resposne from the server");
         }
     }
 }
