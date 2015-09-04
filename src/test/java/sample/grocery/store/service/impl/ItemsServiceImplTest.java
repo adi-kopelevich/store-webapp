@@ -1,5 +1,6 @@
 package sample.grocery.store.service.impl;
 
+import com.sun.jersey.api.NotFoundException;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import sample.grocery.store.service.ItemsService;
@@ -45,16 +46,14 @@ public class ItemsServiceImplTest {
 
     @Test
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Not Found");
+        expectedException.expect(NotFoundException.class);
         int itemId = 3;
         StoreItem retItem = itemsService.getItem(itemId);
     }
 
     @Test
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage("Not Found");
+        expectedException.expect(NotFoundException.class);
         int itemId = 3;
         String itemName = "Milk";
         String itemBrand = "Tnuva";

@@ -1,5 +1,6 @@
 package sample.grocery.store.service.impl;
 
+import com.sun.jersey.api.NotFoundException;
 import sample.grocery.store.persistency.ItemPersistency;
 import sample.grocery.store.persistency.ItemPersistencyMapImpl;
 import sample.grocery.store.service.ItemsService;
@@ -17,7 +18,7 @@ import java.util.List;
 @Path("/items")
 public class ItemsServiceImpl implements ItemsService {
 
-    private static final String RESOURCE_NOT_FOUND_MSG = "Resource Not Found";
+    private static final String RESOURCE_NOT_FOUND_MSG = "Resource with given ID not found - ";
 
     ItemPersistency persistency = ItemPersistencyMapImpl.getInstance();
 
@@ -31,7 +32,7 @@ public class ItemsServiceImpl implements ItemsService {
     public StoreItem getItem(@PathParam("paramId") int itemId) {
         StoreItem item = persistency.getItem(itemId);
         if (item == null) {
-            throw new RuntimeException(RESOURCE_NOT_FOUND_MSG);
+            throw new NotFoundException(RESOURCE_NOT_FOUND_MSG + itemId);
         }
         return item;
     }
