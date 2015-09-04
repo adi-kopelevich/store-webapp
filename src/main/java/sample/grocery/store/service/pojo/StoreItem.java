@@ -74,6 +74,7 @@ public class StoreItem {
         this.tags = tags;
     }
 
+    // for comparission over http client-->server
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
