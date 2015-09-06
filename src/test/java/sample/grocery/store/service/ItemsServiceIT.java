@@ -22,7 +22,7 @@ public class ItemsServiceIT {
 
     @Before
     public void setUp() throws Exception {
-        itemsService = new ItemServiceClient();
+//        itemsService = new ItemServiceClient(MediaType.APPLICATION_XML);
         itemsService = new ItemServiceClient(MediaType.APPLICATION_JSON);
         itemsService.clearAll();
     }

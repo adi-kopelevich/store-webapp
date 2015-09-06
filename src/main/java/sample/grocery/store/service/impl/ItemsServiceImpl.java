@@ -5,11 +5,11 @@ import sample.grocery.store.persistency.ItemPersistency;
 import sample.grocery.store.persistency.ItemPersistencyMapImpl;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.pojo.StoreItem;
-import sample.grocery.store.service.utils.StoreItmeUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.JAXBElement;
 import java.util.List;
 
@@ -24,6 +24,7 @@ public class ItemsServiceImpl implements ItemsService {
     ItemPersistency persistency = ItemPersistencyMapImpl.getInstance();
 
     @Context
+    UriInfo uriInfo;
 
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -44,16 +45,15 @@ public class ItemsServiceImpl implements ItemsService {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public void addItem(StoreItem item) {
-        addItem(StoreItmeUtils.fromStoreItemtoJAXB(item));
+    public void addItem(StoreItem storeItem) {
+//        boolean alreadyExists = persistency.getItem(storeItem.getId()) != null;
+        persistency.putItem(storeItem);
     }
 
     @POST
     @Consumes({MediaType.APPLICATION_XML})
     public void addItem(JAXBElement<StoreItem> itemJAXBElement) {
-        StoreItem storeItem = StoreItmeUtils.fromJAXBtoStoreItem(itemJAXBElement);
-        boolean alreadyExists = persistency.getItem(storeItem.getId()) != null;
-        persistency.putItem(storeItem);
+        addItem(itemJAXBElement.getValue());
     }
 
     @DELETE
@@ -64,15 +64,15 @@ public class ItemsServiceImpl implements ItemsService {
 
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
-    public void updateItem(StoreItem item) {
-        updateItem(StoreItmeUtils.fromStoreItemtoJAXB(item));
+    public void updateItem(StoreItem storeItem) {
+        persistency.putItem(storeItem);
     }
 
     @PUT
     @Consumes({MediaType.APPLICATION_XML})
     public void updateItem(JAXBElement<StoreItem> itemJAXBElement) {
-        StoreItem storeItem = StoreItmeUtils.fromJAXBtoStoreItem(itemJAXBElement);
-        persistency.putItem(storeItem);
+        updateItem(itemJAXBElement.getValue());
+
     }
 
     @DELETE
