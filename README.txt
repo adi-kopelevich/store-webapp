@@ -1,3 +1,7 @@
+Simple REST Service  for managing (CRUD) Store Items 
+
+
+Guidelines for building a project from scratch
 create a new intllij project using maven webapp artifact
 create module hirarchey test and src
 create pojo
