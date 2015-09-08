@@ -6,7 +6,6 @@ import org.junit.rules.ExpectedException;
 import sample.grocery.store.service.client.ItemServiceClient;
 import sample.grocery.store.service.pojo.StoreItem;
 
-import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +22,8 @@ public class ItemsServiceIT {
     @Before
     public void setUp() throws Exception {
 //        itemsService = new ItemServiceClient(MediaType.APPLICATION_XML);
-        itemsService = new ItemServiceClient(MediaType.APPLICATION_JSON);
+//        itemsService = new ItemServiceClient(MediaType.APPLICATION_JSON);
+        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku app
         itemsService.clearAll();
     }
 

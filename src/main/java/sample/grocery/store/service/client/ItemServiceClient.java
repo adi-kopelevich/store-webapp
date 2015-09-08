@@ -15,25 +15,39 @@ import java.util.List;
  */
 public class ItemServiceClient implements ItemsService {
 
-    private static final String PROTOCOL = "http";
-    private static final String HOST = "localhost";
-    private static final String PORT = "8080";
-    private static final String CONTEXT = "store-webapp";
+    private static final String DEFAULT_PROTOCOL = "http";
+    private static final String DEFAULT_HOST = "localhost";
+    private static final String DEFAULT_PORT = "8080";
+    private static final String DEFAULT_CONTEXT = "store-webapp";
     private static final String RESOUCEE = "items";
     private static WebResource r;
+    //https://powerful-woodland-5357.herokuapp.com/rest/items
 
-    private String mediaType = MediaType.APPLICATION_XML;
+    private String mediaType;
 
-    public ItemServiceClient() {
-        String serviceURL = new StringBuffer(PROTOCOL).append("://").
-                append(HOST).append(":").append(PORT).
-                append("/").append(CONTEXT).append("/rest/").append(RESOUCEE).toString();
-        this.r = Client.create().resource(serviceURL);
+    public ItemServiceClient(String protpcol, String hostname, String port, String context, String mediaType) {
+        StringBuffer serviceURL = new StringBuffer(protpcol).append("://").
+                append(hostname);
+
+        if (!port.isEmpty()) {
+            serviceURL.append(":").append(port);
+        }
+        if (!context.isEmpty()) {
+            serviceURL.append("/").append(DEFAULT_CONTEXT);
+        }
+        serviceURL.append("/rest/").append(RESOUCEE).toString();
+
+        this.mediaType = mediaType;
+
+        this.r = Client.create().resource(serviceURL.toString());
+    }
+
+    public ItemServiceClient(String protpcol, String hostname, String port, String context) {
+        this(protpcol, hostname, port, context, MediaType.APPLICATION_XML);
     }
 
     public ItemServiceClient(String mediaType) {
-        new ItemServiceClient();
-        this.mediaType = mediaType;
+        this(DEFAULT_PROTOCOL, DEFAULT_HOST, DEFAULT_PORT, DEFAULT_CONTEXT, mediaType);
     }
 
 
