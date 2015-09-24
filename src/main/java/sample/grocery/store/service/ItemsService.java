@@ -9,16 +9,16 @@ import java.util.List;
  */
 public interface ItemsService {
 
-    public List<StoreItem> getAllItems();
+    List<StoreItem> getAllItems();
 
-    public StoreItem getItem(int itemId);
+    StoreItem getItem(int itemId);
 
-    public void addItem(StoreItem item);
+    void addItem(StoreItem item);
 
-    public void removeItem(int itemId);
+    void removeItem(int itemId);
 
-    public void updateItem(StoreItem item);
+    void updateItem(StoreItem item);
 
-    public void clearAll();
+    void clearAll();
 
 }

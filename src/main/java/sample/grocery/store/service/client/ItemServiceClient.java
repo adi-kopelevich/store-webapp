@@ -21,7 +21,6 @@ public class ItemServiceClient implements ItemsService {
     private static final String DEFAULT_CONTEXT = "store-webapp";
     private static final String RESOUCEE = "items";
     private static WebResource r;
-    //https://powerful-woodland-5357.herokuapp.com/rest/items
 
     private String mediaType;
 

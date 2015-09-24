@@ -1,21 +1,22 @@
 package sample.grocery.store.service;
 
 import com.sun.jersey.api.NotFoundException;
-import org.junit.*;
-import org.junit.rules.ExpectedException;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import sample.grocery.store.service.client.ItemServiceClient;
 import sample.grocery.store.service.pojo.StoreItem;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by kopelevi on 04/09/2015.
  */
 public class ItemsServiceIT {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     ItemsService itemsService;
 
@@ -30,18 +31,17 @@ public class ItemsServiceIT {
 
     @After
     public void tearDown() throws Exception {
-
-
     }
 
     @Test
     public void whenAddItemThenItIsRetrivable() throws Exception {
-        int itemId = 3;
-        String itemName = "Milk";
-        String itemBrand = "Tnuva";
-        int itemPrice = 10;
-        int itemqQuantity = 200;
-        List<String> itemTags = Arrays.asList("quality", "holiday");
+        int itemId = new Random().nextInt();
+        String itemName = UUID.randomUUID().toString();
+        String itemBrand = UUID.randomUUID().toString();
+        int itemPrice = new Random().nextInt();
+        int itemqQuantity = new Random().nextInt();
+        List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         itemsService.addItem(item);
@@ -49,22 +49,21 @@ public class ItemsServiceIT {
         Assert.assertEquals(item, retItem);
     }
 
-    @Test
+    @Test(expected = NotFoundException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
-        expectedException.expect(NotFoundException.class);
-        int itemId = 333;
+        int itemId = new Random().nextInt();
         itemsService.getItem(itemId);
     }
 
-    @Test
+    @Test(expected = NotFoundException.class)
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
-        expectedException.expect(NotFoundException.class);
-        int itemId = 3;
-        String itemName = "Milk";
-        String itemBrand = "Tnuva";
-        int itemPrice = 10;
-        int itemqQuantity = 200;
-        List<String> itemTags = Arrays.asList("quality", "holiday");
+        int itemId = new Random().nextInt();
+        String itemName = UUID.randomUUID().toString();
+        String itemBrand = UUID.randomUUID().toString();
+        int itemPrice = new Random().nextInt();
+        int itemqQuantity = new Random().nextInt();
+        List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
 
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
@@ -75,12 +74,12 @@ public class ItemsServiceIT {
 
     @Test
     public void whenUpdateingAnItemThenChangesAreRetrivable() throws Exception {
-        int itemId = 3;
-        String itemName = "Milk";
-        String itemBrand = "Tnuva";
-        int itemPrice = 10;
-        int itemqQuantity = 200;
-        List<String> itemTags = Arrays.asList("quality", "holiday");
+        int itemId = new Random().nextInt();
+        String itemName = UUID.randomUUID().toString();
+        String itemBrand = UUID.randomUUID().toString();
+        int itemPrice = new Random().nextInt();
+        int itemqQuantity = new Random().nextInt();
+        List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
         itemsService.addItem(originalItem);

@@ -1,11 +1,9 @@
-package sample.grocery.store.service.impl;
+package sample.grocery.store.dao;
 
-import com.sun.jersey.api.NotFoundException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.pojo.StoreItem;
 
 import java.util.Arrays;
@@ -16,17 +14,19 @@ import java.util.UUID;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public class ItemsServiceImplTest {
+public class ItemDAOMapImplTest {
 
-    ItemsService itemsService = new ItemsServiceImpl();
+    ItemDAO store;
 
     @Before
     public void setUp() throws Exception {
-        itemsService.clearAll();
+        store = ItemDAOMapImpl.getInstance();
+        store.clear();
     }
 
     @After
     public void tearDown() throws Exception {
+        store = null;
     }
 
     @Test
@@ -36,21 +36,25 @@ public class ItemsServiceImplTest {
         String itemBrand = UUID.randomUUID().toString();
         int itemPrice = new Random().nextInt();
         int itemqQuantity = new Random().nextInt();
+        ;
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
-        itemsService.addItem(item);
-        StoreItem retItem = itemsService.getItem(itemId);
+        store.putItem(item);
+        StoreItem retItem = store.getItem(itemId);
+
         Assert.assertEquals(item, retItem);
     }
 
-    @Test(expected = NotFoundException.class)
-    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+    @Test
+    public void whenGettingNotExistsThenNullWillBeReturned() throws Exception {
         int itemId = 3;
-        StoreItem retItem = itemsService.getItem(itemId);
+        StoreItem retItem = store.getItem(itemId);
+        Assert.assertEquals(null, retItem);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
@@ -61,9 +65,11 @@ public class ItemsServiceImplTest {
 
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
-        itemsService.addItem(item);
-        itemsService.removeItem(itemId);
-        itemsService.getItem(itemId); // should throw exception
+        store.putItem(item);
+        store.removeItem(itemId);
+        StoreItem retItem = store.getItem(itemId);
+
+        Assert.assertEquals(null, retItem);
     }
 
     @Test
@@ -76,13 +82,13 @@ public class ItemsServiceImplTest {
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
-        itemsService.addItem(originalItem);
+        store.putItem(originalItem);
 
         StoreItem updatedItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
-        itemsService.updateItem(updatedItem);
+        store.putItem(updatedItem);
 
-        StoreItem retItem = itemsService.getItem(itemId);
-        Assert.assertEquals(updatedItem, retItem);
+        StoreItem retItem = store.getItem(itemId);
+        Assert.assertEquals(updatedItem, retItem); // todo replace equals...
     }
 
     @Test
@@ -104,9 +110,9 @@ public class ItemsServiceImplTest {
         StoreItem firstItem = new StoreItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
         StoreItem secondItem = new StoreItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
 
-        itemsService.addItem(firstItem);
-        itemsService.addItem(secondItem);
-        List<StoreItem> retItems = itemsService.getAllItems();
+        store.putItem(firstItem);
+        store.putItem(secondItem);
+        List<StoreItem> retItems = store.getItems();
 
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));

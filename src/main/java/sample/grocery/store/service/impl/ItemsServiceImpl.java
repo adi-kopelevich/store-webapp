@@ -1,8 +1,8 @@
 package sample.grocery.store.service.impl;
 
 import com.sun.jersey.api.NotFoundException;
-import sample.grocery.store.persistency.ItemPersistency;
-import sample.grocery.store.persistency.ItemPersistencyMapImpl;
+import sample.grocery.store.dao.ItemDAO;
+import sample.grocery.store.dao.ItemDAOMapImpl;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.pojo.StoreItem;
 
@@ -21,7 +21,7 @@ public class ItemsServiceImpl implements ItemsService {
 
     private static final String RESOURCE_NOT_FOUND_MSG = "Resource with given ID not found - ";
 
-    ItemPersistency persistency = ItemPersistencyMapImpl.getInstance();
+    ItemDAO persistency = ItemDAOMapImpl.getInstance();
 
     @Context
     UriInfo uriInfo;
@@ -46,7 +46,6 @@ public class ItemsServiceImpl implements ItemsService {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public void addItem(StoreItem storeItem) {
-//        boolean alreadyExists = persistency.getItem(storeItem.getId()) != null;
         persistency.putItem(storeItem);
     }
 
@@ -72,7 +71,6 @@ public class ItemsServiceImpl implements ItemsService {
     @Consumes({MediaType.APPLICATION_XML})
     public void updateItem(JAXBElement<StoreItem> itemJAXBElement) {
         updateItem(itemJAXBElement.getValue());
-
     }
 
     @DELETE
