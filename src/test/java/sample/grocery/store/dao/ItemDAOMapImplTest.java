@@ -16,11 +16,11 @@ import java.util.UUID;
  */
 public class ItemDAOMapImplTest {
 
-    ItemDAO store;
+    StoreItemDAO store;
 
     @Before
     public void setUp() throws Exception {
-        store = ItemDAOMapImpl.getInstance();
+        store = StoreItemDAOMapImpl.getInstance();
         store.clear();
     }
 
@@ -36,7 +36,7 @@ public class ItemDAOMapImplTest {
         String itemBrand = UUID.randomUUID().toString();
         int itemPrice = new Random().nextInt();
         int itemqQuantity = new Random().nextInt();
-        ;
+
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
@@ -44,12 +44,17 @@ public class ItemDAOMapImplTest {
         store.putItem(item);
         StoreItem retItem = store.getItem(itemId);
 
-        Assert.assertEquals(item, retItem);
+        Assert.assertEquals(item.getId(), retItem.getId());
+        Assert.assertEquals(item.getName(), retItem.getName());
+        Assert.assertEquals(item.getBrand(), retItem.getBrand());
+        Assert.assertEquals(item.getPrice(), retItem.getPrice());
+        Assert.assertEquals(item.getQuantity(), retItem.getQuantity());
+        Assert.assertEquals(item.getTags(), retItem.getTags());
     }
 
     @Test
     public void whenGettingNotExistsThenNullWillBeReturned() throws Exception {
-        int itemId = 3;
+        int itemId = new Random().nextInt();
         StoreItem retItem = store.getItem(itemId);
         Assert.assertEquals(null, retItem);
     }
@@ -88,7 +93,13 @@ public class ItemDAOMapImplTest {
         store.putItem(updatedItem);
 
         StoreItem retItem = store.getItem(itemId);
-        Assert.assertEquals(updatedItem, retItem); // todo replace equals...
+
+        Assert.assertEquals(updatedItem.getId(), retItem.getId());
+        Assert.assertEquals(updatedItem.getName(), retItem.getName());
+        Assert.assertEquals(updatedItem.getBrand(), retItem.getBrand());
+        Assert.assertEquals(updatedItem.getPrice(), retItem.getPrice());
+        Assert.assertEquals(updatedItem.getQuantity(), retItem.getQuantity());
+        Assert.assertEquals(updatedItem.getTags(), retItem.getTags());
     }
 
     @Test

@@ -1,8 +1,8 @@
 package sample.grocery.store.service.impl;
 
 import com.sun.jersey.api.NotFoundException;
-import sample.grocery.store.dao.ItemDAO;
-import sample.grocery.store.dao.ItemDAOMapImpl;
+import sample.grocery.store.dao.StoreItemDAO;
+import sample.grocery.store.dao.StoreItemDAOMapImpl;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.pojo.StoreItem;
 
@@ -21,7 +21,7 @@ public class ItemsServiceImpl implements ItemsService {
 
     private static final String RESOURCE_NOT_FOUND_MSG = "Resource with given ID not found - ";
 
-    ItemDAO persistency = ItemDAOMapImpl.getInstance();
+    StoreItemDAO persistency = StoreItemDAOMapImpl.getInstance();
 
     @Context
     UriInfo uriInfo;

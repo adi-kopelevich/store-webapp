@@ -46,7 +46,12 @@ public class ItemsServiceIT {
 
         itemsService.addItem(item);
         StoreItem retItem = itemsService.getItem(itemId);
-        Assert.assertEquals(item, retItem);
+        Assert.assertEquals(item.getId(), retItem.getId());
+        Assert.assertEquals(item.getName(), retItem.getName());
+        Assert.assertEquals(item.getBrand(), retItem.getBrand());
+        Assert.assertEquals(item.getPrice(), retItem.getPrice());
+        Assert.assertEquals(item.getQuantity(), retItem.getQuantity());
+        Assert.assertEquals(item.getTags(), retItem.getTags());
     }
 
     @Test(expected = NotFoundException.class)
@@ -64,7 +69,6 @@ public class ItemsServiceIT {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         itemsService.addItem(item);
@@ -73,7 +77,7 @@ public class ItemsServiceIT {
     }
 
     @Test
-    public void whenUpdateingAnItemThenChangesAreRetrivable() throws Exception {
+    public void whenUpdatingAnItemThenChangesAreRetrivable() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemBrand = UUID.randomUUID().toString();
@@ -88,7 +92,12 @@ public class ItemsServiceIT {
         itemsService.updateItem(updatedItem);
 
         StoreItem retItem = itemsService.getItem(itemId);
-        Assert.assertEquals(updatedItem, retItem);
+        Assert.assertEquals(updatedItem.getId(), retItem.getId());
+        Assert.assertEquals(updatedItem.getName(), retItem.getName());
+        Assert.assertEquals(updatedItem.getBrand(), retItem.getBrand());
+        Assert.assertEquals(updatedItem.getPrice(), retItem.getPrice());
+        Assert.assertEquals(updatedItem.getQuantity(), retItem.getQuantity());
+        Assert.assertEquals(updatedItem.getTags(), retItem.getTags());
     }
 
 }

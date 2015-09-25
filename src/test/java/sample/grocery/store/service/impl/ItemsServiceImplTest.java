@@ -41,13 +41,18 @@ public class ItemsServiceImplTest {
 
         itemsService.addItem(item);
         StoreItem retItem = itemsService.getItem(itemId);
-        Assert.assertEquals(item, retItem);
+        Assert.assertEquals(item.getId(), retItem.getId());
+        Assert.assertEquals(item.getName(), retItem.getName());
+        Assert.assertEquals(item.getBrand(), retItem.getBrand());
+        Assert.assertEquals(item.getPrice(), retItem.getPrice());
+        Assert.assertEquals(item.getQuantity(), retItem.getQuantity());
+        Assert.assertEquals(item.getTags(), retItem.getTags());
     }
 
     @Test(expected = NotFoundException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
-        int itemId = 3;
-        StoreItem retItem = itemsService.getItem(itemId);
+        int itemId = new Random().nextInt();
+        itemsService.getItem(itemId);
     }
 
     @Test(expected = NotFoundException.class)
@@ -82,7 +87,12 @@ public class ItemsServiceImplTest {
         itemsService.updateItem(updatedItem);
 
         StoreItem retItem = itemsService.getItem(itemId);
-        Assert.assertEquals(updatedItem, retItem);
+        Assert.assertEquals(updatedItem.getId(), retItem.getId());
+        Assert.assertEquals(updatedItem.getName(), retItem.getName());
+        Assert.assertEquals(updatedItem.getBrand(), retItem.getBrand());
+        Assert.assertEquals(updatedItem.getPrice(), retItem.getPrice());
+        Assert.assertEquals(updatedItem.getQuantity(), retItem.getQuantity());
+        Assert.assertEquals(updatedItem.getTags(), retItem.getTags());
     }
 
     @Test

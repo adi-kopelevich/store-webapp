@@ -10,17 +10,21 @@ import java.util.stream.Collectors;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public class ItemDAOMapImpl implements ItemDAO {
+public class StoreItemDAOMapImpl implements StoreItemDAO {
 
-    private static final Map<Integer, StoreItem> itemsMap = new ConcurrentHashMap<>();
+    // ConcurrentHashMap for handing concurrency,
+    // its drawbacks are:
+    //      - larger memory footprint compared to a regular has map and
+    //      - handling null keys which are allowed as contrast to regular hash map, as it  might be returned while iterating over them
+    private final Map<Integer, StoreItem> itemsMap = new ConcurrentHashMap<>();
 
-    private static final ItemDAOMapImpl INSTANCE = new ItemDAOMapImpl();
+    private static final StoreItemDAOMapImpl INSTANCE = new StoreItemDAOMapImpl();
 
     // hide c'tor
-    private ItemDAOMapImpl() {
+    private StoreItemDAOMapImpl() {
     }
 
-    public static ItemDAO getInstance() {
+    public static StoreItemDAO getInstance() {
         return INSTANCE;
     }
 

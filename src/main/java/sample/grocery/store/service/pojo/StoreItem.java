@@ -13,7 +13,7 @@ public class StoreItem {
     private int quantity;
     private List<String> tags;
 
-    public StoreItem() { //for serlization
+    public StoreItem() { //for serialization
 
     }
 
