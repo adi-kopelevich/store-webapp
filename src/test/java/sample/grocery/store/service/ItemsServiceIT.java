@@ -1,13 +1,12 @@
 package sample.grocery.store.service;
 
-import com.sun.jersey.api.NotFoundException;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import sample.grocery.store.ServiceLauncher;
 import sample.grocery.store.service.client.ItemServiceClient;
 import sample.grocery.store.service.pojo.StoreItem;
 
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -18,14 +17,26 @@ import java.util.UUID;
  */
 public class ItemsServiceIT {
 
+    static ServiceLauncher serviceLauncher;
     ItemsService itemsService;
+
+    @BeforeClass
+    public static void startServer() {
+        serviceLauncher = new ServiceLauncher();
+        serviceLauncher.startServer();
+    }
+
+    @AfterClass
+    public static void stopServer() {
+        serviceLauncher.stopServer();
+    }
 
     @Before
     public void setUp() throws Exception {
-//        itemsService = new ItemServiceClient(MediaType.APPLICATION_XML);
+        itemsService = new ItemServiceClient(MediaType.APPLICATION_XML);
 //        itemsService = new ItemServiceClient(MediaType.APPLICATION_JSON);
 //        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
-        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "store-webapp");  // Amazon WS
+//        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "store-webapp");  // Amazon WS
         itemsService.clearAll();
     }
 

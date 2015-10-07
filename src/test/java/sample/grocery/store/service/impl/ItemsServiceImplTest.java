@@ -1,6 +1,5 @@
 package sample.grocery.store.service.impl;
 
-import com.sun.jersey.api.NotFoundException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,6 +7,7 @@ import org.junit.Test;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.pojo.StoreItem;
 
+import javax.ws.rs.NotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;

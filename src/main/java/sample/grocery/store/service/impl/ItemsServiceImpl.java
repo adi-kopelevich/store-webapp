@@ -1,6 +1,5 @@
 package sample.grocery.store.service.impl;
 
-import com.sun.jersey.api.NotFoundException;
 import sample.grocery.store.dao.StoreItemDAO;
 import sample.grocery.store.dao.StoreItemDAOMapImpl;
 import sample.grocery.store.service.ItemsService;

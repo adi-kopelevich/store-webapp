@@ -1,13 +1,12 @@
 package sample.grocery.store.service.client;
 
-import com.sun.jersey.api.NotFoundException;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.pojo.StoreItem;
 
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -20,9 +19,9 @@ public class ItemServiceClient implements ItemsService {
     private static final String DEFAULT_PORT = "8080";
     private static final String DEFAULT_CONTEXT = "store-webapp";
     private static final String RESOUCEE = "items";
-    private static WebResource r;
+    private final String mediaType;
+    private final WebTarget webTarget;
 
-    private String mediaType;
 
     public ItemServiceClient(String protpcol, String hostname, String port, String context, String mediaType) {
         StringBuffer serviceURL = new StringBuffer(protpcol).append("://").
@@ -34,11 +33,13 @@ public class ItemServiceClient implements ItemsService {
         if (!context.isEmpty()) {
             serviceURL.append("/").append(DEFAULT_CONTEXT);
         }
-        serviceURL.append("/rest/").append(RESOUCEE).toString();
+
+        serviceURL.append("/").append(RESOUCEE);
 
         this.mediaType = mediaType;
 
-        this.r = Client.create().resource(serviceURL.toString());
+        Client client = ClientBuilder.newClient();
+        this.webTarget = client.target(serviceURL.toString());
     }
 
     public ItemServiceClient(String protpcol, String hostname, String port, String context) {
@@ -46,7 +47,7 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public ItemServiceClient(String mediaType) {
-        this(DEFAULT_PROTOCOL, DEFAULT_HOST, DEFAULT_PORT, DEFAULT_CONTEXT, mediaType);
+        this(DEFAULT_PROTOCOL, DEFAULT_HOST, DEFAULT_PORT, "", mediaType);
     }
 
 
@@ -55,52 +56,53 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public StoreItem getItem(int itemId) {
-        ClientResponse response = r.path(String.valueOf(itemId)).accept(mediaType)
-                .get(ClientResponse.class);
+        Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(mediaType);
+        Response response = invocationBuilder.get();
 
         int responseStatus = response.getStatus();
-        if (responseStatus == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
+        if (responseStatus == Response.Status.NOT_FOUND.getStatusCode()) {
             throw new NotFoundException();
-        } else if (responseStatus != ClientResponse.Status.OK.getStatusCode()) {
+        } else if (responseStatus != Response.Status.OK.getStatusCode()) {
             throw new RuntimeException("Failed to get a valid resposne from the server");
         }
-        return response.getEntity(StoreItem.class);
+        return invocationBuilder.get(StoreItem.class);
     }
 
     public void addItem(StoreItem item) {
-        ClientResponse response = r.type(mediaType)
-                .post(ClientResponse.class, item);
+        Invocation.Builder invocationBuilder = webTarget.request(mediaType);
+        Response response = invocationBuilder.post(Entity.entity(item, mediaType));
 
-        if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+        if (response.getStatus() != Response.Status.NO_CONTENT.getStatusCode()) {
             throw new RuntimeException("Failed to get a valid resposne from the server");
         }
     }
 
     public void removeItem(int itemId) {
-        ClientResponse response = r.path(String.valueOf(itemId))
-                .delete(ClientResponse.class);
+        Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request();
+        Response response = invocationBuilder.delete();
 
         int responseStatus = response.getStatus();
-        if (responseStatus == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
+        if (responseStatus == Response.Status.NOT_FOUND.getStatusCode()) {
             throw new NotFoundException();
-        } else if (responseStatus != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+        } else if (responseStatus != Response.Status.NO_CONTENT.getStatusCode()) {
             throw new RuntimeException("Failed to get a valid resposne from the server");
         }
     }
 
     public void updateItem(StoreItem item) {
-        ClientResponse response = r.type(mediaType)
-                .put(ClientResponse.class, item);
+        Invocation.Builder invocationBuilder = webTarget.request(mediaType);
+        Response response = invocationBuilder.put(Entity.entity(item, mediaType));
 
-        if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+        if (response.getStatus() != Response.Status.NO_CONTENT.getStatusCode()) {
             throw new RuntimeException("Failed to get a valid resposne from the server");
         }
     }
 
     public void clearAll() {
-        ClientResponse response = r.delete(ClientResponse.class);
+        Invocation.Builder invocationBuilder = webTarget.request();
+        Response response = invocationBuilder.delete();
 
-        if (response.getStatus() != ClientResponse.Status.NO_CONTENT.getStatusCode()) {
+        if (response.getStatus() != Response.Status.NO_CONTENT.getStatusCode()) {
             throw new RuntimeException("Failed to get a valid resposne from the server");
         }
     }
