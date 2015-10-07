@@ -12,7 +12,7 @@ import java.net.URI;
 /**
  * Created by kopelevi on 06/10/2015.
  */
-public class ServiceLauncher {
+public class EmbeddedServer {
 
     private static final String DEFAULT_PROTOCOL = "http";
     private static final String DEFAULT_HOST = "localhost";
@@ -20,7 +20,7 @@ public class ServiceLauncher {
 
     private final Server server;
 
-    public ServiceLauncher() {
+    public EmbeddedServer() {
         StringBuffer serviceURL = new StringBuffer(DEFAULT_PROTOCOL).append("://").append(DEFAULT_HOST);
         URI baseUri = UriBuilder.fromUri(serviceURL.toString()).port(Integer.valueOf(DEFAULT_PORT)).build();
         ResourceConfig config = new ResourceConfig(ItemsServiceImpl.class);
