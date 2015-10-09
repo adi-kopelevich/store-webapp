@@ -12,7 +12,7 @@
         <!-- runner jar -->
         <fileSet>
             <directory>${project.build.directory}</directory>
-            <outputDirectory>/lib</outputDirectory>
+            <outputDirectory>/webapp/WEB-INF/lib</outputDirectory>
             <includes>
                 <include>${project.artifactId}-${project.version}.jar</include>
             </includes>
@@ -31,11 +31,16 @@
             <directory>${project.build.directory}/${tmp.dir}/conf</directory>
             <outputDirectory>/conf</outputDirectory>
         </fileSet>
+        <!-- conf dir -->
+        <fileSet>
+            <directory>${project.build.directory}/${tmp.dir}/webapp</directory>
+            <outputDirectory>/webapp</outputDirectory>
+        </fileSet>
     </fileSets>
     <!-- lib dir -->
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/lib</outputDirectory>
+            <outputDirectory>/webapp/WEB-INF/lib</outputDirectory>
             <unpack>false</unpack>
             <scope>runtime</scope>
             <includes>

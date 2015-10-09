@@ -2,12 +2,9 @@ package sample.grocery.store;
 
 
 import org.eclipse.jetty.server.Server;
-import org.glassfish.jersey.jetty.JettyHttpContainerFactory;
-import org.glassfish.jersey.server.ResourceConfig;
-import sample.grocery.store.service.impl.ItemsServiceImpl;
+import org.eclipse.jetty.webapp.WebAppContext;
 
-import javax.ws.rs.core.UriBuilder;
-import java.net.URI;
+import java.io.File;
 
 /**
  * Created by kopelevi on 06/10/2015.
@@ -21,10 +18,19 @@ public class EmbeddedServer {
     private final Server server;
 
     public EmbeddedServer() {
-        StringBuffer serviceURL = new StringBuffer(DEFAULT_PROTOCOL).append("://").append(DEFAULT_HOST);
-        URI baseUri = UriBuilder.fromUri(serviceURL.toString()).port(Integer.valueOf(DEFAULT_PORT)).build();
-        ResourceConfig config = new ResourceConfig(ItemsServiceImpl.class);
-        server = JettyHttpContainerFactory.createServer(baseUri, config);
+//        StringBuffer serviceURL = new StringBuffer(DEFAULT_PROTOCOL).append("://").append(DEFAULT_HOST);
+//        URI baseUri = UriBuilder.fromUri(serviceURL.toString()).port(Integer.valueOf(DEFAULT_PORT)).build();
+//        ResourceConfig config = new ResourceConfig(ItemsServiceImpl.class);
+//        server = JettyHttpContainerFactory.createServer(baseUri, config);
+
+        server = new Server(8080);
+        File warFile = new File("../webapp");
+        WebAppContext webAppContext = new WebAppContext(warFile.getAbsolutePath(), "/");
+//        webAppContext.addAliasCheck(new AllowSymLinkAliasChecker());
+
+        server.setHandler(webAppContext);
+
+
     }
 
     public void startServer() {

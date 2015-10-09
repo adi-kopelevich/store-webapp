@@ -8,6 +8,7 @@
     <modules>
         <module>conf</module>
         <module>service</module>
+        <module>webapp</module>
         <module>runner</module>
     </modules>
     <name>Store App</name>

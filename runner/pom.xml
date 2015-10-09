@@ -30,6 +30,12 @@
             <artifactId>service</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>sample.grocery.store</groupId>
+            <artifactId>webapp</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
 
         <!-- 3rd Party -->
         <dependency>
@@ -80,6 +86,14 @@
                             <type>zip</type>
                             <overWrite>true</overWrite>
                             <outputDirectory>${project.build.directory}/${tmp.dir}</outputDirectory>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>sample.grocery.store</groupId>
+                            <artifactId>webapp</artifactId>
+                            <version>${project.version}</version>
+                            <type>war</type>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${project.build.directory}/${tmp.dir}/webapp</outputDirectory>
                         </artifactItem>
                     </artifactItems>
                 </configuration>
