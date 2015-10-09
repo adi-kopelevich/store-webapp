@@ -26,6 +26,15 @@ public class EmbeddedServer {
         server = new Server(8080);
         File warFile = new File("../webapp");
         WebAppContext webAppContext = new WebAppContext(warFile.getAbsolutePath(), "/");
+
+        //todo remove web.xml add annotation support for jersey servlet
+        //// remove usage of web.xml and add support for annotaions
+// point IT to releative server
+// re-arrange all versions/names in place hodlers
+// add logging
+// add jetty.server xml for general configurations
+// deploy UI
+
 //        webAppContext.addAliasCheck(new AllowSymLinkAliasChecker());
 
         server.setHandler(webAppContext);
