@@ -1,7 +1,6 @@
 package sample.grocery.store.service;
 
 import org.junit.*;
-import sample.grocery.store.EmbeddedServer;
 import sample.grocery.store.service.client.ItemServiceClient;
 import sample.grocery.store.service.pojo.StoreItem;
 
@@ -17,18 +16,18 @@ import java.util.UUID;
  */
 public class ItemsServiceIT {
 
-    static EmbeddedServer embeddedServer;
+//    static EmbeddedServer embeddedServer;
     ItemsService itemsService;
 
     @BeforeClass
     public static void startServer() {
-        embeddedServer = new EmbeddedServer();
-        embeddedServer.startServer();
+//        embeddedServer = new EmbeddedServer();
+//        embeddedServer.startServer();
     }
 
     @AfterClass
     public static void stopServer() {
-        embeddedServer.stopServer();
+//        embeddedServer.stopServer();
     }
 
     @Before

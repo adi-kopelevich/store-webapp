@@ -19,6 +19,7 @@ public class ItemServiceClient implements ItemsService {
     private static final String DEFAULT_PORT = "8080";
     private static final String DEFAULT_CONTEXT = "store-webapp";
     private static final String RESOUCEE = "items";
+    private static final String APP_PATH = "rest";
     private final String mediaType;
     private final WebTarget webTarget;
 
@@ -34,7 +35,7 @@ public class ItemServiceClient implements ItemsService {
             serviceURL.append("/").append(DEFAULT_CONTEXT);
         }
 
-        serviceURL.append("/").append(RESOUCEE);
+        serviceURL.append("/").append(APP_PATH).append("/").append(RESOUCEE);
 
         this.mediaType = mediaType;
 
