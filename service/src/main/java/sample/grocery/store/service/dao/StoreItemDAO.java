@@ -1,4 +1,4 @@
-package sample.grocery.store.dao;
+package sample.grocery.store.service.dao;
 
 import sample.grocery.store.service.pojo.StoreItem;
 

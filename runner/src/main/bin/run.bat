@@ -13,4 +13,4 @@ rem # JVM arguments - print startup JVM argument
 set "JAVA_OPTS=%JAVA_OPTS% -XX:+PrintCommandLineFlags"
 
 rem # Start Server
-"%JAVA_HOME%/bin/java" %JAVA_OPTS% -cp ../webapp/WEB-INF/lib/* sample.grocery.store.ServiceLauncher
+"%JAVA_HOME%/bin/java" %JAVA_OPTS% -cp ../webapp/WEB-INF/lib/* sample.grocery.store.server.ServiceLauncher

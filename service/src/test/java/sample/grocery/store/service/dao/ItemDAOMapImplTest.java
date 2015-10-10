@@ -1,4 +1,4 @@
-package sample.grocery.store.dao;
+package sample.grocery.store.service.dao;
 
 import org.junit.After;
 import org.junit.Assert;

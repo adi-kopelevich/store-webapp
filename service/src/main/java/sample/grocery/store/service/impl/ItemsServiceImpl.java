@@ -1,7 +1,7 @@
 package sample.grocery.store.service.impl;
 
-import sample.grocery.store.dao.StoreItemDAO;
-import sample.grocery.store.dao.StoreItemDAOMapImpl;
+import sample.grocery.store.service.dao.StoreItemDAO;
+import sample.grocery.store.service.dao.StoreItemDAOMapImpl;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.pojo.StoreItem;
 
