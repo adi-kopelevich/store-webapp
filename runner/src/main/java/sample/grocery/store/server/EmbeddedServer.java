@@ -137,7 +137,7 @@ public class EmbeddedServer {
     private void validateFileExists(String filePath) {
         final File file = new File(filePath);
         if (file.exists()) {
-            LOGGER.info("Using war: " + file.getAbsolutePath());
+            LOGGER.info("Using: " + file.getAbsolutePath());
         } else {
             String errorMsg = "Failed to find file path: " + filePath;
             LOGGER.error(errorMsg);
