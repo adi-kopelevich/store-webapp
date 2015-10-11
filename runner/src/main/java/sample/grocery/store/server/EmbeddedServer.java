@@ -1,8 +1,7 @@
 package sample.grocery.store.server;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.jetty.server.NCSARequestLog;
-import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -18,11 +17,18 @@ import java.net.ServerSocket;
 /**
  * Created by kopelevi on 06/10/2015.
  */
+
+
+//todo
+// double jars in webap/web-inf/lib
+// deploy UI
+
 public class EmbeddedServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(EmbeddedServer.class);
 
     private static final int DEFAULT_PORT = 8080;
+    private static final int HTTP_IDLE_TIMEOUT = 30000;
     private static final String DEFAULT_SERVER_ROOT = "..";
     private static final String WAR_PATH = "/webapp";
     private static final String CONF_FOLDER = "/conf";
@@ -42,48 +48,11 @@ public class EmbeddedServer {
     public EmbeddedServer(int port, String serverRootPath) {
         this.serverPort = port;
         this.serverRootPath = serverRootPath;
+        this.server = new Server();
 
         enableLog4j();
-
-        // validate arguments
-        validatePort();
-        validateWarFilePath();
-
-        // init server
-        server = new Server(serverPort);
-
-
+        validateParams();
         configureServer();
-
-
-        //todo
-        // double jars in webap/web-inf/lib
-// deploy UI
-
-    }
-
-    private String getConfFolderPath() {
-        return serverRootPath + CONF_FOLDER;
-    }
-
-    private String getLog4jConfFilePath() {
-        return getConfFolderPath() + "/" + LOG4J_CONF_FILENAME;
-    }
-
-    private String getJettyConfFilePath() {
-        return getConfFolderPath() + "/" + JETTY_CONF_FILENAME;
-    }
-
-    private String getWarPath() {
-        return serverRootPath + WAR_PATH;
-    }
-
-    private String getLogsFolderPath() {
-        return serverRootPath + LOGS_FOLDER;
-    }
-
-    private String getLogFilenameFormat() {
-        return getLogsFolderPath() + "/" + LOG_FILENAME_FORMAT;
     }
 
     private void enableLog4j() {
@@ -98,16 +67,35 @@ public class EmbeddedServer {
         }
     }
 
+    private void validateParams() {
+        validatePort();
+        validateFileExists(getConfFolderPath());
+        validateFileExists(getWarPath());
+    }
 
     private void configureServer() {
-        HandlerCollection handlers = new HandlerCollection();
+        configureAdditionalServerFromXml();
+        configureServerConnectors();
+        configureServerHandlers();
+    }
 
+    private void configureServerConnectors() {
+        HttpConfiguration http_config = new HttpConfiguration();
+        ServerConnector http = new ServerConnector(server,
+                new HttpConnectionFactory(http_config));
+        http.setPort(serverPort);
+        http.setIdleTimeout(HTTP_IDLE_TIMEOUT);
+        server.setConnectors(new Connector[]{http});
+        LOGGER.info("Added connectors to server.");
+    }
+
+    private void configureServerHandlers() {
+        HandlerCollection handlers = new HandlerCollection();
         // add webapp context handler to handlers collection
         WebAppContext webAppContext = new WebAppContext(new File(getWarPath()).getAbsolutePath(), "/");
         // change class loader priority for server first
         webAppContext.setParentLoaderPriority(true);
         handlers.addHandler(webAppContext);
-
         // init access log
         NCSARequestLog requestLog = new NCSARequestLog();
         requestLog.setFilename(getLogFilenameFormat());
@@ -117,11 +105,11 @@ public class EmbeddedServer {
         // add request log jandler to handler's list
         handlers.addHandler(requestLogHandler);
 
-        // set handlers to server
         server.setHandler(handlers);
-        LOGGER.info("Added webapp context handler to server.");
+        LOGGER.info("Added handlers to server.");
+    }
 
-        // configure server from jetty conf XML
+    private void configureAdditionalServerFromXml() {
         String log4jPropsFilePath = getJettyConfFilePath();
         final File jettyXmlConfFile = new File(log4jPropsFilePath);
         if (jettyXmlConfFile.exists()) {
@@ -146,15 +134,40 @@ public class EmbeddedServer {
         }
     }
 
-    private void validateWarFilePath() {
-        final File warFile = new File(getWarPath());
-        if (warFile.exists()) {
-            LOGGER.info("Using war: " + warFile.getAbsolutePath());
+    private void validateFileExists(String filePath) {
+        final File file = new File(filePath);
+        if (file.exists()) {
+            LOGGER.info("Using war: " + file.getAbsolutePath());
         } else {
-            String errorMsg = "Failed to find war file path: " + getWarPath();
+            String errorMsg = "Failed to find file path: " + filePath;
             LOGGER.error(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
+    }
+
+
+    private String getConfFolderPath() {
+        return serverRootPath + CONF_FOLDER;
+    }
+
+    private String getLog4jConfFilePath() {
+        return getConfFolderPath() + "/" + LOG4J_CONF_FILENAME;
+    }
+
+    private String getJettyConfFilePath() {
+        return getConfFolderPath() + "/" + JETTY_CONF_FILENAME;
+    }
+
+    private String getWarPath() {
+        return serverRootPath + WAR_PATH;
+    }
+
+    private String getLogsFolderPath() {
+        return serverRootPath + LOGS_FOLDER;
+    }
+
+    private String getLogFilenameFormat() {
+        return getLogsFolderPath() + "/" + LOG_FILENAME_FORMAT;
     }
 
     public void startServer() {
