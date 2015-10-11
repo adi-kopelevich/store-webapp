@@ -84,6 +84,20 @@
         <finalName>${project.artifactId}-${project.version}</finalName>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix></classpathPrefix>
+                            <mainClass>sample.grocery.store.server.ServiceLauncher</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
             <!-- break dependencies to tmp dir -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

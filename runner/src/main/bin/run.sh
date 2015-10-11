@@ -13,4 +13,4 @@
 JAVA_OPTS="$JAVA_OPTS -XX:+PrintCommandLineFlags"
 
 # Start Server
-"$JAVA_HOME/bin/java" $JAVA_OPTS -cp ../webapp/WEB-INF/lib/* sample.grocery.store.server.ServiceLauncher
+"$JAVA_HOME/bin/java" $JAVA_OPTS -jar ../webapp/WEB-INF/lib/store-runner-1.0-SNAPSHOT.jar
