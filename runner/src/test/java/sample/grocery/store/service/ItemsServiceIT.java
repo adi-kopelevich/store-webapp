@@ -1,6 +1,5 @@
 package sample.grocery.store.service;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.junit.*;
 import sample.grocery.store.server.EmbeddedServer;
 import sample.grocery.store.service.client.ItemServiceClient;
@@ -8,7 +7,6 @@ import sample.grocery.store.service.pojo.StoreItem;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -19,9 +17,9 @@ import java.util.UUID;
  */
 public class ItemsServiceIT {
 
-    private static final String LOG4J_PROPERTIES_PATH = "./target/tmp/conf/log4j.properties";
-    private static final String WEBAPP_PATH = "./target/tmp/webapp";
-    private static final String LOG4J_PROPS_DIR_PATH = "./target/tmp/conf";
+
+    private static final String SERVER_ROOT = "./target/tmp";
+
     private static final int PORT = 8080;
 
     static EmbeddedServer embeddedServer;
@@ -29,11 +27,8 @@ public class ItemsServiceIT {
 
     @BeforeClass
     public static void startServer() {
-        // set log4j
-        File log4jPropertiesFile = new File(LOG4J_PROPERTIES_PATH);
-        PropertyConfigurator.configure(log4jPropertiesFile.getAbsolutePath());
         // start embedded server
-        embeddedServer = new EmbeddedServer(PORT, WEBAPP_PATH);
+        embeddedServer = new EmbeddedServer(PORT, SERVER_ROOT);
         embeddedServer.startServer();
     }
 
