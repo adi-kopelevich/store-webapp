@@ -7,32 +7,33 @@
         <groupId>sample.grocery.store</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>runner</artifactId>
 
+    <artifactId>store-runner</artifactId>
 
     <properties>
         <tmp.dir>tmp</tmp.dir>
+        <webapp.dir>webapp</webapp.dir>
+        <conf.dir>conf</conf.dir>
+        <app.pkg.name>store-app</app.pkg.name>
     </properties>
 
     <dependencies>
-
         <!-- Application -->
         <dependency>
             <groupId>sample.grocery.store</groupId>
-            <artifactId>conf</artifactId>
+            <artifactId>store-conf</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>sample.grocery.store</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>store-service</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>sample.grocery.store</groupId>
-            <artifactId>webapp</artifactId>
+            <artifactId>store-webapp</artifactId>
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
@@ -41,40 +42,39 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>9.2.3.v20140905</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>9.2.3.v20140905</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jmx</artifactId>
-            <version>9.2.3.v20140905</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>9.2.3.v20140905</version>
+            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
+            <version>${slf.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.12</version>
+            <version>${slf.version}</version>
         </dependency>
 
         <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -84,7 +84,7 @@
         <finalName>${project.artifactId}-${project.version}</finalName>
 
         <plugins>
-            <!-- dependencies -->
+            <!-- break dependencies to tmp dir -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -92,7 +92,7 @@
                     <artifactItems>
                         <artifactItem>
                             <groupId>sample.grocery.store</groupId>
-                            <artifactId>conf</artifactId>
+                            <artifactId>store-conf</artifactId>
                             <version>${project.version}</version>
                             <type>zip</type>
                             <overWrite>true</overWrite>
@@ -100,11 +100,11 @@
                         </artifactItem>
                         <artifactItem>
                             <groupId>sample.grocery.store</groupId>
-                            <artifactId>webapp</artifactId>
+                            <artifactId>store-webapp</artifactId>
                             <version>${project.version}</version>
                             <type>war</type>
                             <overWrite>true</overWrite>
-                            <outputDirectory>${project.build.directory}/${tmp.dir}/webapp</outputDirectory>
+                            <outputDirectory>${project.build.directory}/${tmp.dir}/${webapp.dir}</outputDirectory>
                         </artifactItem>
                     </artifactItems>
                 </configuration>
@@ -119,11 +119,11 @@
                 </executions>
             </plugin>
 
-            <!-- assembly -->
+            <!-- assembly from tmp -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>store-app-${project.version}</finalName>
+                    <finalName>${app.pkg.name}-${project.version}</finalName>
                     <descriptor>src/assembly/dep.xml</descriptor>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>

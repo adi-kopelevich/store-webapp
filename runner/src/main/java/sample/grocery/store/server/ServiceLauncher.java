@@ -13,7 +13,6 @@ public class ServiceLauncher {
     private static final String LOG4J_CONF_FILENAME = "log4j.properties";
 
     public static void main(String[] args) {
-
         enableLog4j();
         EmbeddedServer embeddedServer = new EmbeddedServer();
         embeddedServer.startServer(true);

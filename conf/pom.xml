@@ -9,11 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>conf</artifactId>
-    <name>Conf dir assembly</name>
+    <artifactId>store-conf</artifactId>
     <packaging>pom</packaging>
 
     <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

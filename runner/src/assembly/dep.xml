@@ -12,7 +12,7 @@
         <!-- runner jar -->
         <fileSet>
             <directory>${project.build.directory}</directory>
-            <outputDirectory>/webapp/WEB-INF/lib</outputDirectory>
+            <outputDirectory>/${webapp.dir}/WEB-INF/lib</outputDirectory>
             <includes>
                 <include>${project.artifactId}-${project.version}.jar</include>
             </includes>
@@ -28,19 +28,19 @@
         </fileSet>
         <!-- conf dir -->
         <fileSet>
-            <directory>${project.build.directory}/${tmp.dir}/conf</directory>
-            <outputDirectory>/conf</outputDirectory>
+            <directory>${project.build.directory}/${tmp.dir}/${conf.dir}</directory>
+            <outputDirectory>/${conf.dir}</outputDirectory>
         </fileSet>
         <!-- conf dir -->
         <fileSet>
-            <directory>${project.build.directory}/${tmp.dir}/webapp</directory>
-            <outputDirectory>/webapp</outputDirectory>
+            <directory>${project.build.directory}/${tmp.dir}/${webapp.dir}</directory>
+            <outputDirectory>/${webapp.dir}</outputDirectory>
         </fileSet>
     </fileSets>
     <!-- lib dir -->
     <dependencySets>
         <dependencySet>
-            <outputDirectory>/webapp/WEB-INF/lib</outputDirectory>
+            <outputDirectory>/${webapp.dir}/WEB-INF/lib</outputDirectory>
             <unpack>false</unpack>
             <scope>runtime</scope>
             <includes>

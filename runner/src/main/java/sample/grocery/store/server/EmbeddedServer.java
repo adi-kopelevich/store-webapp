@@ -41,8 +41,9 @@ public class EmbeddedServer {
         server.setHandler(webAppContext);
 
         //todo
-// re-arrange all versions/names in place hodlers
+//
 // add jetty.server xml for general configurations
+        // double jars in webap/web-inf/lib
 // deploy UI
 
     }
@@ -81,7 +82,7 @@ public class EmbeddedServer {
                 server.join();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to start server.", e);
             server.destroy();
         }
     }
@@ -91,7 +92,7 @@ public class EmbeddedServer {
             server.stop();
             LOGGER.info("Server is stopped.");
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to stop server.", e);
             server.destroy();
         }
     }
