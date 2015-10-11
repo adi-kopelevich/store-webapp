@@ -19,10 +19,7 @@ import java.net.ServerSocket;
  */
 
 
-//todo
-// double jars in webap/web-inf/lib
-// deploy UI
-
+//todo deploy UI
 public class EmbeddedServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(EmbeddedServer.class);

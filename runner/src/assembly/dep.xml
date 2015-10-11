@@ -31,11 +31,15 @@
             <directory>${project.build.directory}/${tmp.dir}/${conf.dir}</directory>
             <outputDirectory>/${conf.dir}</outputDirectory>
         </fileSet>
-        <!-- conf dir -->
+        <!-- webapp dir -->
         <fileSet>
             <directory>${project.build.directory}/${tmp.dir}/${webapp.dir}</directory>
             <outputDirectory>/${webapp.dir}</outputDirectory>
+            <excludes>
+                <exclude>/WEB-INF/lib/*</exclude>
+            </excludes>
         </fileSet>
+
     </fileSets>
     <!-- lib dir -->
     <dependencySets>
