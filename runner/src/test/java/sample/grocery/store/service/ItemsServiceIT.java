@@ -39,8 +39,8 @@ public class ItemsServiceIT {
 
     @Before
     public void setUp() throws Exception {
-        itemsService = new ItemServiceClient(MediaType.APPLICATION_XML);
-//        itemsService = new ItemServiceClient(MediaType.APPLICATION_JSON);
+//        itemsService = new ItemServiceClient(MediaType.APPLICATION_XML);
+        itemsService = new ItemServiceClient(MediaType.APPLICATION_JSON);
 //        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
 //        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "store-webapp");  // Amazon WS
         itemsService.clearAll();

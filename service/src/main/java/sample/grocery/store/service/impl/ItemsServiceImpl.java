@@ -26,14 +26,16 @@ public class ItemsServiceImpl implements ItemsService {
     UriInfo uriInfo;
 
     @GET
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
     public List<StoreItem> getAllItems() {
         return persistency.getItems();
     }
 
     @GET
     @Path("/{paramId}")
-    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+//    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
     public StoreItem getItem(@PathParam("paramId") int itemId) {
         StoreItem item = persistency.getItem(itemId);
         if (item == null) {
