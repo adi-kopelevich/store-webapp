@@ -17,9 +17,6 @@ import java.net.ServerSocket;
 /**
  * Created by kopelevi on 06/10/2015.
  */
-
-
-//todo deploy UI
 public class EmbeddedServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(EmbeddedServer.class);
