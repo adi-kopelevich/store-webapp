@@ -32,14 +32,13 @@ public class ItemDALMongoDBImpl implements ItemDAL {
 
     private ItemDALMongoDBImpl() {
         this.collection = initDBCollection();
-        clear();
     }
 
     public static ItemDALMongoDBImpl getInstance() {
         return INSTANCE;
     }
 
-    private DBCollection initDBCollection(){
+    private DBCollection initDBCollection() {
         String mongoHost = System.getProperty(MONGO_HOST_ENV_KEY);
         if (mongoHost == null) {
             mongoHost = DEFAULT_MONGO_HOST;
@@ -52,7 +51,10 @@ public class ItemDALMongoDBImpl implements ItemDAL {
 
         MongoClient mongoClient = new MongoClient(mongoHost, Integer.valueOf(mongoPort));
         DB db = mongoClient.getDB(DB_NAME);
-        return db.getCollection(COLLECTION_NAME);
+        DBCollection collection = db.getCollection(COLLECTION_NAME);
+        collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
+
+        return collection;
     }
 
     private DBObject toDBObject(StoreItem storeItem) {
