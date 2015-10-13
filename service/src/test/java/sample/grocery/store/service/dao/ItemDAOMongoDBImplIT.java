@@ -1,34 +1,31 @@
-package sample.grocery.store.service.impl;
+package sample.grocery.store.service.dao;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sample.grocery.store.service.ItemsService;
-import sample.grocery.store.service.dao.ItemDALMapImpl;
 import sample.grocery.store.service.pojo.StoreItem;
 
-import javax.ws.rs.NotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by kopelevi on 04/09/2015.
+ * Created by kopelevi on 13/10/2015.
  */
-public class ItemsServiceImplTest {
+public class ItemDAOMongoDBImplIT {
 
-    private static final ItemsService itemsService = new ItemsServiceImpl(ItemDALMapImpl.getInstance());
-//        private static final ItemsService itemsService = new ItemsServiceImpl();
+    private static final ItemDAL store = ItemDALMongoDBImpl.getInstance();
 
     @Before
     public void setUp() throws Exception {
-        itemsService.clearAll();
+        store.clear();
     }
 
     @After
     public void tearDown() throws Exception {
+        store.clear();
     }
 
     @Test
@@ -38,11 +35,14 @@ public class ItemsServiceImplTest {
         String itemBrand = UUID.randomUUID().toString();
         int itemPrice = new Random().nextInt();
         int itemqQuantity = new Random().nextInt();
+
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
-        itemsService.addItem(item);
-        StoreItem retItem = itemsService.getItem(itemId);
+        store.putItem(item);
+        StoreItem retItem = store.getItem(itemId);
+
         Assert.assertEquals(item.getId(), retItem.getId());
         Assert.assertEquals(item.getName(), retItem.getName());
         Assert.assertEquals(item.getBrand(), retItem.getBrand());
@@ -51,13 +51,14 @@ public class ItemsServiceImplTest {
         Assert.assertEquals(item.getTags(), retItem.getTags());
     }
 
-    @Test(expected = NotFoundException.class)
-    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+    @Test
+    public void whenGettingNotExistsThenNullWillBeReturned() throws Exception {
         int itemId = new Random().nextInt();
-        itemsService.getItem(itemId);
+        StoreItem retItem = store.getItem(itemId);
+        Assert.assertEquals(null, retItem);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
@@ -68,27 +69,30 @@ public class ItemsServiceImplTest {
 
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
-        itemsService.addItem(item);
-        itemsService.removeItem(itemId);
-        itemsService.getItem(itemId); // should throw exception
+        store.putItem(item);
+        store.removeItem(itemId);
+        StoreItem retItem = store.getItem(itemId);
+
+        Assert.assertEquals(null, retItem);
     }
 
     @Test
     public void whenUpdateingAnItemThenChangesAreRetrivable() throws Exception {
-        int itemId = new Random().nextInt();
+        int itemId = new Random().nextInt(1000);
         String itemName = UUID.randomUUID().toString();
         String itemBrand = UUID.randomUUID().toString();
-        int itemPrice = new Random().nextInt();
-        int itemqQuantity = new Random().nextInt();
+        int itemPrice = new Random().nextInt(100);
+        int itemqQuantity = new Random().nextInt(1000);
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
-        itemsService.addItem(originalItem);
+        store.putItem(originalItem);
 
         StoreItem updatedItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
-        itemsService.updateItem(updatedItem);
+        store.putItem(updatedItem);
 
-        StoreItem retItem = itemsService.getItem(itemId);
+        StoreItem retItem = store.getItem(itemId);
+
         Assert.assertEquals(updatedItem.getId(), retItem.getId());
         Assert.assertEquals(updatedItem.getName(), retItem.getName());
         Assert.assertEquals(updatedItem.getBrand(), retItem.getBrand());
@@ -116,13 +120,12 @@ public class ItemsServiceImplTest {
         StoreItem firstItem = new StoreItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
         StoreItem secondItem = new StoreItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
 
-        itemsService.addItem(firstItem);
-        itemsService.addItem(secondItem);
-        List<StoreItem> retItems = itemsService.getAllItems();
+        store.putItem(firstItem);
+        store.putItem(secondItem);
+        List<StoreItem> retItems = store.getItems();
 
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));
     }
-
 }

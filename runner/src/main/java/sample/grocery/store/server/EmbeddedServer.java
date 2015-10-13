@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Properties;
 
 /**
  * Created by kopelevi on 06/10/2015.
@@ -27,6 +28,7 @@ public class EmbeddedServer {
     private static final String WAR_PATH = "/webapp";
     private static final String CONF_FOLDER = "/conf";
     private static final String LOG4J_CONF_FILENAME = "log4j.properties";
+    private static final String MONGO_CONF_FILENAME = "mongo.properties";
     private static final String JETTY_CONF_FILENAME = "jetty.xml";
     private static final String LOGS_FOLDER = "/logs";
     private static final String LOG_FILENAME_FORMAT = "yyyy_MM_dd.request.log";
@@ -45,6 +47,7 @@ public class EmbeddedServer {
         this.server = new Server();
 
         enableLog4j();
+        publishMongoConf();
         validateParams();
         configureServer();
     }
@@ -59,6 +62,22 @@ public class EmbeddedServer {
         } else {
             System.out.println("Failed to find log4j.properties in: " + log4jPropertiesFile.getAbsolutePath());
         }
+    }
+
+    private void publishMongoConf() {
+        try (FileInputStream fis = new FileInputStream(getMongoConfFilePath())) {
+            Properties mongoProperties = new Properties();
+            mongoProperties.load(fis);
+            for (String key : mongoProperties.stringPropertyNames()) {
+                System.setProperty(key, mongoProperties.getProperty(key));
+            }
+        } catch (Exception e) {
+            String errorMsg = "Failed to process mongo conf file, path: " + getMongoConfFilePath();
+            LOGGER.error(errorMsg, e);
+            throw new RuntimeException(errorMsg, e);
+        }
+
+
     }
 
     private void validateParams() {
@@ -150,6 +169,10 @@ public class EmbeddedServer {
 
     private String getJettyConfFilePath() {
         return getConfFolderPath() + "/" + JETTY_CONF_FILENAME;
+    }
+
+    private String getMongoConfFilePath() {
+        return getConfFolderPath() + "/" + MONGO_CONF_FILENAME;
     }
 
     private String getWarPath() {

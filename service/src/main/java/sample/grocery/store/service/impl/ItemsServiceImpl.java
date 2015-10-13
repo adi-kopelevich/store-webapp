@@ -1,8 +1,8 @@
 package sample.grocery.store.service.impl;
 
-import sample.grocery.store.service.dao.StoreItemDAO;
-import sample.grocery.store.service.dao.StoreItemDAOMapImpl;
 import sample.grocery.store.service.ItemsService;
+import sample.grocery.store.service.dao.ItemDAL;
+import sample.grocery.store.service.dao.ItemDALMongoDBImpl;
 import sample.grocery.store.service.pojo.StoreItem;
 
 import javax.ws.rs.*;
@@ -20,7 +20,15 @@ public class ItemsServiceImpl implements ItemsService {
 
     private static final String RESOURCE_NOT_FOUND_MSG = "Resource with given ID not found - ";
 
-    StoreItemDAO persistency = StoreItemDAOMapImpl.getInstance();
+    private final ItemDAL persistency;
+
+    public ItemsServiceImpl() {
+        this.persistency = ItemDALMongoDBImpl.getInstance();
+    }
+
+    public ItemsServiceImpl(ItemDAL itemDAL) {
+        this.persistency = itemDAL;
+    }
 
     @Context
     UriInfo uriInfo;

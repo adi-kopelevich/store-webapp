@@ -14,19 +14,17 @@ import java.util.UUID;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public class ItemDAOMapImplTest {
+public class ItemDALMapImplTest {
 
-    StoreItemDAO store;
+    private static final ItemDAL store = ItemDALMapImpl.getInstance();
 
     @Before
     public void setUp() throws Exception {
-        store = StoreItemDAOMapImpl.getInstance();
         store.clear();
     }
 
     @After
     public void tearDown() throws Exception {
-        store = null;
     }
 
     @Test
