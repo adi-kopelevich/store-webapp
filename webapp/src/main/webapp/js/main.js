@@ -73,7 +73,7 @@ $(document).ready(function () {
     function getStoreItemsFromRemote() {
         jQuery.ajax({
             type: "GET",
-            url: "http://localhost:8080/rest/items",
+            url: "/rest/items",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data, status, jqXHR) {
@@ -92,7 +92,7 @@ $(document).ready(function () {
     function storeItemToRemote(item) {
         jQuery.ajax({
             type: "POST",
-            url: "http://localhost:8080/rest/items",
+            url: "/rest/items",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(item),
             dataType: "json",
@@ -108,7 +108,7 @@ $(document).ready(function () {
     function deleteItemFromRemote(item) {
         jQuery.ajax({
             type: "DELETE",
-            url: "http://localhost:8080/rest/items/" + item.id,
+            url: "/rest/items/" + item.id,
             contentType: "application/json; charset=utf-8",
             success: function (data, status, jqXHR) {
                 getStoreItemsFromRemote();
@@ -122,7 +122,7 @@ $(document).ready(function () {
     function updateItemToRemote(item) {
         jQuery.ajax({
             type: "PUT",
-            url: "http://localhost:8080/rest/items",
+            url: "/rest/items",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(item),
             dataType: "json",
