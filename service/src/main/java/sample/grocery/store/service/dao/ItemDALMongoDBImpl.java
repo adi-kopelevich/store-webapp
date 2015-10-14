@@ -39,22 +39,114 @@ public class ItemDALMongoDBImpl implements ItemDAL {
     }
 
     private DBCollection initDBCollection() {
-        String mongoHost = System.getProperty(MONGO_HOST_ENV_KEY);
-        if (mongoHost == null) {
-            mongoHost = DEFAULT_MONGO_HOST;
+        DBCollection collection = null;
+        String mongoHost = getMongoProperty(MONGO_HOST_ENV_KEY, DEFAULT_MONGO_HOST);
+        String mongoPort = getMongoProperty(MONGO_PORT_ENV_KEY, DEFAULT_MONGO_PORT);
+        LOGGER.debug("Going to initiate MongoDB client with host= " + mongoHost + "and port=" + mongoPort);
+        try {
+            MongoClient mongoClient = new MongoClient(mongoHost, Integer.valueOf(mongoPort));
+            mongoClient.setWriteConcern(WriteConcern.ACKNOWLEDGED);
+            DB db = mongoClient.getDB(DB_NAME);
+            collection = db.getCollection(COLLECTION_NAME);
+            LOGGER.debug("Initiated MongoDB collection= " + COLLECTION_NAME + ", with DB=" + DB_NAME);
+            collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
+            LOGGER.debug("Created unique index - " + UNIQUE_INDEX);
+        } catch (Exception e) {
+            logAndThrowErr("Failed to init MongoDB collection, aborting ItemDAL init...", e);
         }
-
-        String mongoPort = System.getProperty(MONGO_PORT_ENV_KEY);
-        if (mongoPort == null) {
-            mongoPort = DEFAULT_MONGO_PORT;
-        }
-
-        MongoClient mongoClient = new MongoClient(mongoHost, Integer.valueOf(mongoPort));
-        DB db = mongoClient.getDB(DB_NAME);
-        DBCollection collection = db.getCollection(COLLECTION_NAME);
-        collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
-
         return collection;
+    }
+
+    @Override
+    public StoreItem getItem(int itemId) {
+        StoreItem ret = null;
+        try {
+            BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
+            DBCursor queryResult = collection.find(searchQuery);
+            if (queryResult.hasNext()) {
+                DBObject retObj = queryResult.next();
+                ret = toStoreItem(retObj.toString());
+                LOGGER.debug("Found: " + retObj + " for query: " + searchQuery);
+            } else {
+                ret = null;
+                LOGGER.debug("Failed to find object for query: " + searchQuery);
+            }
+        } catch (Exception e) {
+            logAndThrowErr("Failed to get item with with ID: " + itemId, e);
+        }
+        return ret;
+    }
+
+    @Override
+    public List<StoreItem> getItems() {
+        List<StoreItem> storeItems = null;
+        try {
+            storeItems = new ArrayList<StoreItem>();
+            DBCursor queryResult = collection.find();
+            while (queryResult.hasNext()) {
+                String storeItemJsonFormat = queryResult.next().toString();
+                StoreItem storeItem = toStoreItem(storeItemJsonFormat);
+                storeItems.add(storeItem);
+            }
+
+        } catch (Exception e) {
+            logAndThrowErr("Failed to get all items...", e);
+        }
+        return storeItems;
+    }
+
+    @Override
+    public void putItem(StoreItem item) {
+        try {
+            collection.insert(toDBObject(item));
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Item inserted successfully: " + toDBObject(item).toString());
+            }
+        } catch (DuplicateKeyException duplicateKeyException) {
+            try {
+                WriteResult result = collection.update(getUniqueContactSearchQuery(item.getId()), toDBObject(item));
+                if (result.getN() == 1) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Item updated successfully: " + toDBObject(item).toString());
+                    }
+                } else {
+                    logAndThrowErr("Failed to update, resource with ID: " + item.getId() + " was not found, probably removed by another thread...", null);
+                }
+            } catch (Exception e) {
+                logAndThrowErr("Failed to update item with ID: " + item.getId(), e);
+            }
+        } catch (Exception e) {
+            logAndThrowErr("Failed to insert item with ID: " + item.getId(), e);
+        }
+    }
+
+    @Override
+    public void removeItem(int itemId) {
+        try {
+            BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
+            collection.remove(searchQuery);
+        } catch (Exception e) {
+            logAndThrowErr("Failed to delete item with ID: " + itemId, e);
+        }
+    }
+
+    @Override
+    public void clear() {
+        try {
+            collection.drop();
+            collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
+        } catch (Exception e) {
+            logAndThrowErr("Failed to clear collection  " + collection.getName(), e);
+        }
+    }
+
+    private String getMongoProperty(String envKey, String defVal) {
+        String mongoPropertyValue = System.getProperty(envKey);
+        if (mongoPropertyValue == null) {
+            mongoPropertyValue = defVal;
+            LOGGER.debug("Failed to retrieve " + envKey + " from environment variables, going to use default: " + defVal);
+        }
+        return mongoPropertyValue;
     }
 
     private DBObject toDBObject(StoreItem storeItem) {
@@ -72,66 +164,14 @@ public class ItemDALMongoDBImpl implements ItemDAL {
         return searchQuery;
     }
 
-    @Override
-    public StoreItem getItem(int itemId) {
-        StoreItem ret;
-        BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
-        DBCursor queryResult = collection.find(searchQuery);
-        if (queryResult.hasNext()) {
-            DBObject retObj = queryResult.next();
-            ret = toStoreItem(retObj.toString());
+    private void logAndThrowErr(String errMsg, Exception e) {
+        if (e == null) {
+            LOGGER.error(errMsg);
+            throw new RuntimeException(errMsg);
         } else {
-            ret = null;
+            LOGGER.error(errMsg, e);
+            throw new RuntimeException(errMsg, e);
         }
-        return ret;
-    }
-
-    @Override
-    public List<StoreItem> getItems() {
-        List<StoreItem> storeItems = new ArrayList<StoreItem>();
-        DBCursor queryResult = collection.find();
-        while (queryResult.hasNext()) {
-            String storeItemJsonFormat = queryResult.next().toString();
-            StoreItem storeItem = toStoreItem(storeItemJsonFormat);
-            storeItems.add(storeItem);
-        }
-        return storeItems;
-    }
-
-    public List<StoreItem> getItems(int... storeItemIDs) {
-        List<StoreItem> storeItems = new ArrayList<StoreItem>();
-        for (int id : storeItemIDs) {
-            StoreItem storeItem = getItem(id);
-            if (storeItem != null) {
-                storeItems.add(storeItem);
-            }
-        }
-        return storeItems;
-    }
-
-    @Override
-    public void putItem(StoreItem item) {
-        WriteResult result;
-        try {
-            result = collection.insert(toDBObject(item));
-        } catch (DuplicateKeyException e) {
-            result = collection.update(getUniqueContactSearchQuery(item.getId()), toDBObject(item));
-            if (result.getN() != 1) {
-                throw new RuntimeException("Failed to update, resource with ID: " + item.getId() + " was not found");
-            }
-        }
-    }
-
-    @Override
-    public void removeItem(int itemId) {
-        BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
-        collection.remove(searchQuery);
-    }
-
-    @Override
-    public void clear() {
-        collection.drop();
-        collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
     }
 
 }
