@@ -1,35 +1,22 @@
 package sample.grocery.store.service.impl;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 import sample.grocery.store.service.ItemsService;
-import sample.grocery.store.service.dao.ItemDALMapImpl;
+import sample.grocery.store.service.dao.ItemDAL;
 import sample.grocery.store.service.pojo.StoreItem;
 
 import javax.ws.rs.NotFoundException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by kopelevi on 04/09/2015.
  */
 public class ItemsServiceImplTest {
 
-    private static final ItemsService itemsService = new ItemsServiceImpl(ItemDALMapImpl.getInstance());
-//        private static final ItemsService itemsService = new ItemsServiceImpl();
-
-    @Before
-    public void setUp() throws Exception {
-        itemsService.clearAll();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void whenAddItemThenItIsRetrivable() throws Exception {
@@ -41,7 +28,13 @@ public class ItemsServiceImplTest {
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        Mockito.when(itemDAL.getItem(itemId)).thenReturn(item);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+
         itemsService.addItem(item);
+        Mockito.verify(itemDAL, Mockito.times(1)).putItem(item);
+
         StoreItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(item.getId(), retItem.getId());
         Assert.assertEquals(item.getName(), retItem.getName());
@@ -53,6 +46,10 @@ public class ItemsServiceImplTest {
 
     @Test(expected = NotFoundException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        Mockito.when(itemDAL.getItem(Mockito.anyInt())).thenReturn(null);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+
         int itemId = new Random().nextInt();
         itemsService.getItem(itemId);
     }
@@ -68,8 +65,16 @@ public class ItemsServiceImplTest {
 
         StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        Mockito.when(itemDAL.getItem(itemId)).thenReturn(null);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+
         itemsService.addItem(item);
+        Mockito.verify(itemDAL, Mockito.times(1)).putItem(item);
+
         itemsService.removeItem(itemId);
+        Mockito.verify(itemDAL, Mockito.times(1)).removeItem(item.getId());
+
         itemsService.getItem(itemId); // should throw exception
     }
 
@@ -83,10 +88,17 @@ public class ItemsServiceImplTest {
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
-        itemsService.addItem(originalItem);
-
         StoreItem updatedItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
+
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        Mockito.when(itemDAL.getItem(itemId)).thenReturn(updatedItem);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+
+        itemsService.addItem(originalItem);
+        Mockito.verify(itemDAL, Mockito.times(1)).putItem(originalItem);
+
         itemsService.updateItem(updatedItem);
+        Mockito.verify(itemDAL, Mockito.times(1)).putItem(updatedItem);
 
         StoreItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(updatedItem.getId(), retItem.getId());
@@ -115,14 +127,74 @@ public class ItemsServiceImplTest {
 
         StoreItem firstItem = new StoreItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
         StoreItem secondItem = new StoreItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
+        List<StoreItem> items = new ArrayList<StoreItem>();
+        items.add(firstItem);
+        items.add(secondItem);
+
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        Mockito.when(itemDAL.getItems()).thenReturn(items);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
 
         itemsService.addItem(firstItem);
+        Mockito.verify(itemDAL, Mockito.times(1)).putItem(firstItem);
         itemsService.addItem(secondItem);
+        Mockito.verify(itemDAL, Mockito.times(1)).putItem(secondItem);
         List<StoreItem> retItems = itemsService.getAllItems();
 
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));
+    }
+
+    @Test
+    public void whenGetItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
+        int itemId = new Random().nextInt();
+
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        String throwableMsg = UUID.randomUUID().toString();
+        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAL).getItem(itemId);
+
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage(throwableMsg);
+
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        itemsService.getItem(itemId);
+    }
+
+    @Test
+    public void whenPutItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
+        int itemId = new Random().nextInt();
+        String itemName = UUID.randomUUID().toString();
+        String itemBrand = UUID.randomUUID().toString();
+        int itemPrice = new Random().nextInt();
+        int itemqQuantity = new Random().nextInt();
+        List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        String throwableMsg = UUID.randomUUID().toString();
+        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAL).putItem(item);
+
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage(throwableMsg);
+
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        itemsService.addItem(item);
+    }
+
+    @Test
+    public void whenDeleteItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
+        int itemId = new Random().nextInt();
+
+        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        String throwableMsg = UUID.randomUUID().toString();
+        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAL).removeItem(itemId);
+
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage(throwableMsg);
+
+        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        itemsService.removeItem(itemId);
     }
 
 }
