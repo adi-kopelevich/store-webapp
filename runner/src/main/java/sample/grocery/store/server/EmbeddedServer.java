@@ -1,6 +1,7 @@
 package sample.grocery.store.server;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.ServerSocket;
 import java.util.Properties;
 
@@ -88,8 +90,15 @@ public class EmbeddedServer {
 
     private void configureServer() {
         configureAdditionalServerFromXml();
+        configureJMX();
         configureServerConnectors();
         configureServerHandlers();
+    }
+
+    private void configureJMX() {
+        MBeanContainer mbContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
+        server.addEventListener(mbContainer);
+        server.addBean(mbContainer);
     }
 
     private void configureServerConnectors() {
