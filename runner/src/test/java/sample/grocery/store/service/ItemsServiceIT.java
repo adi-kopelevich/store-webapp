@@ -14,10 +14,9 @@ import java.util.*;
  */
 public class ItemsServiceIT {
 
-
     private static final String SERVER_ROOT = "./target/tmp";
+    private static final int PORT = 8989;
 
-    private static final int PORT = 8080;
 
     static EmbeddedServer embeddedServer;
     ItemsService itemsService;
