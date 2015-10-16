@@ -4,7 +4,7 @@ rem Uncomment and set if  not set by the calling environment
 rem JAVA_HOME=
 
 rem JVM arguments - remote debug argument
-rem set "JAVA_OPTS=%JAVA_OPTS% -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+set "JAVA_OPTS=%JAVA_OPTS% -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 
 rem # JVM arguments - GC options
 rem set "JAVA_OPTS=%JAVA_OPTS% -XX:+UseParNewGC -XX:+UseConcMarkSweepGC"

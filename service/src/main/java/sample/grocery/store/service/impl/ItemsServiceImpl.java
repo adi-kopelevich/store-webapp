@@ -1,14 +1,15 @@
 package sample.grocery.store.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.dao.ItemDAL;
 import sample.grocery.store.service.dao.ItemDALMongoDBImpl;
 import sample.grocery.store.service.pojo.StoreItem;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBElement;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 @Path("/items")
 public class ItemsServiceImpl implements ItemsService {
 
-    private static final String RESOURCE_NOT_FOUND_MSG = "Resource with given ID not found - ";
+    private final Logger LOGGER = LoggerFactory.getLogger(ItemDALMongoDBImpl.class);
 
     private final ItemDAL persistency;
 
@@ -30,24 +31,30 @@ public class ItemsServiceImpl implements ItemsService {
         this.persistency = itemDAL;
     }
 
-    @Context
-    UriInfo uriInfo;
-
     @GET
-//    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public List<StoreItem> getAllItems() {
-        return persistency.getItems();
+        List<StoreItem> items = null;
+        try {
+            items = persistency.getItems();
+        } catch (Exception e) {
+            logAndThrowServiceUnavailableException(e);
+        }
+        return items;
     }
 
     @GET
     @Path("/{paramId}")
-//    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public StoreItem getItem(@PathParam("paramId") int itemId) {
-        StoreItem item = persistency.getItem(itemId);
+        StoreItem item = null;
+        try {
+            item = persistency.getItem(itemId);
+        } catch (Exception e) {
+            logAndThrowServiceUnavailableException(e);
+        }
         if (item == null) {
-            throw new NotFoundException(RESOURCE_NOT_FOUND_MSG + itemId);
+            logAndThrowSNotFoundException(itemId);
         }
         return item;
     }
@@ -55,7 +62,11 @@ public class ItemsServiceImpl implements ItemsService {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public void addItem(StoreItem storeItem) {
-        persistency.putItem(storeItem);
+        try {
+            persistency.putItem(storeItem);
+        } catch (Exception e) {
+            logAndThrowServiceUnavailableException(e);
+        }
     }
 
     @POST
@@ -67,13 +78,21 @@ public class ItemsServiceImpl implements ItemsService {
     @DELETE
     @Path("/{paramId}")
     public void removeItem(@PathParam("paramId") int itemId) {
-        persistency.removeItem(itemId);
+        try {
+            persistency.removeItem(itemId);
+        } catch (Exception e) {
+            logAndThrowServiceUnavailableException(e);
+        }
     }
 
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
     public void updateItem(StoreItem storeItem) {
-        persistency.putItem(storeItem);
+        try {
+            persistency.putItem(storeItem);
+        } catch (Exception e) {
+            logAndThrowServiceUnavailableException(e);
+        }
     }
 
     @PUT
@@ -84,6 +103,22 @@ public class ItemsServiceImpl implements ItemsService {
 
     @DELETE
     public void clearAll() {
-        persistency.clear();
+        try {
+            persistency.clear();
+        } catch (Exception e) {
+            logAndThrowServiceUnavailableException(e);
+        }
+    }
+
+    private void logAndThrowServiceUnavailableException(Exception e) {
+        String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
+        LOGGER.error(errMsg, e);
+        throw new ServiceUnavailableException(errMsg);
+    }
+
+    private void logAndThrowSNotFoundException(int itemId) {
+        String errMsg = Response.Status.NOT_FOUND + " - " + "Item wth ID: " + itemId;
+        LOGGER.error(errMsg);
+        throw new NotFoundException(errMsg);
     }
 }

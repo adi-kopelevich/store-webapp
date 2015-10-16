@@ -88,9 +88,8 @@ public class ItemDALMongoDBImpl implements ItemDAL {
                 StoreItem storeItem = toStoreItem(storeItemJsonFormat);
                 storeItems.add(storeItem);
             }
-
         } catch (Exception e) {
-            logAndThrowErr("Failed to get all items...", e);
+            logAndThrowErr("Failed to get all items", e);
         }
         return storeItems;
     }
