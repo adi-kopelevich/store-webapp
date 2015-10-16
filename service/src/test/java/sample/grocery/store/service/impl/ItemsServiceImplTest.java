@@ -139,7 +139,7 @@ public class ItemsServiceImplTest {
         Mockito.verify(itemDAL, Mockito.times(1)).putItem(firstItem);
         itemsService.addItem(secondItem);
         Mockito.verify(itemDAL, Mockito.times(1)).putItem(secondItem);
-        List<StoreItem> retItems = itemsService.getAllItems();
+        List<StoreItem> retItems = itemsService.getAllItems().getItems();
 
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));

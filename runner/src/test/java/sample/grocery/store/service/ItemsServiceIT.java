@@ -7,10 +7,7 @@ import sample.grocery.store.service.pojo.StoreItem;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by kopelevi on 04/09/2015.
@@ -69,6 +66,34 @@ public class ItemsServiceIT {
         Assert.assertEquals(item.getPrice(), retItem.getPrice());
         Assert.assertEquals(item.getQuantity(), retItem.getQuantity());
         Assert.assertEquals(item.getTags(), retItem.getTags());
+    }
+
+    @Test
+    public void whenAddingMultiItemsThenTheyAreRetrivable() throws Exception {
+        int firstItemId = new Random().nextInt();
+        String firstItemName = UUID.randomUUID().toString();
+        String firstItemBrand = UUID.randomUUID().toString();
+        int firstItemPrice = new Random().nextInt();
+        int firstItemqQuantity = new Random().nextInt();
+        List<String> firstItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+        int secondItemId = firstItemId + new Random().nextInt();
+        String secondItemName = UUID.randomUUID().toString();
+        String secondItemBrand = UUID.randomUUID().toString();
+        int secondItemPrice = new Random().nextInt();
+        int secondItemqQuantity = new Random().nextInt();
+        List<String> secondItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+        StoreItem firstItem = new StoreItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
+        StoreItem secondItem = new StoreItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
+
+        itemsService.addItem(firstItem);
+        itemsService.addItem(secondItem);
+
+        List<StoreItem> retItems = itemsService.getAllItems().getItems();
+        Assert.assertEquals(2, retItems.size());
+        Assert.assertEquals(true, retItems.contains(firstItem));
+        Assert.assertEquals(true, retItems.contains(secondItem));
     }
 
     @Test(expected = NotFoundException.class)

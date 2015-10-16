@@ -10,8 +10,4 @@ public class ServiceLauncher {
         embeddedServer.startServer(true);
     }
 
-
-
-
-
 }

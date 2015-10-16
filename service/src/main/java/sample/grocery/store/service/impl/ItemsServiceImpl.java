@@ -6,6 +6,7 @@ import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.dao.ItemDAL;
 import sample.grocery.store.service.dao.ItemDALMongoDBImpl;
 import sample.grocery.store.service.pojo.StoreItem;
+import sample.grocery.store.service.pojo.StoreItems;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -33,14 +34,14 @@ public class ItemsServiceImpl implements ItemsService {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public List<StoreItem> getAllItems() {
+    public StoreItems getAllItems() {
         List<StoreItem> items = null;
         try {
             items = persistency.getItems();
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
         }
-        return items;
+        return new StoreItems(items);
     }
 
     @GET
