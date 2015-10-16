@@ -4,9 +4,9 @@
 #JAVA_HOME=
 
 # JVM arguments - remote debug argument
-#JAVA_OPTS="$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+JAVA_OPTS="$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 
-# JVM arguments - GC options
+# JVM arguments - GC options. using parallel CPU(s) for young gen & concurent mark and sweep for old gen)
 JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:+UseConcMarkSweepGC"
 
 # JVM arguments - print startup JVM argument
