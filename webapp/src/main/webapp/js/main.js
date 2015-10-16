@@ -74,12 +74,12 @@ $(document).ready(function () {
         jQuery.ajax({
             type: "GET",
             url: "/rest/items",
-            contentType: "application/json; charset=utf-8",
+            headers: {Accept: "application/json; charset=utf-8"},
             dataType: "json",
             success: function (data, status, jqXHR) {
                 items = [];
-                for (var i = 0; i < data.length; i++) {
-                    items.push(data[i]);
+                for (var i = 0; i < data.items.length; i++) {
+                    items.push(data.items[i]);
                 }
                 loadList(items)
             },
