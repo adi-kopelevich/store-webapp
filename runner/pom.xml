@@ -93,7 +93,7 @@
                             <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix></classpathPrefix>
-                            <mainClass>sample.grocery.store.server.ServiceLauncher</mainClass>
+                            <mainClass>sample.task.list.server.ServiceLauncher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

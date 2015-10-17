@@ -1,4 +1,4 @@
-Simple REST Service  for managing (CRUD) Store Items 
+Simple REST Service for managing (CRUD) Task List Items
 
 
 Guidelines for building a project from scratch

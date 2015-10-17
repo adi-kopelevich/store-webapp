@@ -103,7 +103,7 @@ $(document).ready(function () {
                 getTaskListFromRemote();
             },
             error: function (jqXHR, status) {
-                console.log("Failed to store item: " + item.name);
+                console.log("Failed to save item: " + item.name);
             }
         });
     }
