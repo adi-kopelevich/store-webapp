@@ -3,37 +3,37 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>store-app</artifactId>
-        <groupId>sample.grocery.store</groupId>
+        <artifactId>task-list-app</artifactId>
+        <groupId>sample.task.list</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>store-runner</artifactId>
+    <artifactId>task-list-runner</artifactId>
 
     <properties>
         <tmp.dir>tmp</tmp.dir>
         <webapp.dir>webapp</webapp.dir>
         <conf.dir>conf</conf.dir>
-        <app.pkg.name>store-app</app.pkg.name>
+        <app.pkg.name>task-list-app</app.pkg.name>
     </properties>
 
     <dependencies>
         <!-- Application -->
         <dependency>
-            <groupId>sample.grocery.store</groupId>
-            <artifactId>store-conf</artifactId>
+            <groupId>sample.task.list</groupId>
+            <artifactId>task-list-conf</artifactId>
             <version>${project.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
-            <groupId>sample.grocery.store</groupId>
-            <artifactId>store-service</artifactId>
+            <groupId>sample.task.list</groupId>
+            <artifactId>task-list-service</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>sample.grocery.store</groupId>
-            <artifactId>store-webapp</artifactId>
+            <groupId>sample.task.list</groupId>
+            <artifactId>task-list-webapp</artifactId>
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
@@ -105,16 +105,16 @@
                 <configuration>
                     <artifactItems>
                         <artifactItem>
-                            <groupId>sample.grocery.store</groupId>
-                            <artifactId>store-conf</artifactId>
+                            <groupId>sample.task.list</groupId>
+                            <artifactId>task-list-conf</artifactId>
                             <version>${project.version}</version>
                             <type>zip</type>
                             <overWrite>true</overWrite>
                             <outputDirectory>${project.build.directory}/${tmp.dir}</outputDirectory>
                         </artifactItem>
                         <artifactItem>
-                            <groupId>sample.grocery.store</groupId>
-                            <artifactId>store-webapp</artifactId>
+                            <groupId>sample.task.list</groupId>
+                            <artifactId>task-list-webapp</artifactId>
                             <version>${project.version}</version>
                             <type>war</type>
                             <overWrite>true</overWrite>

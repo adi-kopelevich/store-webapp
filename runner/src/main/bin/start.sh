@@ -16,4 +16,4 @@ JAVA_OPTS="$JAVA_OPTS -XX:+PrintCommandLineFlags"
 JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 
 # Start Server
-"$JAVA_HOME/bin/java" $JAVA_OPTS -jar ../webapp/WEB-INF/lib/store-runner-1.0-SNAPSHOT.jar
+"$JAVA_HOME/bin/java" $JAVA_OPTS -jar ../webapp/WEB-INF/lib/task-list-runner-1.0-SNAPSHOT.jar

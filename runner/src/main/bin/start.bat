@@ -16,4 +16,4 @@ rem JVM arguments - print startup JVM argument
 set "JAVA_OPTS=%JAVA_OPTS% -XX:+PrintCommandLineFlags"
 
 rem Start Server
-"%JAVA_HOME%/bin/java" %JAVA_OPTS% -jar ../webapp/WEB-INF/lib/store-runner-1.0-SNAPSHOT.jar
+"%JAVA_HOME%/bin/java" %JAVA_OPTS% -jar ../webapp/WEB-INF/lib/task-list-runner-1.0-SNAPSHOT.jar

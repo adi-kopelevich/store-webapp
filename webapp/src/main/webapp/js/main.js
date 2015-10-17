@@ -25,7 +25,7 @@ $(document).ready(function () {
         var value = $('#main-input').val();
         $('#main-input').val('');
         var item = createItemObject(value);
-        storeItemToRemote(item);
+        saveItemToRemote(item);
         // set button to
         $('button').prop('disabled', true);
     });
@@ -92,7 +92,7 @@ $(document).ready(function () {
         });
     }
 
-    function storeItemToRemote(item) {
+    function saveItemToRemote(item) {
         jQuery.ajax({
             type: "POST",
             url: "/rest/items",
