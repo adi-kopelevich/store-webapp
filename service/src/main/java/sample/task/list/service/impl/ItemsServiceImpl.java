@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.service.ItemsService;
 import sample.task.list.service.dao.ItemDAL;
+import sample.task.list.service.dao.ItemDALMapImpl;
 import sample.task.list.service.dao.ItemDALMongoDBImpl;
 import sample.task.list.service.pojo.TaskItem;
 import sample.task.list.service.pojo.TaskList;
@@ -20,12 +21,20 @@ import java.util.List;
 @Path("/items")
 public class ItemsServiceImpl implements ItemsService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ItemDALMongoDBImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDALMongoDBImpl.class);
 
     private final ItemDAL persistency;
 
     public ItemsServiceImpl() {
-        this.persistency = ItemDALMongoDBImpl.getInstance();
+        ItemDAL itemDAL;
+        if (ItemDALMongoDBImpl.isMongoConfEnabled()) {
+            LOGGER.info("MongoDB conf is set to enabled, going to use mongoDB store...");
+            itemDAL = ItemDALMongoDBImpl.getInstance();
+        } else {
+            LOGGER.info("MongoDB conf is set to disabled, going to use local map store...");
+            itemDAL = ItemDALMapImpl.getInstance();
+        }
+        this.persistency = itemDAL;
     }
 
     public ItemsServiceImpl(ItemDAL itemDAL) {

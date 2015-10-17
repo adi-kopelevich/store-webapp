@@ -15,13 +15,16 @@ import java.util.List;
  */
 public class ItemDALMongoDBImpl implements ItemDAL {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ItemDALMongoDBImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDALMongoDBImpl.class);
 
     private static final String MONGO_HOST_ENV_KEY = "mongo.host";
     private static final String MONGO_PORT_ENV_KEY = "mongo.port";
+    private static final String MONGO_ENABLED_ENV_KEY = "mongo.enabled";
 
     private static final String DEFAULT_MONGO_HOST = "localhost";
     private static final String DEFAULT_MONGO_PORT = "27017";
+    private static final String DEFAULT_MONGO_ENABLED = "false";
+
     private static final String DB_NAME = "taskLists";
     private static final String COLLECTION_NAME = "items";
     private static final String UNIQUE_INDEX = "id";
@@ -40,10 +43,11 @@ public class ItemDALMongoDBImpl implements ItemDAL {
 
     private DBCollection initDBCollection() {
         DBCollection collection = null;
-        String mongoHost = getMongoProperty(MONGO_HOST_ENV_KEY, DEFAULT_MONGO_HOST);
-        String mongoPort = getMongoProperty(MONGO_PORT_ENV_KEY, DEFAULT_MONGO_PORT);
-        LOGGER.debug("Going to initiate MongoDB client with host= " + mongoHost + "and port=" + mongoPort);
         try {
+            String mongoHost = getMongoProperty(MONGO_HOST_ENV_KEY, DEFAULT_MONGO_HOST);
+            String mongoPort = getMongoProperty(MONGO_PORT_ENV_KEY, DEFAULT_MONGO_PORT);
+            LOGGER.debug("Going to initiate MongoDB client with host= " + mongoHost + "and port=" + mongoPort);
+
             MongoClient mongoClient = new MongoClient(mongoHost, Integer.valueOf(mongoPort));
             mongoClient.setWriteConcern(WriteConcern.ACKNOWLEDGED);
             DB db = mongoClient.getDB(DB_NAME);
@@ -109,7 +113,7 @@ public class ItemDALMongoDBImpl implements ItemDAL {
                         LOGGER.debug("Item updated successfully: " + toDBObject(item).toString());
                     }
                 } else {
-                    logAndThrowErr("Failed to update, resource with ID: " + item.getId() + " was not found, probably removed by another thread...", null);
+                    logAndThrowErr("Failed to update, resource with ID: " + item.getId() + " was not found, probably removed by another thread...");
                 }
             } catch (Exception e) {
                 logAndThrowErr("Failed to update item with ID: " + item.getId(), e);
@@ -139,7 +143,7 @@ public class ItemDALMongoDBImpl implements ItemDAL {
         }
     }
 
-    private String getMongoProperty(String envKey, String defVal) {
+    private static String getMongoProperty(String envKey, String defVal) {
         String mongoPropertyValue = System.getProperty(envKey);
         if (mongoPropertyValue == null) {
             mongoPropertyValue = defVal;
@@ -163,6 +167,10 @@ public class ItemDALMongoDBImpl implements ItemDAL {
         return searchQuery;
     }
 
+    private void logAndThrowErr(String errMsg) {
+        logAndThrowErr(errMsg, null);
+    }
+
     private void logAndThrowErr(String errMsg, Exception e) {
         if (e == null) {
             LOGGER.error(errMsg);
@@ -171,6 +179,11 @@ public class ItemDALMongoDBImpl implements ItemDAL {
             LOGGER.error(errMsg, e);
             throw new RuntimeException(errMsg, e);
         }
+    }
+
+    public static boolean isMongoConfEnabled() {
+        String mongoEnabledString = getMongoProperty(MONGO_ENABLED_ENV_KEY, DEFAULT_MONGO_ENABLED);
+        return Boolean.valueOf(mongoEnabledString);
     }
 
 }
