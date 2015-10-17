@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement
-public class StoreItem {
+public class TaskItem {
 
     private int id;
     private String name;
@@ -13,11 +13,11 @@ public class StoreItem {
     private int quantity;
     private List<String> tags;
 
-    public StoreItem() { //for serialization
+    public TaskItem() { //for serialization
 
     }
 
-    public StoreItem(int id, String name, String brand, int price, int quantity, List<String> tags) {
+    public TaskItem(int id, String name, String brand, int price, int quantity, List<String> tags) {
         this.id = id;
         this.name = name;
         this.brand = brand;
@@ -80,14 +80,14 @@ public class StoreItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        StoreItem storeItem = (StoreItem) o;
+        TaskItem taskItem = (TaskItem) o;
 
-        if (id != storeItem.id) return false;
-        if (price != storeItem.price) return false;
-        if (quantity != storeItem.quantity) return false;
-        if (name != null ? !name.equals(storeItem.name) : storeItem.name != null) return false;
-        if (brand != null ? !brand.equals(storeItem.brand) : storeItem.brand != null) return false;
-        return !(tags != null ? !tags.equals(storeItem.tags) : storeItem.tags != null);
+        if (id != taskItem.id) return false;
+        if (price != taskItem.price) return false;
+        if (quantity != taskItem.quantity) return false;
+        if (name != null ? !name.equals(taskItem.name) : taskItem.name != null) return false;
+        if (brand != null ? !brand.equals(taskItem.brand) : taskItem.brand != null) return false;
+        return !(tags != null ? !tags.equals(taskItem.tags) : taskItem.tags != null);
 
     }
 

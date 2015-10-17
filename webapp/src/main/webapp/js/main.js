@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     var items = [];
     loadList(items);
-    getStoreItemsFromRemote();
+    getTaskListFromRemote();
     var index;
 
     // if input is empty disable button
@@ -52,7 +52,7 @@ $(document).ready(function () {
     // loadList
     function loadList(items) {
         $('li').remove();
-        if (items.length > 0) {
+        if (items != null && items.length > 0) {
             for (var i = 0; i < items.length; i++) {
                 $('ul').append('<li class= "list-group-item" data-toggle="modal" data-target="#editModal">' + items[i].name + '<span class="glyphicon glyphicon-remove"></span</li>');
             }
@@ -70,7 +70,7 @@ $(document).ready(function () {
         return myItem;
     }
 
-    function getStoreItemsFromRemote() {
+    function getTaskListFromRemote() {
         jQuery.ajax({
             type: "GET",
             url: "/rest/items",
@@ -78,8 +78,11 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data, status, jqXHR) {
                 items = [];
-                for (var i = 0; i < data.items.length; i++) {
-                    items.push(data.items[i]);
+                var retItems = data.items;
+                if (retItems != null && retItems.length > 0) {
+                    for (var i = 0; i < retItems.length; i++) {
+                        items.push(retItems[i]);
+                    }
                 }
                 loadList(items)
             },
@@ -97,10 +100,10 @@ $(document).ready(function () {
             data: JSON.stringify(item),
             dataType: "json",
             success: function (data, status, jqXHR) {
-                getStoreItemsFromRemote();
+                getTaskListFromRemote();
             },
             error: function (jqXHR, status) {
-                console.log("Failed to store item: " + storeItem);
+                console.log("Failed to store item: " + item.name);
             }
         });
     }
@@ -111,7 +114,7 @@ $(document).ready(function () {
             url: "/rest/items/" + item.id,
             contentType: "application/json; charset=utf-8",
             success: function (data, status, jqXHR) {
-                getStoreItemsFromRemote();
+                getTaskListFromRemote();
             },
             error: function (jqXHR, status) {
                 console.log("Failed to delete item: " + item);
@@ -127,7 +130,7 @@ $(document).ready(function () {
             data: JSON.stringify(item),
             dataType: "json",
             success: function (data, status, jqXHR) {
-                getStoreItemsFromRemote();
+                getTaskListFromRemote();
             },
             error: function (jqXHR, status) {
                 console.log("Failed to update item: " + item);

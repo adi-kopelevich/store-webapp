@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sample.grocery.store.service.pojo.StoreItem;
+import sample.grocery.store.service.pojo.TaskItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.UUID;
  */
 public class ItemDALMapImplTest {
 
-    private static final ItemDAL store = ItemDALMapImpl.getInstance();
+    private static final ItemDAL persistency = ItemDALMapImpl.getInstance();
 
     @Before
     public void setUp() throws Exception {
-        store.clear();
+        persistency.clear();
     }
 
     @After
@@ -37,10 +37,10 @@ public class ItemDALMapImplTest {
 
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
-        store.putItem(item);
-        StoreItem retItem = store.getItem(itemId);
+        persistency.putItem(item);
+        TaskItem retItem = persistency.getItem(itemId);
 
         Assert.assertEquals(item.getId(), retItem.getId());
         Assert.assertEquals(item.getName(), retItem.getName());
@@ -53,7 +53,7 @@ public class ItemDALMapImplTest {
     @Test
     public void whenGettingNotExistsThenNullWillBeReturned() throws Exception {
         int itemId = new Random().nextInt();
-        StoreItem retItem = store.getItem(itemId);
+        TaskItem retItem = persistency.getItem(itemId);
         Assert.assertEquals(null, retItem);
     }
 
@@ -66,11 +66,11 @@ public class ItemDALMapImplTest {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
-        store.putItem(item);
-        store.removeItem(itemId);
-        StoreItem retItem = store.getItem(itemId);
+        persistency.putItem(item);
+        persistency.removeItem(itemId);
+        TaskItem retItem = persistency.getItem(itemId);
 
         Assert.assertEquals(null, retItem);
     }
@@ -84,13 +84,13 @@ public class ItemDALMapImplTest {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
-        store.putItem(originalItem);
+        TaskItem originalItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        persistency.putItem(originalItem);
 
-        StoreItem updatedItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
-        store.putItem(updatedItem);
+        TaskItem updatedItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
+        persistency.putItem(updatedItem);
 
-        StoreItem retItem = store.getItem(itemId);
+        TaskItem retItem = persistency.getItem(itemId);
 
         Assert.assertEquals(updatedItem.getId(), retItem.getId());
         Assert.assertEquals(updatedItem.getName(), retItem.getName());
@@ -116,12 +116,12 @@ public class ItemDALMapImplTest {
         int secondItemqQuantity = new Random().nextInt();
         List<String> secondItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem firstItem = new StoreItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
-        StoreItem secondItem = new StoreItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
+        TaskItem firstItem = new TaskItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
+        TaskItem secondItem = new TaskItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
 
-        store.putItem(firstItem);
-        store.putItem(secondItem);
-        List<StoreItem> retItems = store.getItems();
+        persistency.putItem(firstItem);
+        persistency.putItem(secondItem);
+        List<TaskItem> retItems = persistency.getItems();
 
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));

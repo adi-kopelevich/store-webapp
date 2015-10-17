@@ -1,6 +1,6 @@
 package sample.grocery.store.service.dao;
 
-import sample.grocery.store.service.pojo.StoreItem;
+import sample.grocery.store.service.pojo.TaskItem;
 
 import java.util.List;
 
@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface ItemDAL {
 
-    StoreItem getItem(int itemId);
+    TaskItem getItem(int itemId);
 
-    List<StoreItem> getItems();
+    List<TaskItem> getItems();
 
-    void putItem(StoreItem item);
+    void putItem(TaskItem item);
 
     void removeItem(int itemId);
 

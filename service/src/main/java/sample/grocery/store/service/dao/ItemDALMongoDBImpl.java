@@ -5,7 +5,7 @@ import com.mongodb.*;
 import com.mongodb.util.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.grocery.store.service.pojo.StoreItem;
+import sample.grocery.store.service.pojo.TaskItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class ItemDALMongoDBImpl implements ItemDAL {
 
     private static final String DEFAULT_MONGO_HOST = "localhost";
     private static final String DEFAULT_MONGO_PORT = "27017";
-    private static final String DB_NAME = "mystore";
+    private static final String DB_NAME = "taskLists";
     private static final String COLLECTION_NAME = "items";
     private static final String UNIQUE_INDEX = "id";
 
@@ -58,14 +58,14 @@ public class ItemDALMongoDBImpl implements ItemDAL {
     }
 
     @Override
-    public StoreItem getItem(int itemId) {
-        StoreItem ret = null;
+    public TaskItem getItem(int itemId) {
+        TaskItem ret = null;
         try {
             BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
             DBCursor queryResult = collection.find(searchQuery);
             if (queryResult.hasNext()) {
                 DBObject retObj = queryResult.next();
-                ret = toStoreItem(retObj.toString());
+                ret = toTaskItem(retObj.toString());
                 LOGGER.debug("Found: " + retObj + " for query: " + searchQuery);
             } else {
                 ret = null;
@@ -78,24 +78,24 @@ public class ItemDALMongoDBImpl implements ItemDAL {
     }
 
     @Override
-    public List<StoreItem> getItems() {
-        List<StoreItem> storeItems = null;
+    public List<TaskItem> getItems() {
+        List<TaskItem> taskItems = null;
         try {
-            storeItems = new ArrayList<StoreItem>();
+            taskItems = new ArrayList<TaskItem>();
             DBCursor queryResult = collection.find();
             while (queryResult.hasNext()) {
-                String storeItemJsonFormat = queryResult.next().toString();
-                StoreItem storeItem = toStoreItem(storeItemJsonFormat);
-                storeItems.add(storeItem);
+                String taskItemJsonFormat = queryResult.next().toString();
+                TaskItem taskItem = toTaskItem(taskItemJsonFormat);
+                taskItems.add(taskItem);
             }
         } catch (Exception e) {
             logAndThrowErr("Failed to get all items", e);
         }
-        return storeItems;
+        return taskItems;
     }
 
     @Override
-    public void putItem(StoreItem item) {
+    public void putItem(TaskItem item) {
         try {
             collection.insert(toDBObject(item));
             if (LOGGER.isDebugEnabled()) {
@@ -148,18 +148,18 @@ public class ItemDALMongoDBImpl implements ItemDAL {
         return mongoPropertyValue;
     }
 
-    private DBObject toDBObject(StoreItem storeItem) {
-        String json = new Gson().toJson(storeItem);
+    private DBObject toDBObject(TaskItem taskItem) {
+        String json = new Gson().toJson(taskItem);
         return (DBObject) JSON.parse(json);
     }
 
-    private StoreItem toStoreItem(String storeItemJson) {
-        return new Gson().fromJson(storeItemJson, StoreItem.class);
+    private TaskItem toTaskItem(String taskItemJson) {
+        return new Gson().fromJson(taskItemJson, TaskItem.class);
     }
 
-    private BasicDBObject getUniqueContactSearchQuery(int storeItemId) {
+    private BasicDBObject getUniqueContactSearchQuery(int taskItemId) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put(UNIQUE_INDEX, storeItemId);
+        searchQuery.put(UNIQUE_INDEX, taskItemId);
         return searchQuery;
     }
 

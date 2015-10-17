@@ -3,8 +3,8 @@ package sample.grocery.store.service.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.grocery.store.service.ItemsService;
-import sample.grocery.store.service.pojo.StoreItem;
-import sample.grocery.store.service.pojo.StoreItems;
+import sample.grocery.store.service.pojo.TaskItem;
+import sample.grocery.store.service.pojo.TaskList;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
@@ -19,7 +19,7 @@ public class ItemServiceClient implements ItemsService {
     private static final String DEFAULT_PROTOCOL = "http";
     private static final String DEFAULT_HOST = "localhost";
     private static final String DEFAULT_PORT = "8080";
-    private static final String DEFAULT_CONTEXT = "store-webapp";
+    private static final String DEFAULT_CONTEXT = "task-list";
     private static final String RESOUCEE = "items";
     private static final String APP_PATH = "rest";
     private final String mediaType;
@@ -55,17 +55,17 @@ public class ItemServiceClient implements ItemsService {
     }
 
 
-    public StoreItems getAllItems() {
+    public TaskList getAllItems() {
         Invocation.Builder invocationBuilder = webTarget.request(mediaType);
-        return invocationBuilder.get(StoreItems.class);
+        return invocationBuilder.get(TaskList.class);
     }
 
-    public StoreItem getItem(int itemId) {
+    public TaskItem getItem(int itemId) {
         Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(mediaType);
-        return invocationBuilder.get(StoreItem.class);
+        return invocationBuilder.get(TaskItem.class);
     }
 
-    public void addItem(StoreItem item) {
+    public void addItem(TaskItem item) {
         Invocation.Builder invocationBuilder = webTarget.request(mediaType);
         invocationBuilder.post(Entity.entity(item, mediaType));
     }
@@ -75,7 +75,7 @@ public class ItemServiceClient implements ItemsService {
         invocationBuilder.delete();
     }
 
-    public void updateItem(StoreItem item) {
+    public void updateItem(TaskItem item) {
         Invocation.Builder invocationBuilder = webTarget.request(mediaType);
         invocationBuilder.put(Entity.entity(item, mediaType));
     }

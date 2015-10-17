@@ -8,23 +8,22 @@ import java.util.List;
  */
 
 @XmlRootElement
-public class StoreItems {
+public class TaskList {
 
-    private List<StoreItem> items;
+    private List<TaskItem> items;
 
-    public StoreItems() { //for serialization
-
+    public TaskList() { //for serialization
     }
 
-    public StoreItems(List<StoreItem> items) { //for serialization
+    public TaskList(List<TaskItem> items) { //for serialization
         this.items = items;
     }
 
-    public List<StoreItem> getItems() {
+    public List<TaskItem> getItems() {
         return items;
     }
 
-    public void setItems(List<StoreItem> items) {
+    public void setItems(List<TaskItem> items) {
         this.items = items;
     }
 }

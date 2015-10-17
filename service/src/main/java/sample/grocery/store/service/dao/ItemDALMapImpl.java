@@ -1,6 +1,6 @@
 package sample.grocery.store.service.dao;
 
-import sample.grocery.store.service.pojo.StoreItem;
+import sample.grocery.store.service.pojo.TaskItem;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class ItemDALMapImpl implements ItemDAL {
     // its drawbacks are:
     //      - larger memory footprint compared to a regular has map and
     //      - handling null keys which are allowed as contrast to regular hash map, as it  might be returned while iterating over them
-    private final Map<Integer, StoreItem> itemsMap = new ConcurrentHashMap<>();
+    private final Map<Integer, TaskItem> itemsMap = new ConcurrentHashMap<>();
 
     private static final ItemDALMapImpl INSTANCE = new ItemDALMapImpl();
 
@@ -28,18 +28,18 @@ public class ItemDALMapImpl implements ItemDAL {
         return INSTANCE;
     }
 
-    public StoreItem getItem(int itemId) {
+    public TaskItem getItem(int itemId) {
         return itemsMap.get(itemId);
     }
 
-    public List<StoreItem> getItems() {// ConcurrentHashMap might contain null keys
+    public List<TaskItem> getItems() {// ConcurrentHashMap might contain null keys
         return itemsMap.entrySet().stream()
                 .filter(x -> x != null)
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
 
-    public void putItem(StoreItem item) {
+    public void putItem(TaskItem item) {
         itemsMap.put(item.getId(), item);
     }
 

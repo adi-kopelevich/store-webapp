@@ -5,7 +5,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import sample.grocery.store.service.ItemsService;
 import sample.grocery.store.service.dao.ItemDAL;
-import sample.grocery.store.service.pojo.StoreItem;
+import sample.grocery.store.service.pojo.TaskItem;
 
 import javax.ws.rs.NotFoundException;
 import java.util.*;
@@ -26,7 +26,7 @@ public class ItemsServiceImplTest {
         int itemPrice = new Random().nextInt();
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
         Mockito.when(itemDAL.getItem(itemId)).thenReturn(item);
@@ -35,7 +35,7 @@ public class ItemsServiceImplTest {
         itemsService.addItem(item);
         Mockito.verify(itemDAL, Mockito.times(1)).putItem(item);
 
-        StoreItem retItem = itemsService.getItem(itemId);
+        TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(item.getId(), retItem.getId());
         Assert.assertEquals(item.getName(), retItem.getName());
         Assert.assertEquals(item.getBrand(), retItem.getBrand());
@@ -63,7 +63,7 @@ public class ItemsServiceImplTest {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
         Mockito.when(itemDAL.getItem(itemId)).thenReturn(null);
@@ -87,8 +87,8 @@ public class ItemsServiceImplTest {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
-        StoreItem updatedItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
+        TaskItem originalItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem updatedItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
 
         ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
         Mockito.when(itemDAL.getItem(itemId)).thenReturn(updatedItem);
@@ -100,7 +100,7 @@ public class ItemsServiceImplTest {
         itemsService.updateItem(updatedItem);
         Mockito.verify(itemDAL, Mockito.times(1)).putItem(updatedItem);
 
-        StoreItem retItem = itemsService.getItem(itemId);
+        TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(updatedItem.getId(), retItem.getId());
         Assert.assertEquals(updatedItem.getName(), retItem.getName());
         Assert.assertEquals(updatedItem.getBrand(), retItem.getBrand());
@@ -125,9 +125,9 @@ public class ItemsServiceImplTest {
         int secondItemqQuantity = new Random().nextInt();
         List<String> secondItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem firstItem = new StoreItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
-        StoreItem secondItem = new StoreItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
-        List<StoreItem> items = new ArrayList<StoreItem>();
+        TaskItem firstItem = new TaskItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
+        TaskItem secondItem = new TaskItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
+        List<TaskItem> items = new ArrayList<TaskItem>();
         items.add(firstItem);
         items.add(secondItem);
 
@@ -139,7 +139,7 @@ public class ItemsServiceImplTest {
         Mockito.verify(itemDAL, Mockito.times(1)).putItem(firstItem);
         itemsService.addItem(secondItem);
         Mockito.verify(itemDAL, Mockito.times(1)).putItem(secondItem);
-        List<StoreItem> retItems = itemsService.getAllItems().getItems();
+        List<TaskItem> retItems = itemsService.getAllItems().getItems();
 
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
@@ -169,7 +169,7 @@ public class ItemsServiceImplTest {
         int itemPrice = new Random().nextInt();
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
         String throwableMsg = UUID.randomUUID().toString();

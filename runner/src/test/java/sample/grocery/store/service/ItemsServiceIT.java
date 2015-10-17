@@ -3,7 +3,7 @@ package sample.grocery.store.service;
 import org.junit.*;
 import sample.grocery.store.server.EmbeddedServer;
 import sample.grocery.store.service.client.ItemServiceClient;
-import sample.grocery.store.service.pojo.StoreItem;
+import sample.grocery.store.service.pojo.TaskItem;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -55,10 +55,10 @@ public class ItemsServiceIT {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         itemsService.addItem(item);
-        StoreItem retItem = itemsService.getItem(itemId);
+        TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(item.getId(), retItem.getId());
         Assert.assertEquals(item.getName(), retItem.getName());
         Assert.assertEquals(item.getBrand(), retItem.getBrand());
@@ -83,13 +83,13 @@ public class ItemsServiceIT {
         int secondItemqQuantity = new Random().nextInt();
         List<String> secondItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem firstItem = new StoreItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
-        StoreItem secondItem = new StoreItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
+        TaskItem firstItem = new TaskItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
+        TaskItem secondItem = new TaskItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
 
         itemsService.addItem(firstItem);
         itemsService.addItem(secondItem);
 
-        List<StoreItem> retItems = itemsService.getAllItems().getItems();
+        List<TaskItem> retItems = itemsService.getAllItems().getItems();
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));
@@ -110,7 +110,7 @@ public class ItemsServiceIT {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem item = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
 
         itemsService.addItem(item);
         itemsService.removeItem(itemId);
@@ -126,13 +126,13 @@ public class ItemsServiceIT {
         int itemqQuantity = new Random().nextInt();
         List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        StoreItem originalItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem originalItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
         itemsService.addItem(originalItem);
 
-        StoreItem updatedItem = new StoreItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
+        TaskItem updatedItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
         itemsService.updateItem(updatedItem);
 
-        StoreItem retItem = itemsService.getItem(itemId);
+        TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(updatedItem.getId(), retItem.getId());
         Assert.assertEquals(updatedItem.getName(), retItem.getName());
         Assert.assertEquals(updatedItem.getBrand(), retItem.getBrand());
