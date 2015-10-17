@@ -20,7 +20,6 @@ public class ItemsServiceIT {
     private static final String SERVER_ROOT = "./target/tmp";
     private static final int PORT = 8989;
     private static final String HOST = "localhost";
-    private static final String CONTEXT = "//";
 
     static EmbeddedServer embeddedServer;
     ItemsService itemsService;
@@ -50,41 +49,36 @@ public class ItemsServiceIT {
     public void whenAddItemThenItIsRetrivable() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
-        String itemBrand = UUID.randomUUID().toString();
-        int itemPrice = new Random().nextInt();
-        int itemqQuantity = new Random().nextInt();
-        List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        String itemCategory = UUID.randomUUID().toString();
+        long itemReminder = new Random().nextLong();
+        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
-
+        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
         itemsService.addItem(item);
         TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(item.getId(), retItem.getId());
         Assert.assertEquals(item.getName(), retItem.getName());
-        Assert.assertEquals(item.getBrand(), retItem.getBrand());
-        Assert.assertEquals(item.getPrice(), retItem.getPrice());
-        Assert.assertEquals(item.getQuantity(), retItem.getQuantity());
-        Assert.assertEquals(item.getTags(), retItem.getTags());
+        Assert.assertEquals(item.getCategory(), retItem.getCategory());
+        Assert.assertEquals(item.getReminder(), retItem.getReminder());
+        Assert.assertEquals(item.getNotes(), retItem.getNotes());
     }
 
     @Test
     public void whenAddingMultiItemsThenTheyAreRetrivable() throws Exception {
         int firstItemId = new Random().nextInt();
         String firstItemName = UUID.randomUUID().toString();
-        String firstItemBrand = UUID.randomUUID().toString();
-        int firstItemPrice = new Random().nextInt();
-        int firstItemqQuantity = new Random().nextInt();
+        String firstItemCategory = UUID.randomUUID().toString();
+        long firstItemReminder = new Random().nextLong();
         List<String> firstItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         int secondItemId = firstItemId + new Random().nextInt();
         String secondItemName = UUID.randomUUID().toString();
-        String secondItemBrand = UUID.randomUUID().toString();
-        int secondItemPrice = new Random().nextInt();
-        int secondItemqQuantity = new Random().nextInt();
+        String secondItemCategory = UUID.randomUUID().toString();
+        long secondItemReminder = new Random().nextLong();
         List<String> secondItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        TaskItem firstItem = new TaskItem(firstItemId, firstItemName, firstItemBrand, firstItemPrice, firstItemqQuantity, firstItemTags);
-        TaskItem secondItem = new TaskItem(secondItemId, secondItemName, secondItemBrand, secondItemPrice, secondItemqQuantity, secondItemTags);
+        TaskItem firstItem = new TaskItem(firstItemId, firstItemName, firstItemCategory, firstItemReminder, firstItemTags);
+        TaskItem secondItem = new TaskItem(secondItemId, secondItemName, secondItemCategory, secondItemReminder, secondItemTags);
 
         itemsService.addItem(firstItem);
         itemsService.addItem(secondItem);
@@ -105,12 +99,11 @@ public class ItemsServiceIT {
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
-        String itemBrand = UUID.randomUUID().toString();
-        int itemPrice = new Random().nextInt();
-        int itemqQuantity = new Random().nextInt();
-        List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        String itemCategory = UUID.randomUUID().toString();
+        long itemReminder = new Random().nextLong();
+        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        TaskItem item = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
 
         itemsService.addItem(item);
         itemsService.removeItem(itemId);
@@ -121,24 +114,22 @@ public class ItemsServiceIT {
     public void whenUpdatingAnItemThenChangesAreRetrivable() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
-        String itemBrand = UUID.randomUUID().toString();
-        int itemPrice = new Random().nextInt();
-        int itemqQuantity = new Random().nextInt();
-        List<String> itemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+        String itemCategory = UUID.randomUUID().toString();
+        long itemReminder = new Random().nextLong();
+        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        TaskItem originalItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity, itemTags);
+        TaskItem originalItem = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
         itemsService.addItem(originalItem);
 
-        TaskItem updatedItem = new TaskItem(itemId, itemName, itemBrand, itemPrice, itemqQuantity + 100, itemTags);
+        TaskItem updatedItem = new TaskItem(itemId, itemName, itemCategory, itemReminder + 10000, itemNotes);
         itemsService.updateItem(updatedItem);
 
         TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(updatedItem.getId(), retItem.getId());
         Assert.assertEquals(updatedItem.getName(), retItem.getName());
-        Assert.assertEquals(updatedItem.getBrand(), retItem.getBrand());
-        Assert.assertEquals(updatedItem.getPrice(), retItem.getPrice());
-        Assert.assertEquals(updatedItem.getQuantity(), retItem.getQuantity());
-        Assert.assertEquals(updatedItem.getTags(), retItem.getTags());
+        Assert.assertEquals(updatedItem.getCategory(), retItem.getCategory());
+        Assert.assertEquals(updatedItem.getReminder(), retItem.getReminder());
+        Assert.assertEquals(updatedItem.getNotes(), retItem.getNotes());
     }
 
 }

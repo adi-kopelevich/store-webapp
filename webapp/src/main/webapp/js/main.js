@@ -63,10 +63,12 @@ $(document).ready(function () {
         var myItem = new Object();
         myItem.id = Math.floor((Math.random() * 1000) + 1);
         myItem.name = name;
-        myItem.brand = "brand for " + name;
-        myItem.price = Math.floor((Math.random() * 100) + 1);
-        myItem.quantity = Math.floor((Math.random() * 1000) + 1);
-        myItem.tags = [];
+        myItem.category = "home";
+        // set a reminder to a week from now
+        var aWeekFromNow = new Date();
+        aWeekFromNow.setDate(aWeekFromNow.getDate()+7);
+        myItem.reminder = aWeekFromNow.getTime();
+        myItem.notes = ["note1", "note2"];
         return myItem;
     }
 

@@ -8,22 +8,20 @@ public class TaskItem {
 
     private int id;
     private String name;
-    private String brand;
-    private int price;
-    private int quantity;
-    private List<String> tags;
+    private String category;
+    private long reminder;
+    private List<String> notes;
 
     public TaskItem() { //for serialization
 
     }
 
-    public TaskItem(int id, String name, String brand, int price, int quantity, List<String> tags) {
+    public TaskItem(int id, String name, String category, long reminder, List<String> notes) {
         this.id = id;
         this.name = name;
-        this.brand = brand;
-        this.price = price;
-        this.quantity = quantity;
-        this.tags = tags;
+        this.category = category;
+        this.reminder = reminder;
+        this.notes = notes;
     }
 
     public int getId() {
@@ -42,39 +40,32 @@ public class TaskItem {
         this.name = name;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getCategory() {
+        return category;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public int getPrice() {
-        return price;
+    public long getReminder() {
+        return reminder;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setReminder(long reminder) {
+        this.reminder = reminder;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public List<String> getNotes() {
+        return notes;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
+    public void setNotes(List<String> notes) {
+        this.notes = notes;
     }
 
     // for comparission over http client-->server
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,22 +74,21 @@ public class TaskItem {
         TaskItem taskItem = (TaskItem) o;
 
         if (id != taskItem.id) return false;
-        if (price != taskItem.price) return false;
-        if (quantity != taskItem.quantity) return false;
-        if (name != null ? !name.equals(taskItem.name) : taskItem.name != null) return false;
-        if (brand != null ? !brand.equals(taskItem.brand) : taskItem.brand != null) return false;
-        return !(tags != null ? !tags.equals(taskItem.tags) : taskItem.tags != null);
+        if (reminder != taskItem.reminder) return false;
+        if (!category.equals(taskItem.category)) return false;
+        if (!name.equals(taskItem.name)) return false;
+        if (!notes.equals(taskItem.notes)) return false;
 
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (brand != null ? brand.hashCode() : 0);
-        result = 31 * result + price;
-        result = 31 * result + quantity;
-        result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        result = 31 * result + name.hashCode();
+        result = 31 * result + category.hashCode();
+        result = 31 * result + (int) (reminder ^ (reminder >>> 32));
+        result = 31 * result + notes.hashCode();
         return result;
     }
 }
