@@ -36,9 +36,11 @@ Getting started...
 
 [Please note: In case you want to app to work In-memory instead of using a mongoDB instance for persistence, please refer to mongo.properties under /conf dir in order to change the configuration appropriately] 
 
-### Access the application using a browser - http://localhost:8080/
+### Access the application using a browser 
+http://localhost:8080/
 
-### Access the application REST Resource using a browser/client - http://localhost:8080/rest/items/
+### Access the application REST Resource using a browser/client
+http://localhost:8080/rest/items/
 
 
 
