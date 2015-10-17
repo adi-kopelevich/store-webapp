@@ -1,8 +1,8 @@
 task-list-app
 =======================
-Simple Task List Application for managing a list of To-do(s).
-Served by simple JS UI (JQuery) and JAX-RS REST service (Jersey) working against MongoDB(default)/In-memory for persistence.
-Deployed using webapp context handler on top of a lean embedded Jetty server.
+Simple Task List Application for managing a list of To-do items.
+Served by simple JS UI (JQuery) and a JAX-RS REST service (Jersey) implementation working against MongoDB(default)/In-memory for persistence.
+Deployed using a Webapp context handler on top of a lean embedded Jetty server.
 
 The application consists the following directories:
 
@@ -34,17 +34,12 @@ Getting started...
 2. $ tar -xvf ./runner/task-list-app-1.0-SNAPSHOT.tar.gz --directory ./app
 3. $ ./app/bin/start.sh 
 
-[Please note: In case you want to app to work In-memory instead of using a mongoDB instance for persistence, please refer to mongo.properties under /conf dir in order to change the configuration appropriately] 
+#### Please note:
+In case you want the application to work In-memory instead of using a mongoDB instance for persistence, 
+Please refer to mongo.properties under /conf dir in order to change the configuration appropriately before running start.sh] 
 
 ### Access the application using a browser 
 http://localhost:8080/
 
 ### Access the application REST Resource using a browser/client
 http://localhost:8080/rest/items/
-
-
-
- 
-
-
-
