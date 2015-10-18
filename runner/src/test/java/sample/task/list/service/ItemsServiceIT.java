@@ -22,10 +22,12 @@ public class ItemsServiceIT {
     private static final String HOST = "localhost";
 
 
-    ItemsService itemsService;
+    private static ItemsService itemsService;
 
     @BeforeClass
     public static void startServer() {
+
+
         // start embedded server on a daemon thread
         Thread serverDaemonThread = new Thread(new Runnable() {
             @Override
@@ -36,11 +38,22 @@ public class ItemsServiceIT {
         serverDaemonThread.setDaemon(true);
         serverDaemonThread.start();
 
+        final int numOfRetries = 5;
+        final int cycleIntervalInMili = 1000;
+        itemsService = new ItemServiceClient(HOST, PORT, MediaType.APPLICATION_JSON_TYPE);
         // wait for server to load
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (int i = 0; i < numOfRetries; i++) {
+            try {
+                itemsService.clearAll();
+                break;
+            } catch (Exception e) {
+                // go to sleep
+                try {
+                    Thread.sleep(cycleIntervalInMili);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
         }
     }
 
