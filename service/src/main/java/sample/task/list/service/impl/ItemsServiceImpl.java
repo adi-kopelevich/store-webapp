@@ -24,11 +24,12 @@ public class ItemsServiceImpl implements ItemsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemDAOMongoDBImpl.class);
 
+    private static final boolean IS_MONGO_ENABLED = ApplicationConfiguration.isMongoEnabled();
     private final ItemDAO persistency;
 
     public ItemsServiceImpl() {
         ItemDAO itemDAO;
-        if (ApplicationConfiguration.isMongoEnabled()) {
+        if (IS_MONGO_ENABLED) {
             LOGGER.info("MongoDB conf is set to enabled, going to use mongoDB store...");
             itemDAO = ItemDAOMongoDBImpl.getInstance();
         } else {
