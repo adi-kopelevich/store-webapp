@@ -28,18 +28,22 @@ public class ItemsServiceImpl implements ItemsService {
     private final ItemDAO persistency;
 
     public ItemsServiceImpl() {
-        ItemDAO itemDAO;
-        if (IS_MONGO_ENABLED) {
-            LOGGER.info("MongoDB conf is set to enabled, going to use mongoDB store...");
-            itemDAO = ItemDAOMongoDBImpl.getInstance();
-        } else {
-            LOGGER.info("MongoDB conf is set to disabled, going to use local map store...");
-            itemDAO = ItemDAOMapImpl.getInstance();
+        ItemDAO itemDAO = null;
+        try {
+            if (IS_MONGO_ENABLED) {
+                LOGGER.info("MongoDB conf is set to enabled, going to use mongoDB store...");
+                itemDAO = ItemDAOMongoDBImpl.getInstance();
+            } else {
+                LOGGER.info("MongoDB conf is set to disabled, going to use local map store...");
+                itemDAO = ItemDAOMapImpl.getInstance();
+            }
+        } catch (Exception e) {
+            logAndThrowServerInitException(e);
         }
         this.persistency = itemDAO;
     }
 
-    public ItemsServiceImpl(ItemDAO itemDAO) {
+    protected ItemsServiceImpl(ItemDAO itemDAO) {
         this.persistency = itemDAO;
     }
 
@@ -132,5 +136,11 @@ public class ItemsServiceImpl implements ItemsService {
         String errMsg = Response.Status.NOT_FOUND + " - " + "Item wth ID: " + itemId;
         LOGGER.error(errMsg);
         throw new NotFoundException(errMsg);
+    }
+
+    private void logAndThrowServerInitException(Exception e) {
+        String errMsg = Response.Status.INTERNAL_SERVER_ERROR + " - Failed to init server. Please check the logs...";
+        LOGGER.error(errMsg, e);
+        throw new InternalServerErrorException(errMsg, e);
     }
 }
