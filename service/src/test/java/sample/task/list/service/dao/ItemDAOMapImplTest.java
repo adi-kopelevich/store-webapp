@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sample.task.list.service.pojo.TaskItem;
+import sample.task.list.service.model.TaskItem;
 
 import java.util.Arrays;
 import java.util.List;

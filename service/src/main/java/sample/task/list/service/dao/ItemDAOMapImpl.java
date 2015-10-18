@@ -1,6 +1,6 @@
 package sample.task.list.service.dao;
 
-import sample.task.list.service.pojo.TaskItem;
+import sample.task.list.service.model.TaskItem;
 
 import java.util.List;
 import java.util.Map;

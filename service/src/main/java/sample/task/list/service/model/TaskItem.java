@@ -1,4 +1,4 @@
-package sample.task.list.service.pojo;
+package sample.task.list.service.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;

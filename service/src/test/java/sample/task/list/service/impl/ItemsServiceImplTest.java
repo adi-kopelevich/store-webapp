@@ -5,7 +5,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import sample.task.list.service.ItemsService;
 import sample.task.list.service.dao.ItemDAO;
-import sample.task.list.service.pojo.TaskItem;
+import sample.task.list.service.model.TaskItem;
 
 import javax.ws.rs.NotFoundException;
 import java.util.*;

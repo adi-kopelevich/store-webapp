@@ -3,7 +3,7 @@ package sample.task.list.service;
 import org.junit.*;
 import sample.task.list.server.EmbeddedServer;
 import sample.task.list.service.client.ItemServiceClient;
-import sample.task.list.service.pojo.TaskItem;
+import sample.task.list.service.model.TaskItem;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;

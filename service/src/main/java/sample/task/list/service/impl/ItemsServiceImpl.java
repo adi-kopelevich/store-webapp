@@ -6,8 +6,8 @@ import sample.task.list.service.ItemsService;
 import sample.task.list.service.dao.ItemDAO;
 import sample.task.list.service.dao.ItemDAOMapImpl;
 import sample.task.list.service.dao.ItemDAOMongoDBImpl;
-import sample.task.list.service.pojo.TaskItem;
-import sample.task.list.service.pojo.TaskList;
+import sample.task.list.service.model.TaskItem;
+import sample.task.list.service.model.TaskList;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

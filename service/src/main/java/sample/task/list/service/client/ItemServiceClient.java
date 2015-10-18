@@ -3,8 +3,8 @@ package sample.task.list.service.client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.service.ItemsService;
-import sample.task.list.service.pojo.TaskItem;
-import sample.task.list.service.pojo.TaskList;
+import sample.task.list.service.model.TaskItem;
+import sample.task.list.service.model.TaskList;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
