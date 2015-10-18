@@ -5,6 +5,7 @@ import com.mongodb.*;
 import com.mongodb.util.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sample.task.list.ApplicationConfiguration;
 import sample.task.list.service.model.TaskItem;
 
 import java.util.ArrayList;
@@ -16,14 +17,6 @@ import java.util.List;
 public class ItemDAOMongoDBImpl implements ItemDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemDAOMongoDBImpl.class);
-
-    private static final String MONGO_HOST_ENV_KEY = "mongo.host";
-    private static final String MONGO_PORT_ENV_KEY = "mongo.port";
-    private static final String MONGO_ENABLED_ENV_KEY = "mongo.enabled";
-
-    private static final String DEFAULT_MONGO_HOST = "localhost";
-    private static final String DEFAULT_MONGO_PORT = "27017";
-    private static final String DEFAULT_MONGO_ENABLED = "false";
 
     private static final String DB_NAME = "taskLists";
     private static final String COLLECTION_NAME = "items";
@@ -44,8 +37,8 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
     private DBCollection initDBCollection() {
         DBCollection collection = null;
         try {
-            String mongoHost = getMongoProperty(MONGO_HOST_ENV_KEY, DEFAULT_MONGO_HOST);
-            String mongoPort = getMongoProperty(MONGO_PORT_ENV_KEY, DEFAULT_MONGO_PORT);
+            String mongoHost = ApplicationConfiguration.getMongoHost();
+            String mongoPort = ApplicationConfiguration.getMongoPort();
             LOGGER.debug("Going to initiate MongoDB client with host= " + mongoHost + "and port=" + mongoPort);
 
             MongoClient mongoClient = new MongoClient(mongoHost, Integer.valueOf(mongoPort));
@@ -179,11 +172,6 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             LOGGER.error(errMsg, e);
             throw new RuntimeException(errMsg, e);
         }
-    }
-
-    public static boolean isMongoConfEnabled() {
-        String mongoEnabledString = getMongoProperty(MONGO_ENABLED_ENV_KEY, DEFAULT_MONGO_ENABLED);
-        return Boolean.valueOf(mongoEnabledString);
     }
 
 }

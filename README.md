@@ -19,7 +19,7 @@ Getting started...
 1. git client 
 2. Maven 3.x and M2_HOME/bin included in PATH
 3. JDK 7 (or above...), JAVA_HOME set appropriately and JAVA_HOME/bin included in path  
-4. MongoDB local instance (please refer to mongo.properties under /conf dir in order to change or enable/disable)
+4. MongoDB local instance (please refer to app.properties under /conf dir in order to change or enable/disable)
 
 ### Build application artifacts 
 
@@ -36,7 +36,7 @@ Getting started...
 
 #### Please note:
 In case you want the application to work In-memory instead of using a mongoDB instance for persistence, 
-Please refer to mongo.properties under /conf dir in order to change the configuration appropriately before running start.sh] 
+Please refer to app.properties under /conf dir in order to change the configuration appropriately before running start.sh] 
 
 ### Access the application using a browser 
 http://localhost:8080/

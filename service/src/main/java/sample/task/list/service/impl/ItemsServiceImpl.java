@@ -2,6 +2,7 @@ package sample.task.list.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sample.task.list.ApplicationConfiguration;
 import sample.task.list.service.ItemsService;
 import sample.task.list.service.dao.ItemDAO;
 import sample.task.list.service.dao.ItemDAOMapImpl;
@@ -27,7 +28,7 @@ public class ItemsServiceImpl implements ItemsService {
 
     public ItemsServiceImpl() {
         ItemDAO itemDAO;
-        if (ItemDAOMongoDBImpl.isMongoConfEnabled()) {
+        if (ApplicationConfiguration.isMongoEnabled()) {
             LOGGER.info("MongoDB conf is set to enabled, going to use mongoDB store...");
             itemDAO = ItemDAOMongoDBImpl.getInstance();
         } else {
