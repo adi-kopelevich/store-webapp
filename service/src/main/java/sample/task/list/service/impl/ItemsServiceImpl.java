@@ -3,9 +3,9 @@ package sample.task.list.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.service.ItemsService;
-import sample.task.list.service.dao.ItemDAL;
-import sample.task.list.service.dao.ItemDALMapImpl;
-import sample.task.list.service.dao.ItemDALMongoDBImpl;
+import sample.task.list.service.dao.ItemDAO;
+import sample.task.list.service.dao.ItemDAOMapImpl;
+import sample.task.list.service.dao.ItemDAOMongoDBImpl;
 import sample.task.list.service.pojo.TaskItem;
 import sample.task.list.service.pojo.TaskList;
 
@@ -21,24 +21,24 @@ import java.util.List;
 @Path("/items")
 public class ItemsServiceImpl implements ItemsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDALMongoDBImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDAOMongoDBImpl.class);
 
-    private final ItemDAL persistency;
+    private final ItemDAO persistency;
 
     public ItemsServiceImpl() {
-        ItemDAL itemDAL;
-        if (ItemDALMongoDBImpl.isMongoConfEnabled()) {
+        ItemDAO itemDAO;
+        if (ItemDAOMongoDBImpl.isMongoConfEnabled()) {
             LOGGER.info("MongoDB conf is set to enabled, going to use mongoDB store...");
-            itemDAL = ItemDALMongoDBImpl.getInstance();
+            itemDAO = ItemDAOMongoDBImpl.getInstance();
         } else {
             LOGGER.info("MongoDB conf is set to disabled, going to use local map store...");
-            itemDAL = ItemDALMapImpl.getInstance();
+            itemDAO = ItemDAOMapImpl.getInstance();
         }
-        this.persistency = itemDAL;
+        this.persistency = itemDAO;
     }
 
-    public ItemsServiceImpl(ItemDAL itemDAL) {
-        this.persistency = itemDAL;
+    public ItemsServiceImpl(ItemDAO itemDAO) {
+        this.persistency = itemDAO;
     }
 
     @GET

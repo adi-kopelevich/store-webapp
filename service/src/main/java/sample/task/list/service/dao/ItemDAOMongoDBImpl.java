@@ -13,9 +13,9 @@ import java.util.List;
 /**
  * Created by kopelevi on 12/10/2015.
  */
-public class ItemDALMongoDBImpl implements ItemDAL {
+public class ItemDAOMongoDBImpl implements ItemDAO {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDALMongoDBImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDAOMongoDBImpl.class);
 
     private static final String MONGO_HOST_ENV_KEY = "mongo.host";
     private static final String MONGO_PORT_ENV_KEY = "mongo.port";
@@ -31,13 +31,13 @@ public class ItemDALMongoDBImpl implements ItemDAL {
 
     private final DBCollection collection;
 
-    private static final ItemDALMongoDBImpl INSTANCE = new ItemDALMongoDBImpl();
+    private static final ItemDAOMongoDBImpl INSTANCE = new ItemDAOMongoDBImpl();
 
-    private ItemDALMongoDBImpl() {
+    private ItemDAOMongoDBImpl() {
         this.collection = initDBCollection();
     }
 
-    public static ItemDALMongoDBImpl getInstance() {
+    public static ItemDAOMongoDBImpl getInstance() {
         return INSTANCE;
     }
 

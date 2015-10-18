@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public interface ItemDAL {
+public interface ItemDAO {
 
     TaskItem getItem(int itemId);
 

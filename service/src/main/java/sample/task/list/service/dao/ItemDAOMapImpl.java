@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public class ItemDALMapImpl implements ItemDAL {
+public class ItemDAOMapImpl implements ItemDAO {
 
     // ConcurrentHashMap for handing concurrency,
     // its drawbacks are:
@@ -18,13 +18,13 @@ public class ItemDALMapImpl implements ItemDAL {
     //      - handling null keys which are allowed as contrast to regular hash map, as it  might be returned while iterating over them
     private final Map<Integer, TaskItem> itemsMap = new ConcurrentHashMap<>();
 
-    private static final ItemDALMapImpl INSTANCE = new ItemDALMapImpl();
+    private static final ItemDAOMapImpl INSTANCE = new ItemDAOMapImpl();
 
     // hide c'tor
-    private ItemDALMapImpl() {
+    private ItemDAOMapImpl() {
     }
 
-    public static ItemDAL getInstance() {
+    public static ItemDAO getInstance() {
         return INSTANCE;
     }
 

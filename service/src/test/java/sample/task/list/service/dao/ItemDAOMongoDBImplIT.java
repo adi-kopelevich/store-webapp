@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public class ItemDAOMongoDBImplIT {
 
-    private static final ItemDAL persistency = ItemDALMongoDBImpl.getInstance();
+    private static final ItemDAO persistency = ItemDAOMongoDBImpl.getInstance();
 
     @Before
     public void setUp() throws Exception {

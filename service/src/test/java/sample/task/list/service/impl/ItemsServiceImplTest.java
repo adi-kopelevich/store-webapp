@@ -4,7 +4,7 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 import sample.task.list.service.ItemsService;
-import sample.task.list.service.dao.ItemDAL;
+import sample.task.list.service.dao.ItemDAO;
 import sample.task.list.service.pojo.TaskItem;
 
 import javax.ws.rs.NotFoundException;
@@ -28,12 +28,12 @@ public class ItemsServiceImplTest {
 
         TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
 
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
-        Mockito.when(itemDAL.getItem(itemId)).thenReturn(item);
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
+        Mockito.when(itemDAO.getItem(itemId)).thenReturn(item);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
         itemsService.addItem(item);
-        Mockito.verify(itemDAL, Mockito.times(1)).putItem(item);
+        Mockito.verify(itemDAO, Mockito.times(1)).putItem(item);
 
         TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(item.getId(), retItem.getId());
@@ -45,9 +45,9 @@ public class ItemsServiceImplTest {
 
     @Test(expected = NotFoundException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
-        Mockito.when(itemDAL.getItem(Mockito.anyInt())).thenReturn(null);
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
+        Mockito.when(itemDAO.getItem(Mockito.anyInt())).thenReturn(null);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
         int itemId = new Random().nextInt();
         itemsService.getItem(itemId);
@@ -64,15 +64,15 @@ public class ItemsServiceImplTest {
         TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
 
 
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
-        Mockito.when(itemDAL.getItem(itemId)).thenReturn(null);
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
+        Mockito.when(itemDAO.getItem(itemId)).thenReturn(null);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
         itemsService.addItem(item);
-        Mockito.verify(itemDAL, Mockito.times(1)).putItem(item);
+        Mockito.verify(itemDAO, Mockito.times(1)).putItem(item);
 
         itemsService.removeItem(itemId);
-        Mockito.verify(itemDAL, Mockito.times(1)).removeItem(item.getId());
+        Mockito.verify(itemDAO, Mockito.times(1)).removeItem(item.getId());
 
         itemsService.getItem(itemId); // should throw exception
     }
@@ -88,15 +88,15 @@ public class ItemsServiceImplTest {
         TaskItem originalItem = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
         TaskItem updatedItem = new TaskItem(itemId, itemName, itemCategory, itemReminder + 10000, itemNotes);
 
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
-        Mockito.when(itemDAL.getItem(itemId)).thenReturn(updatedItem);
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
+        Mockito.when(itemDAO.getItem(itemId)).thenReturn(updatedItem);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
         itemsService.addItem(originalItem);
-        Mockito.verify(itemDAL, Mockito.times(1)).putItem(originalItem);
+        Mockito.verify(itemDAO, Mockito.times(1)).putItem(originalItem);
 
         itemsService.updateItem(updatedItem);
-        Mockito.verify(itemDAL, Mockito.times(1)).putItem(updatedItem);
+        Mockito.verify(itemDAO, Mockito.times(1)).putItem(updatedItem);
 
         TaskItem retItem = itemsService.getItem(itemId);
         Assert.assertEquals(updatedItem.getId(), retItem.getId());
@@ -127,14 +127,14 @@ public class ItemsServiceImplTest {
         items.add(firstItem);
         items.add(secondItem);
 
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
-        Mockito.when(itemDAL.getItems()).thenReturn(items);
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
+        Mockito.when(itemDAO.getItems()).thenReturn(items);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
         itemsService.addItem(firstItem);
-        Mockito.verify(itemDAL, Mockito.times(1)).putItem(firstItem);
+        Mockito.verify(itemDAO, Mockito.times(1)).putItem(firstItem);
         itemsService.addItem(secondItem);
-        Mockito.verify(itemDAL, Mockito.times(1)).putItem(secondItem);
+        Mockito.verify(itemDAO, Mockito.times(1)).putItem(secondItem);
         List<TaskItem> retItems = itemsService.getAllItems().getItems();
 
         Assert.assertEquals(2, retItems.size());
@@ -146,14 +146,14 @@ public class ItemsServiceImplTest {
     public void whenGetItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
         int itemId = new Random().nextInt();
 
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         String throwableMsg = UUID.randomUUID().toString();
-        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAL).getItem(itemId);
+        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).getItem(itemId);
 
         expectedException.expect(RuntimeException.class);
         expectedException.expectMessage(throwableMsg);
 
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.getItem(itemId);
     }
 
@@ -167,14 +167,14 @@ public class ItemsServiceImplTest {
 
         TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
 
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         String throwableMsg = UUID.randomUUID().toString();
-        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAL).putItem(item);
+        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).putItem(item);
 
         expectedException.expect(RuntimeException.class);
         expectedException.expectMessage(throwableMsg);
 
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.addItem(item);
     }
 
@@ -182,14 +182,14 @@ public class ItemsServiceImplTest {
     public void whenDeleteItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
         int itemId = new Random().nextInt();
 
-        ItemDAL itemDAL = Mockito.mock(ItemDAL.class);
+        ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         String throwableMsg = UUID.randomUUID().toString();
-        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAL).removeItem(itemId);
+        Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).removeItem(itemId);
 
         expectedException.expect(RuntimeException.class);
         expectedException.expectMessage(throwableMsg);
 
-        ItemsService itemsService = new ItemsServiceImpl(itemDAL);
+        ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.removeItem(itemId);
     }
 

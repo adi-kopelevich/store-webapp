@@ -14,9 +14,9 @@ import java.util.UUID;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public class ItemDALMapImplTest {
+public class ItemDAOMapImplTest {
 
-    private static final ItemDAL persistency = ItemDALMapImpl.getInstance();
+    private static final ItemDAO persistency = ItemDAOMapImpl.getInstance();
 
     @Before
     public void setUp() throws Exception {
