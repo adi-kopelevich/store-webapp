@@ -7,7 +7,7 @@ public class ServiceLauncher {
 
     public static void main(String[] args) {
         EmbeddedServer embeddedServer = new EmbeddedServer();
-        embeddedServer.startServer(true);
+        embeddedServer.startServer();
     }
 
 }

@@ -197,16 +197,10 @@ public class EmbeddedServer {
     }
 
     public void startServer() {
-        startServer(false);
-    }
-
-    public void startServer(boolean shouldJoin) {
         try {
             server.start();
             LOGGER.info("Server is started.");
-            if (shouldJoin) {
-                server.join();
-            }
+            server.join();
         } catch (Exception e) {
             LOGGER.error("Failed to start server.", e);
             server.destroy();

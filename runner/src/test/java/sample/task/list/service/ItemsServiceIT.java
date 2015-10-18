@@ -18,22 +18,34 @@ import java.util.UUID;
 public class ItemsServiceIT {
 
     private static final String SERVER_ROOT = "./target/tmp";
-    private static final int PORT = 8989;
+    private static final int PORT = 8888;
     private static final String HOST = "localhost";
 
-    static EmbeddedServer embeddedServer;
+
     ItemsService itemsService;
 
     @BeforeClass
     public static void startServer() {
-        // start embedded server
-        embeddedServer = new EmbeddedServer(PORT, SERVER_ROOT);
-        embeddedServer.startServer();
+        // start embedded server on a daemon thread
+        Thread serverDaemonThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new EmbeddedServer(PORT, SERVER_ROOT).startServer();
+            }
+        });
+        serverDaemonThread.setDaemon(true);
+        serverDaemonThread.start();
+
+        // wait for server to load
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterClass
     public static void stopServer() {
-        embeddedServer.stopServer();
     }
 
     @Before
