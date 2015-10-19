@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
  */
 public class ItemServiceClient implements ItemsService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ItemServiceClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemServiceClient.class);
 
     private static final String DEFAULT_PROTOCOL = "http";
     private static final String DEFAULT_HOST = "localhost";
