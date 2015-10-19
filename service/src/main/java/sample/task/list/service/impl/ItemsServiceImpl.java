@@ -3,6 +3,7 @@ package sample.task.list.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.ApplicationConfiguration;
+import sample.task.list.service.ItemNotFoundException;
 import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.dao.ItemDAO;
 import sample.task.list.service.dao.ItemDAOMapImpl;
@@ -42,7 +43,11 @@ public class ItemsServiceImpl implements ItemsService {
     }
 
     public TaskItem getItem(int itemId) {
-        return persistency.getItem(itemId);
+        TaskItem taskItem = persistency.getItem(itemId);
+        if (taskItem == null) {
+            throw new ItemNotFoundException(itemId);
+        }
+        return taskItem;
     }
 
     public void addItem(TaskItem taskItem) {

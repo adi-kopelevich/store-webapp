@@ -1,12 +1,14 @@
 package sample.task.list.service;
 
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import sample.task.list.server.EmbeddedServer;
 import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.client.ItemServiceClient;
 import sample.task.list.service.model.TaskItem;
 
-import javax.ws.rs.NotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -112,14 +114,14 @@ public class ItemsServiceIT {
         Assert.assertEquals(true, retItems.contains(secondItem));
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ItemNotFoundException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         itemsService.getItem(itemId);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = ItemNotFoundException.class)
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();

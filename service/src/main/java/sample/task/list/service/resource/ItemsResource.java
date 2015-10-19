@@ -2,15 +2,16 @@ package sample.task.list.service.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sample.task.list.service.ItemNotFoundException;
 import sample.task.list.service.impl.ItemsServiceImpl;
 import sample.task.list.service.model.TaskItem;
 import sample.task.list.service.model.TaskList;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 /**
@@ -20,6 +21,9 @@ import java.util.List;
 public class ItemsResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemsResource.class);
+
+    @Context
+    UriInfo uriInfo;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -40,53 +44,63 @@ public class ItemsResource {
         TaskItem item = null;
         try {
             item = new ItemsServiceImpl().getItem(itemId);
+        } catch (ItemNotFoundException itemNotFoundException) {
+            logAndThrowNotFoundException(itemId);
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
-        }
-        if (item == null) {
-            logAndThrowNotFoundException(itemId);
         }
         return item;
     }
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public void addItem(TaskItem taskItem, @Context final HttpServletResponse response) {
+    public Response addItem(TaskItem taskItem) {
+        Response response = null;
         try {
             new ItemsServiceImpl().addItem(taskItem);
-            response.setStatus(Response.Status.CREATED.getStatusCode());
+            response = Response.created(uriInfo.getRequestUri()).build();
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
         }
+        return response;
     }
 
     @DELETE
     @Path("/{paramId}")
-    public void removeItem(@PathParam("paramId") int itemId) {
+    public Response removeItem(@PathParam("paramId") int itemId) {
+        Response response = null;
         try {
             new ItemsServiceImpl().removeItem(itemId);
+            response = Response.noContent().build();
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
         }
+        return response;
     }
 
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
-    public void updateItem(TaskItem taskItem) {
+    public Response updateItem(TaskItem taskItem) {
+        Response response = null;
         try {
             new ItemsServiceImpl().updateItem(taskItem);
+            response = Response.ok().build();
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
         }
+        return response;
     }
 
     @DELETE
-    public void clearAll() {
+    public Response clearAll() {
+        Response response = null;
         try {
             new ItemsServiceImpl().clearAll();
+            response = Response.noContent().build();
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
         }
+        return response;
     }
 
     private void logAndThrowServiceUnavailableException(Exception e) {

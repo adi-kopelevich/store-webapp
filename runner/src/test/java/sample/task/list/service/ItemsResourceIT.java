@@ -83,6 +83,40 @@ public class ItemsResourceIT {
     }
 
     @Test
+    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        WebTarget webTarget = client.target(RESOURCE_URL);
+        int itemId = new Random().nextInt();
+        Response response = webTarget.path(String.valueOf(itemId)).request(MEDIA_TYPE).get();
+        Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        WebTarget webTarget = client.target(RESOURCE_URL);
+
+        int itemId = new Random().nextInt();
+        String itemName = UUID.randomUUID().toString();
+        String itemCategory = UUID.randomUUID().toString();
+        long itemReminder = new Random().nextLong();
+        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
+
+        // add object and verify status
+        Response postResponse = webTarget.request().post(Entity.entity(item, MEDIA_TYPE));
+        Assert.assertEquals(Response.Status.CREATED.getStatusCode(), postResponse.getStatus());
+
+        // remove object and verify status
+        Response deleteREsponse = webTarget.path(String.valueOf(itemId)).request(MEDIA_TYPE).delete();
+        Assert.assertEquals(Response.Status.NO_CONTENT.getStatusCode(), deleteREsponse.getStatus());
+
+        // get object and verify status
+        Response getResponse = webTarget.path(String.valueOf(itemId)).request(MEDIA_TYPE).get();
+        Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), getResponse.getStatus());
+    }
+
     public void whenAddItemThenItIsRetrievable() throws Exception {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);
@@ -96,7 +130,7 @@ public class ItemsResourceIT {
 
         // add object and verify status
         Response postResponse = webTarget.request().post(Entity.entity(item, MEDIA_TYPE));
-        Assert.assertEquals(Response.Status.NO_CONTENT.getStatusCode(), postResponse.getStatus());
+        Assert.assertEquals(Response.Status.CREATED.getStatusCode(), postResponse.getStatus());
 
         // get object and verify its status and content
         Response getResponse = webTarget.path(String.valueOf(itemId)).request(MEDIA_TYPE).get();

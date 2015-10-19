@@ -5,6 +5,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
+import sample.task.list.service.ItemNotFoundException;
 import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.dao.ItemDAO;
 import sample.task.list.service.model.TaskItem;
@@ -44,19 +45,18 @@ public class ItemsServiceImplTest {
         Assert.assertEquals(item.getNotes(), retItem.getNotes());
     }
 
-    @Test
-    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+    @Test(expected = ItemNotFoundException.class)
+    public void whenGettingNotExistsThenNullIsReturned() throws Exception {
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         Mockito.when(itemDAO.getItem(Mockito.anyInt())).thenReturn(null);
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
         int itemId = new Random().nextInt();
-        TaskItem item = itemsService.getItem(itemId);
-        Assert.assertNull(item);
+        itemsService.getItem(itemId);
     }
 
-    @Test
-    public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
+    @Test(expected = ItemNotFoundException.class)
+    public void whenDeletingExistingItemAndRetriveThenItemThenNullIsReturned() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();

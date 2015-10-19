@@ -3,10 +3,12 @@ package sample.task.list.service.client;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sample.task.list.service.ItemNotFoundException;
 import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.model.TaskItem;
 import sample.task.list.service.model.TaskList;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -75,8 +77,12 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public TaskItem getItem(int itemId) {
-        Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(DEFAULT_MEDIA_TYPE);
-        return invocationBuilder.get(TaskItem.class);
+        try {
+            Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(DEFAULT_MEDIA_TYPE);
+            return invocationBuilder.get(TaskItem.class);
+        }catch (NotFoundException notFoundException){
+            throw new ItemNotFoundException(itemId);
+        }
     }
 
     public void addItem(TaskItem item) {
