@@ -12,10 +12,8 @@ public class ItemServicePerfIT {
     private static final String HOST = "localhost";
 
     @Test
-    public void whenAddItemThenItIsRetrivable() throws Exception {
-
+    public void whenAddItemThenItIsRetrievable() throws Exception {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
-
         for (int i = 0; i < 1000000; i++) {
             itemsService.getAllItems();
             System.out.println(i);
