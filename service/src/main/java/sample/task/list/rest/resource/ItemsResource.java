@@ -1,11 +1,11 @@
-package sample.task.list.service.resource;
+package sample.task.list.rest.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.service.ItemNotFoundException;
-import sample.task.list.service.impl.ItemsServiceImpl;
-import sample.task.list.service.model.TaskItem;
-import sample.task.list.service.model.TaskList;
+import sample.task.list.service.ItemsServiceImpl;
+import sample.task.list.service.TaskItem;
+import sample.task.list.service.TaskList;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;

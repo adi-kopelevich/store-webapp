@@ -1,6 +1,6 @@
-package sample.task.list.service.dao;
+package sample.task.list.service;
 
-import sample.task.list.service.model.TaskItem;
+import sample.task.list.service.TaskItem;
 
 import java.util.List;
 

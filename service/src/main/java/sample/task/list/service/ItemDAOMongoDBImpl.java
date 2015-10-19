@@ -1,4 +1,4 @@
-package sample.task.list.service.dao;
+package sample.task.list.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,8 +6,7 @@ import com.mongodb.*;
 import com.mongodb.util.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.task.list.ApplicationConfiguration;
-import sample.task.list.service.model.TaskItem;
+import sample.task.list.service.ServiceConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,8 +39,8 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
     private DBCollection initDBCollection() {
         DBCollection collection = null;
         try {
-            String mongoHost = ApplicationConfiguration.getMongoHost();
-            String mongoPort = ApplicationConfiguration.getMongoPort();
+            String mongoHost = ServiceConfiguration.getMongoHost();
+            String mongoPort = ServiceConfiguration.getMongoPort();
             LOGGER.debug("Going to initiate MongoDB client with host= " + mongoHost + "and port=" + mongoPort);
 
             MongoClient mongoClient = new MongoClient(mongoHost, Integer.valueOf(mongoPort));

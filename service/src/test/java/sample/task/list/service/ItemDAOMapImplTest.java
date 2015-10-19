@@ -1,10 +1,12 @@
-package sample.task.list.service.dao;
+package sample.task.list.service;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sample.task.list.service.model.TaskItem;
+import sample.task.list.service.ItemDAO;
+import sample.task.list.service.ItemDAOMapImpl;
+import sample.task.list.service.TaskItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,11 +14,11 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Created by kopelevi on 13/10/2015.
+ * Created by kopelevi on 04/09/2015.
  */
-public class ItemDAOMongoDBImplIT {
+public class ItemDAOMapImplTest {
 
-    private static final ItemDAO persistency = ItemDAOMongoDBImpl.getInstance();
+    private static final ItemDAO persistency = ItemDAOMapImpl.getInstance();
 
     @Before
     public void setUp() throws Exception {
@@ -25,7 +27,6 @@ public class ItemDAOMongoDBImplIT {
 
     @After
     public void tearDown() throws Exception {
-        persistency.clear();
     }
 
     @Test
@@ -64,6 +65,7 @@ public class ItemDAOMongoDBImplIT {
         List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
+
         persistency.putItem(item);
         persistency.removeItem(itemId);
         TaskItem retItem = persistency.getItem(itemId);
@@ -119,4 +121,5 @@ public class ItemDAOMongoDBImplIT {
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));
     }
+
 }

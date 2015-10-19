@@ -1,4 +1,4 @@
-package sample.task.list;
+package sample.task.list.rest;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;

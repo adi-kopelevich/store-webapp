@@ -1,14 +1,10 @@
-package sample.task.list.service.impl;
+package sample.task.list.service;
 
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
-import sample.task.list.service.ItemNotFoundException;
-import sample.task.list.service.api.ItemsService;
-import sample.task.list.service.dao.ItemDAO;
-import sample.task.list.service.model.TaskItem;
 
 import java.util.*;
 

@@ -1,4 +1,4 @@
-package sample.task.list.service;
+package sample.task.list.rest;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.Assert;
@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sample.task.list.server.EmbeddedServer;
-import sample.task.list.service.api.ItemsService;
-import sample.task.list.service.client.ItemServiceClient;
-import sample.task.list.service.model.TaskItem;
+import sample.task.list.service.ItemServiceClient;
+import sample.task.list.service.ItemsService;
+import sample.task.list.service.TaskItem;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -117,6 +117,7 @@ public class ItemsResourceIT {
         Assert.assertEquals(Response.Status.NOT_FOUND.getStatusCode(), getResponse.getStatus());
     }
 
+    @Test
     public void whenAddItemThenItIsRetrievable() throws Exception {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);

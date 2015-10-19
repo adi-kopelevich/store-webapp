@@ -1,14 +1,8 @@
-package sample.task.list.service.impl;
+package sample.task.list.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.task.list.ApplicationConfiguration;
-import sample.task.list.service.ItemNotFoundException;
-import sample.task.list.service.api.ItemsService;
-import sample.task.list.service.dao.ItemDAO;
-import sample.task.list.service.dao.ItemDAOMapImpl;
-import sample.task.list.service.dao.ItemDAOMongoDBImpl;
-import sample.task.list.service.model.TaskItem;
+import sample.task.list.service.ServiceConfiguration;
 
 import java.util.List;
 
@@ -19,7 +13,7 @@ public class ItemsServiceImpl implements ItemsService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemsServiceImpl.class);
 
-    private static final boolean IS_MONGO_ENABLED = ApplicationConfiguration.isMongoEnabled();
+    private static final boolean IS_MONGO_ENABLED = ServiceConfiguration.isMongoEnabled();
     private final ItemDAO persistency;
 
     public ItemsServiceImpl() {

@@ -1,4 +1,4 @@
-package sample.task.list.service.model;
+package sample.task.list.service;
 
 import java.util.List;
 public class TaskItem {

@@ -1,6 +1,4 @@
-package sample.task.list.service.api;
-
-import sample.task.list.service.model.TaskItem;
+package sample.task.list.service;
 
 import java.util.List;
 

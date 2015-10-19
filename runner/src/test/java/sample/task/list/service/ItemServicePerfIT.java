@@ -1,8 +1,5 @@
 package sample.task.list.service;
 
-import sample.task.list.service.api.ItemsService;
-import sample.task.list.service.client.ItemServiceClient;
-
 /**
  * Created by kopelevi on 16/10/2015.
  */

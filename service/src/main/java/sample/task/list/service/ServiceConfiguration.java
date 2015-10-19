@@ -1,4 +1,4 @@
-package sample.task.list;
+package sample.task.list.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by kopelevi on 18/10/2015.
  */
-public class ApplicationConfiguration {
+public class ServiceConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceConfiguration.class);
 
     private static final String MONGO_HOST_ENV_KEY = "mongo.host";
     private static final String MONGO_PORT_ENV_KEY = "mongo.port";
@@ -22,7 +22,7 @@ public class ApplicationConfiguration {
     private static final String mongoPort = getProperty(MONGO_PORT_ENV_KEY, DEFAULT_MONGO_PORT);
     private static final boolean isMongoEnabled = Boolean.valueOf(getProperty(MONGO_ENABLED_ENV_KEY, DEFAULT_MONGO_ENABLED));
 
-    private ApplicationConfiguration() {
+    private ServiceConfiguration() {
     }
 
     private static String getProperty(String envKey, String defVal) {

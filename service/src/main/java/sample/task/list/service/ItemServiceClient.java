@@ -1,12 +1,8 @@
-package sample.task.list.service.client;
+package sample.task.list.service;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.task.list.service.ItemNotFoundException;
-import sample.task.list.service.api.ItemsService;
-import sample.task.list.service.model.TaskItem;
-import sample.task.list.service.model.TaskList;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.*;

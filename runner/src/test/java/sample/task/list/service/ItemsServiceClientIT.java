@@ -5,9 +5,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sample.task.list.server.EmbeddedServer;
-import sample.task.list.service.api.ItemsService;
-import sample.task.list.service.client.ItemServiceClient;
-import sample.task.list.service.model.TaskItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.UUID;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public class ItemsServiceIT {
+public class ItemsServiceClientIT {
 
     private static final String SERVER_ROOT = "./target/tmp";
     private static final int PORT = 8888;
