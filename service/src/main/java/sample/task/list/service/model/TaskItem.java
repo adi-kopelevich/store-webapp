@@ -1,9 +1,6 @@
 package sample.task.list.service.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
-
-@XmlRootElement
 public class TaskItem {
 
     private int id;
@@ -12,8 +9,7 @@ public class TaskItem {
     private long reminder;
     private List<String> notes;
 
-    public TaskItem() { //for serialization
-
+    public TaskItem() { // for serialization
     }
 
     public TaskItem(int id, String name, String category, long reminder, List<String> notes) {

@@ -19,19 +19,17 @@ public class ItemServiceClient implements ItemsService {
     private static final String DEFAULT_PROTOCOL = "http";
     private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_PORT = 8080;
-    private static final int MAX_PORT = 65535;
     private static final String DEFAULT_CONTEXT = "";
+    private static final String DEFAULT_MEDIA_TYPE = MediaType.APPLICATION_JSON;
     private static final String RESOUCEE = "items";
     private static final String APP_PATH = "rest";
-    private final MediaType mediaType;
+    private static final int MAX_PORT = 65535;
+
     private final WebTarget webTarget;
 
-
-    public ItemServiceClient(String protpcol, String hostname, int port, String context, MediaType mediaType) {
+    public ItemServiceClient(String protpcol, String hostname, int port, String context) {
         //init client
         try {
-            validateMediaType(mediaType);
-            this.mediaType = mediaType;
             String serviceURL = buildServiceURL(protpcol, hostname, port, context);
             Client client = ClientBuilder.newClient();
             this.webTarget = client.target(serviceURL.toString());
@@ -43,12 +41,8 @@ public class ItemServiceClient implements ItemsService {
         }
     }
 
-    private void validateMediaType(MediaType mediaType) {
-        if (!MediaType.APPLICATION_JSON_TYPE.equals(mediaType) && !MediaType.APPLICATION_XML_TYPE.equals(mediaType)) {
-            String msg = "Given MediaType: " + mediaType + " is invalid, only the following are supported: " + MediaType.APPLICATION_JSON + "," + MediaType.APPLICATION_XML;
-            LOGGER.error(msg);
-            throw new IllegalArgumentException(msg);
-        }
+    public ItemServiceClient(String hostname, int port) {
+        this(DEFAULT_PROTOCOL, hostname, port, DEFAULT_CONTEXT);
     }
 
     private String buildServiceURL(String protocol, String hostname, int port, String context) {
@@ -71,28 +65,20 @@ public class ItemServiceClient implements ItemsService {
         return serviceURL.toString();
     }
 
-    public ItemServiceClient(String hostname, int port, MediaType mediaType) {
-        this(DEFAULT_PROTOCOL, hostname, port, DEFAULT_CONTEXT, mediaType);
-    }
-
-    public ItemServiceClient(MediaType mediaType) {
-        this(DEFAULT_PROTOCOL, DEFAULT_HOST, DEFAULT_PORT, DEFAULT_CONTEXT, mediaType);
-    }
-
 
     public TaskList getAllItems() {
-        Invocation.Builder invocationBuilder = webTarget.request(mediaType);
+        Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
         return invocationBuilder.get(TaskList.class);
     }
 
     public TaskItem getItem(int itemId) {
-        Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(mediaType);
+        Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(DEFAULT_MEDIA_TYPE);
         return invocationBuilder.get(TaskItem.class);
     }
 
     public void addItem(TaskItem item) {
-        Invocation.Builder invocationBuilder = webTarget.request(mediaType);
-        invocationBuilder.post(Entity.entity(item, mediaType));
+        Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
+        invocationBuilder.post(Entity.entity(item, DEFAULT_MEDIA_TYPE));
     }
 
     public void removeItem(int itemId) {
@@ -101,8 +87,8 @@ public class ItemServiceClient implements ItemsService {
     }
 
     public void updateItem(TaskItem item) {
-        Invocation.Builder invocationBuilder = webTarget.request(mediaType);
-        invocationBuilder.put(Entity.entity(item, mediaType));
+        Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
+        invocationBuilder.put(Entity.entity(item, DEFAULT_MEDIA_TYPE));
     }
 
     public void clearAll() {

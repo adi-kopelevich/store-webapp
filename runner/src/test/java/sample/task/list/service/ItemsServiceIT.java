@@ -6,7 +6,6 @@ import sample.task.list.service.client.ItemServiceClient;
 import sample.task.list.service.model.TaskItem;
 
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -40,7 +39,7 @@ public class ItemsServiceIT {
 
         final int numOfRetries = 5;
         final int cycleIntervalInMili = 1000;
-        itemsService = new ItemServiceClient(HOST, PORT, MediaType.APPLICATION_JSON_TYPE);
+        itemsService = new ItemServiceClient(HOST, PORT);
         // wait for server to load
         for (int i = 0; i < numOfRetries; i++) {
             try {
@@ -63,10 +62,9 @@ public class ItemsServiceIT {
 
     @Before
     public void setUp() throws Exception {
-//        itemsService = new ItemServiceClient(MediaType.APPLICATION_XML);
 //        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
 //        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
-        itemsService = new ItemServiceClient(HOST, PORT, MediaType.APPLICATION_JSON_TYPE);
+        itemsService = new ItemServiceClient(HOST, PORT);
         itemsService.clearAll();
     }
 

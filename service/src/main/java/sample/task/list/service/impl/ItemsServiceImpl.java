@@ -13,7 +13,6 @@ import sample.task.list.service.model.TaskList;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBElement;
 import java.util.List;
 
 /**
@@ -48,7 +47,7 @@ public class ItemsServiceImpl implements ItemsService {
     }
 
     @GET
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
     public TaskList getAllItems() {
         List<TaskItem> items = null;
         try {
@@ -61,7 +60,7 @@ public class ItemsServiceImpl implements ItemsService {
 
     @GET
     @Path("/{paramId}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON})
     public TaskItem getItem(@PathParam("paramId") int itemId) {
         TaskItem item = null;
         try {
@@ -85,12 +84,6 @@ public class ItemsServiceImpl implements ItemsService {
         }
     }
 
-    @POST
-    @Consumes({MediaType.APPLICATION_XML})
-    public void addItem(JAXBElement<TaskItem> itemJAXBElement) {
-        addItem(itemJAXBElement.getValue());
-    }
-
     @DELETE
     @Path("/{paramId}")
     public void removeItem(@PathParam("paramId") int itemId) {
@@ -109,12 +102,6 @@ public class ItemsServiceImpl implements ItemsService {
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
         }
-    }
-
-    @PUT
-    @Consumes({MediaType.APPLICATION_XML})
-    public void updateItem(JAXBElement<TaskItem> itemJAXBElement) {
-        updateItem(itemJAXBElement.getValue());
     }
 
     @DELETE
