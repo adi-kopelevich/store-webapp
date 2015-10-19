@@ -31,7 +31,7 @@ public class ItemsServiceIT {
         Thread serverDaemonThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                new EmbeddedServer(PORT, SERVER_ROOT).startServer();
+                new EmbeddedServer(PORT, SERVER_ROOT);
             }
         });
         serverDaemonThread.setDaemon(true);

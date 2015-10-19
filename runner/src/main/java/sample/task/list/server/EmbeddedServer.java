@@ -35,46 +35,40 @@ public class EmbeddedServer {
     private static final String LOGS_FOLDER = "/logs";
     private static final String LOG_FILENAME_FORMAT = "yyyy_MM_dd.request.log";
 
-    private final String serverRootPath;
-    private final int serverPort;
-    private final Server server;
-
     public EmbeddedServer() {
         this(DEFAULT_PORT, DEFAULT_SERVER_ROOT);
     }
 
-    public EmbeddedServer(int port, String serverRootPath) {
-        this.serverPort = port;
-        this.serverRootPath = serverRootPath;
-        this.server = new Server();
-
-        enableLog4j();
-        publishAppConf();
-        validateParams();
-        configureServer();
+    public EmbeddedServer(int port, String appRootPath) {
+        validateParams(port, appRootPath);
+        enableLog4j(appRootPath);
+        publishAppConf(appRootPath);
+        configureServer(port, appRootPath);
     }
 
-    private void enableLog4j() {
-        System.setProperty("log.folder.path", getLogsFolderPath());
-        String log4jPropsFilePath = getLog4jConfFilePath();
+    private void enableLog4j(String appRootPath) {
+        System.setProperty("log.folder.path", getLogsFolderPath(appRootPath));
+        String log4jPropsFilePath = getLog4jConfFilePath(appRootPath);
         final File log4jPropertiesFile = new File(log4jPropsFilePath);
         if (log4jPropertiesFile.exists()) {
-            System.out.println("Using log4j configuration: " + log4jPropertiesFile.getAbsolutePath());
             PropertyConfigurator.configure(new File(log4jPropsFilePath).getAbsolutePath());
+            LOGGER.info("Using log4j configuration: " + log4jPropertiesFile.getAbsolutePath());
         } else {
-            System.out.println("Failed to find log4j.properties in: " + log4jPropertiesFile.getAbsolutePath());
+            String errorMsg = "Failed to find log4j.properties in: " + log4jPropertiesFile.getAbsolutePath();
+            System.err.println(errorMsg);
+            throw new RuntimeException(errorMsg);
         }
     }
 
-    private void publishAppConf() {
-        try (FileInputStream fis = new FileInputStream(getAppConfFilePath())) {
+    private void publishAppConf(String appRootPath) {
+        try (FileInputStream fis = new FileInputStream(getAppConfFilePath(appRootPath))) {
             Properties appProperties = new Properties();
             appProperties.load(fis);
             for (String key : appProperties.stringPropertyNames()) {
                 System.setProperty(key, appProperties.getProperty(key));
             }
         } catch (Exception e) {
-            String errorMsg = "Failed to process application conf file, path: " + getAppConfFilePath();
+            String errorMsg = "Failed to process application conf file, path: " + getAppConfFilePath(appRootPath);
             LOGGER.error(errorMsg, e);
             throw new RuntimeException(errorMsg, e);
         }
@@ -82,26 +76,28 @@ public class EmbeddedServer {
 
     }
 
-    private void validateParams() {
-        validatePort();
-        validateFileExists(getConfFolderPath());
-        validateFileExists(getWarPath());
+    private void validateParams(int port, String appRootPath) {
+        validatePort(port);
+        validateFileExists(getConfFolderPath(appRootPath));
+        validateFileExists(getWarPath(appRootPath));
     }
 
-    private void configureServer() {
-        configureAdditionalServerFromXml();
-        configureJMX();
-        configureServerConnectors();
-        configureServerHandlers();
+    private void configureServer(int serverPort, String appRootPath) {
+        Server server = new Server();
+        configureAdditionalServerFromXml(server, appRootPath);
+        configureJMX(server);
+        configureServerConnectors(server, serverPort);
+        configureServerHandlers(server, appRootPath);
+        startServer(server);
     }
 
-    private void configureJMX() {
+    private void configureJMX(Server server) {
         MBeanContainer mbContainer = new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
         server.addEventListener(mbContainer);
         server.addBean(mbContainer);
     }
 
-    private void configureServerConnectors() {
+    private void configureServerConnectors(Server server, int serverPort) {
         HttpConfiguration http_config = new HttpConfiguration();
         ServerConnector http = new ServerConnector(server,
                 new HttpConnectionFactory(http_config));
@@ -111,28 +107,27 @@ public class EmbeddedServer {
         LOGGER.info("Added connectors to server.");
     }
 
-    private void configureServerHandlers() {
+    private void configureServerHandlers(Server server, String appRootPath) {
         HandlerCollection handlers = new HandlerCollection();
         // add webapp context handler to handlers collection
-        WebAppContext webAppContext = new WebAppContext(new File(getWarPath()).getAbsolutePath(), "/");
+        WebAppContext webAppContext = new WebAppContext(new File(getWarPath(appRootPath)).getAbsolutePath(), "/");
         // change class loader priority for server first
         webAppContext.setParentLoaderPriority(true);
         handlers.addHandler(webAppContext);
         // init access log
         NCSARequestLog requestLog = new NCSARequestLog();
-        requestLog.setFilename(getLogFilenameFormat());
+        requestLog.setFilename(getLogFilenameFormat(appRootPath));
         // init request log handler
         RequestLogHandler requestLogHandler = new RequestLogHandler();
         requestLogHandler.setRequestLog(requestLog);
         // add request log jandler to handler's list
         handlers.addHandler(requestLogHandler);
-
         server.setHandler(handlers);
         LOGGER.info("Added handlers to server.");
     }
 
-    private void configureAdditionalServerFromXml() {
-        String log4jPropsFilePath = getJettyConfFilePath();
+    private void configureAdditionalServerFromXml(Server server, String appRootPath) {
+        String log4jPropsFilePath = getJettyConfFilePath(appRootPath);
         final File jettyXmlConfFile = new File(log4jPropsFilePath);
         if (jettyXmlConfFile.exists()) {
             try (FileInputStream jettyXmlConfInputStream = new FileInputStream(jettyXmlConfFile)) {
@@ -145,13 +140,13 @@ public class EmbeddedServer {
         }
     }
 
-    private void validatePort() {
+    private void validatePort(int serverPort) {
         try {
             new ServerSocket(serverPort).close();
-            LOGGER.info("Using port: " + serverPort);
+            System.out.println("Using port: " + serverPort);
         } catch (IOException e) {
             String errorMsg = "Failed to bind port: " + serverPort + ". Either port is invalid or already bounded by another process...";
-            LOGGER.error(errorMsg);
+            System.err.println(errorMsg);
             throw new IllegalArgumentException(errorMsg, e);
         }
     }
@@ -159,60 +154,50 @@ public class EmbeddedServer {
     private void validateFileExists(String filePath) {
         final File file = new File(filePath);
         if (file.exists()) {
-            LOGGER.info("Using: " + file.getAbsolutePath());
+            System.out.println("Using: " + file.getAbsolutePath());
         } else {
             String errorMsg = "Failed to find file path: " + filePath;
-            LOGGER.error(errorMsg);
+            System.err.println(errorMsg);
             throw new IllegalArgumentException(errorMsg);
         }
     }
 
 
-    private String getConfFolderPath() {
-        return serverRootPath + CONF_FOLDER;
+    private String getConfFolderPath(String appRootPath) {
+        return appRootPath + CONF_FOLDER;
     }
 
-    private String getLog4jConfFilePath() {
-        return getConfFolderPath() + "/" + LOG4J_CONF_FILENAME;
+    private String getLog4jConfFilePath(String appRootPath) {
+        return getConfFolderPath(appRootPath) + "/" + LOG4J_CONF_FILENAME;
     }
 
-    private String getJettyConfFilePath() {
-        return getConfFolderPath() + "/" + JETTY_CONF_FILENAME;
+    private String getJettyConfFilePath(String appRootPath) {
+        return getConfFolderPath(appRootPath) + "/" + JETTY_CONF_FILENAME;
     }
 
-    private String getAppConfFilePath() {
-        return getConfFolderPath() + "/" + APP_CONF_FILENAME;
+    private String getAppConfFilePath(String appRootPath) {
+        return getConfFolderPath(appRootPath) + "/" + APP_CONF_FILENAME;
     }
 
-    private String getWarPath() {
-        return serverRootPath + WAR_PATH;
+    private String getWarPath(String appRootPath) {
+        return appRootPath + WAR_PATH;
     }
 
-    private String getLogsFolderPath() {
-        return serverRootPath + LOGS_FOLDER;
+    private String getLogsFolderPath(String appRootPath) {
+        return appRootPath + LOGS_FOLDER;
     }
 
-    private String getLogFilenameFormat() {
-        return getLogsFolderPath() + "/" + LOG_FILENAME_FORMAT;
+    private String getLogFilenameFormat(String appRootPath) {
+        return getLogsFolderPath(appRootPath) + "/" + LOG_FILENAME_FORMAT;
     }
 
-    public void startServer() {
+    public void startServer(Server server) {
         try {
             server.start();
             LOGGER.info("Server is started.");
             server.join();
         } catch (Exception e) {
             LOGGER.error("Failed to start server.", e);
-            server.destroy();
-        }
-    }
-
-    public void stopServer() {
-        try {
-            server.stop();
-            LOGGER.info("Server is stopped.");
-        } catch (Exception e) {
-            LOGGER.error("Failed to stop server.", e);
             server.destroy();
         }
     }

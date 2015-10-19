@@ -6,8 +6,7 @@ package sample.task.list.server;
 public class ServiceLauncher {
 
     public static void main(String[] args) {
-        EmbeddedServer embeddedServer = new EmbeddedServer();
-        embeddedServer.startServer();
+        new EmbeddedServer();
     }
 
 }
