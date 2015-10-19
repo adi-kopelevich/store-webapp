@@ -21,7 +21,7 @@ import java.util.List;
 @Path("/items")
 public class ItemsServiceImpl implements ItemsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDAOMongoDBImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemsServiceImpl.class);
 
     private static final boolean IS_MONGO_ENABLED = ApplicationConfiguration.isMongoEnabled();
     private final ItemDAO persistency;
