@@ -24,10 +24,11 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
     private static final String COLLECTION_NAME = "items";
     private static final String UNIQUE_INDEX = "id";
 
-    private final DBCollection collection;
+    private final DBCollection collection;  //thread safe...
 
     private static final ItemDAOMongoDBImpl INSTANCE = new ItemDAOMongoDBImpl();
 
+    // hide constructor
     private ItemDAOMongoDBImpl() {
         this.collection = initDBCollection();
     }

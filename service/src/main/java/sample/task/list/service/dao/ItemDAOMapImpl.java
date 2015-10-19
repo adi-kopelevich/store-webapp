@@ -16,11 +16,11 @@ public class ItemDAOMapImpl implements ItemDAO {
     // its drawbacks are:
     //      - larger memory footprint compared to a regular has map and
     //      - handling null keys which are allowed as contrast to regular hash map, as it  might be returned while iterating over them
-    private final Map<Integer, TaskItem> itemsMap = new ConcurrentHashMap<>();
+    private final Map<Integer, TaskItem> itemsMap = new ConcurrentHashMap<>(); //thread safe...
 
     private static final ItemDAOMapImpl INSTANCE = new ItemDAOMapImpl();
 
-    // hide c'tor
+    // hide constructor
     private ItemDAOMapImpl() {
     }
 
