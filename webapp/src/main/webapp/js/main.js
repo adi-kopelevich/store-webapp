@@ -100,7 +100,7 @@ $(document).ready(function () {
             url: "/rest/items",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(item),
-            dataType: "json",
+            dataType: "text",
             success: function (data, status, jqXHR) {
                 getTaskListFromRemote();
             },
@@ -130,7 +130,7 @@ $(document).ready(function () {
             url: "/rest/items",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(item),
-            dataType: "json",
+            dataType: "text",
             success: function (data, status, jqXHR) {
                 getTaskListFromRemote();
             },
