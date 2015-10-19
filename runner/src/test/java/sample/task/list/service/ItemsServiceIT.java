@@ -20,14 +20,21 @@ public class ItemsServiceIT {
     private static final int PORT = 8888;
     private static final String HOST = "localhost";
 
-
-    private static ItemsService itemsService;
-
     @BeforeClass
     public static void startServer() {
+        startServerAsDaemon();
+        validateServerIsUp(5, 1000);
+    }
 
+    @Before
+    public void setUp() throws Exception {
+//        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
+//        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
+        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
+        itemsService.clearAll();
+    }
 
-        // start embedded server on a daemon thread
+    private static void startServerAsDaemon() {
         Thread serverDaemonThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -36,19 +43,19 @@ public class ItemsServiceIT {
         });
         serverDaemonThread.setDaemon(true);
         serverDaemonThread.start();
+    }
 
-        final int numOfRetries = 5;
-        final int cycleIntervalInMili = 1000;
-        itemsService = new ItemServiceClient(HOST, PORT);
+    private static void validateServerIsUp(final int numOfRetries, final int cycleIntervalInMillis) {
+        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         // wait for server to load
         for (int i = 0; i < numOfRetries; i++) {
             try {
-                itemsService.clearAll();
+                itemsService.getAllItems();
                 break;
             } catch (Exception e) {
                 // go to sleep
                 try {
-                    Thread.sleep(cycleIntervalInMili);
+                    Thread.sleep(cycleIntervalInMillis);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
@@ -56,20 +63,10 @@ public class ItemsServiceIT {
         }
     }
 
-    @AfterClass
-    public static void stopServer() {
-    }
-
-    @Before
-    public void setUp() throws Exception {
-//        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
-//        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
-        itemsService = new ItemServiceClient(HOST, PORT);
-        itemsService.clearAll();
-    }
-
     @Test
     public void whenAddItemThenItIsRetrivable() throws Exception {
+        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
+
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -88,6 +85,8 @@ public class ItemsServiceIT {
 
     @Test
     public void whenAddingMultiItemsThenTheyAreRetrivable() throws Exception {
+        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
+
         int firstItemId = new Random().nextInt();
         String firstItemName = UUID.randomUUID().toString();
         String firstItemCategory = UUID.randomUUID().toString();
@@ -114,12 +113,14 @@ public class ItemsServiceIT {
 
     @Test(expected = NotFoundException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         itemsService.getItem(itemId);
     }
 
     @Test(expected = NotFoundException.class)
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
+        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -135,6 +136,7 @@ public class ItemsServiceIT {
 
     @Test
     public void whenUpdatingAnItemThenChangesAreRetrivable() throws Exception {
+        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
