@@ -6,7 +6,9 @@ import sample.task.list.service.impl.ItemsServiceImpl;
 import sample.task.list.service.model.TaskItem;
 import sample.task.list.service.model.TaskList;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -49,9 +51,10 @@ public class ItemsResource {
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
-    public void addItem(TaskItem taskItem) {
+    public void addItem(TaskItem taskItem, @Context final HttpServletResponse response) {
         try {
             new ItemsServiceImpl().addItem(taskItem);
+            response.setStatus(Response.Status.CREATED.getStatusCode());
         } catch (Exception e) {
             logAndThrowServiceUnavailableException(e);
         }

@@ -1,9 +1,9 @@
 package sample.task.list.service.dao;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.*;
 import com.mongodb.util.JSON;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.ApplicationConfiguration;
@@ -147,7 +147,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
 
     private TaskItem toTaskItem(String taskItemJson) throws IOException {
         return new ObjectMapper()
-                .disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .readValue(taskItemJson, TaskItem.class);
     }
 
