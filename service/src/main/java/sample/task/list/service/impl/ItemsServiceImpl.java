@@ -31,10 +31,10 @@ public class ItemsServiceImpl implements ItemsService {
         ItemDAO itemDAO = null;
         try {
             if (IS_MONGO_ENABLED) {
-                LOGGER.info("MongoDB conf is set to enabled, going to use mongoDB store...");
+                LOGGER.debug("MongoDB conf is set to enabled, going to use mongoDB store...");
                 itemDAO = ItemDAOMongoDBImpl.getInstance();
             } else {
-                LOGGER.info("MongoDB conf is set to disabled, going to use local map store...");
+                LOGGER.debug("MongoDB conf is set to disabled, going to use local map store...");
                 itemDAO = ItemDAOMapImpl.getInstance();
             }
         } catch (Exception e) {
