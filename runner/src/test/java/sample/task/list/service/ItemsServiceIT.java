@@ -2,6 +2,7 @@ package sample.task.list.service;
 
 import org.junit.*;
 import sample.task.list.server.EmbeddedServer;
+import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.client.ItemServiceClient;
 import sample.task.list.service.model.TaskItem;
 
@@ -105,7 +106,7 @@ public class ItemsServiceIT {
         itemsService.addItem(firstItem);
         itemsService.addItem(secondItem);
 
-        List<TaskItem> retItems = itemsService.getAllItems().getItems();
+        List<TaskItem> retItems = itemsService.getAllItems();
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));

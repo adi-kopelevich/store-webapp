@@ -1,13 +1,14 @@
 package sample.task.list.service.impl;
 
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
-import sample.task.list.service.ItemsService;
+import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.dao.ItemDAO;
 import sample.task.list.service.model.TaskItem;
 
-import javax.ws.rs.NotFoundException;
 import java.util.*;
 
 /**
@@ -43,17 +44,18 @@ public class ItemsServiceImplTest {
         Assert.assertEquals(item.getNotes(), retItem.getNotes());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         Mockito.when(itemDAO.getItem(Mockito.anyInt())).thenReturn(null);
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
         int itemId = new Random().nextInt();
-        itemsService.getItem(itemId);
+        TaskItem item = itemsService.getItem(itemId);
+        Assert.assertNull(item);
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
@@ -62,7 +64,6 @@ public class ItemsServiceImplTest {
         List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
         TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
-
 
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         Mockito.when(itemDAO.getItem(itemId)).thenReturn(null);
@@ -74,7 +75,8 @@ public class ItemsServiceImplTest {
         itemsService.removeItem(itemId);
         Mockito.verify(itemDAO, Mockito.times(1)).removeItem(item.getId());
 
-        itemsService.getItem(itemId); // should throw exception
+        TaskItem retItem = itemsService.getItem(itemId);
+        Assert.assertNull(retItem);
     }
 
     @Test
@@ -135,7 +137,7 @@ public class ItemsServiceImplTest {
         Mockito.verify(itemDAO, Mockito.times(1)).putItem(firstItem);
         itemsService.addItem(secondItem);
         Mockito.verify(itemDAO, Mockito.times(1)).putItem(secondItem);
-        List<TaskItem> retItems = itemsService.getAllItems().getItems();
+        List<TaskItem> retItems = itemsService.getAllItems();
 
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));

@@ -1,6 +1,7 @@
 package sample.task.list.service;
 
 import org.junit.Test;
+import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.client.ItemServiceClient;
 
 /**

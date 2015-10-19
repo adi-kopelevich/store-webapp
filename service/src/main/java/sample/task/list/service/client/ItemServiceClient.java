@@ -3,12 +3,13 @@ package sample.task.list.service.client;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.task.list.service.ItemsService;
+import sample.task.list.service.api.ItemsService;
 import sample.task.list.service.model.TaskItem;
 import sample.task.list.service.model.TaskList;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Created by kopelevi on 04/09/2015.
@@ -67,9 +68,10 @@ public class ItemServiceClient implements ItemsService {
     }
 
 
-    public TaskList getAllItems() {
+    public List<TaskItem> getAllItems() {
         Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
-        return invocationBuilder.get(TaskList.class);
+        TaskList taskList = invocationBuilder.get(TaskList.class);
+        return taskList.getItems();
     }
 
     public TaskItem getItem(int itemId) {
