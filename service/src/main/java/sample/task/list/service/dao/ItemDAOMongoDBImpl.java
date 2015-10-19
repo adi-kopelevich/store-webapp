@@ -1,13 +1,15 @@
 package sample.task.list.service.dao;
 
-import com.google.gson.Gson;
 import com.mongodb.*;
 import com.mongodb.util.JSON;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.ApplicationConfiguration;
 import sample.task.list.service.model.TaskItem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,22 +138,16 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
         }
     }
 
-    private static String getMongoProperty(String envKey, String defVal) {
-        String mongoPropertyValue = System.getProperty(envKey);
-        if (mongoPropertyValue == null) {
-            mongoPropertyValue = defVal;
-            LOGGER.debug("Failed to retrieve " + envKey + " from environment variables, going to use default: " + defVal);
-        }
-        return mongoPropertyValue;
+    private DBObject toDBObject(TaskItem taskItem) throws IOException {
+        String taskItemJson = new ObjectMapper()
+                .writeValueAsString(taskItem);
+        return (DBObject) JSON.parse(taskItemJson);
     }
 
-    private DBObject toDBObject(TaskItem taskItem) {
-        String json = new Gson().toJson(taskItem);
-        return (DBObject) JSON.parse(json);
-    }
-
-    private TaskItem toTaskItem(String taskItemJson) {
-        return new Gson().fromJson(taskItemJson, TaskItem.class);
+    private TaskItem toTaskItem(String taskItemJson) throws IOException {
+        return new ObjectMapper()
+                .disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .readValue(taskItemJson, TaskItem.class);
     }
 
     private BasicDBObject getUniqueContactSearchQuery(int taskItemId) {

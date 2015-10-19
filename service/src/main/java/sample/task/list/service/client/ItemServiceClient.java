@@ -1,5 +1,6 @@
 package sample.task.list.service.client;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sample.task.list.service.ItemsService;
@@ -31,7 +32,7 @@ public class ItemServiceClient implements ItemsService {
         //init client
         try {
             String serviceURL = buildServiceURL(protpcol, hostname, port, context);
-            Client client = ClientBuilder.newClient();
+            Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build(); // register Jackson JSON providers to automatically handled Object <--> JSON
             this.webTarget = client.target(serviceURL.toString());
             LOGGER.info("Initiated client with target " + serviceURL);
         } catch (Exception e) {

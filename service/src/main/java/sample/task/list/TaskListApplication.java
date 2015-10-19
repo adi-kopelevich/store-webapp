@@ -11,8 +11,8 @@ import javax.ws.rs.ApplicationPath;
 @ApplicationPath("/rest")
 public class TaskListApplication extends ResourceConfig {
     public TaskListApplication() {
-        packages("sample.task.list");   // register packahes for Jeresy resources
-        register(JacksonFeature.class); // register Jackson JSON providers to automatically handled Object --> JSON
+        packages("sample.task.list");   // register packages for Jeresy resources
+        register(JacksonFeature.class); // register Jackson JSON providers to automatically handled Object <--> JSON
     }
 
 }
