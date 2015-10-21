@@ -135,6 +135,7 @@ public class ItemsServiceImplTest {
         Mockito.verify(itemDAO, Mockito.times(1)).putItem(secondItem);
         List<TaskItem> retItems = itemsService.getAllItems();
 
+        Assert.assertNotNull(retItems);
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));

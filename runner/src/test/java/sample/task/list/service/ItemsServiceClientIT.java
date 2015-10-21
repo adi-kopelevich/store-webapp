@@ -106,6 +106,7 @@ public class ItemsServiceClientIT {
         itemsService.addItem(secondItem);
 
         List<TaskItem> retItems = itemsService.getAllItems();
+        Assert.assertNotNull(retItems);
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));

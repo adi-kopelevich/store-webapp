@@ -4,9 +4,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import sample.task.list.service.ItemDAO;
-import sample.task.list.service.ItemDAOMapImpl;
-import sample.task.list.service.TaskItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -117,6 +114,7 @@ public class ItemDAOMapImplTest {
         persistency.putItem(secondItem);
         List<TaskItem> retItems = persistency.getItems();
 
+        Assert.assertNotNull(retItems);
         Assert.assertEquals(2, retItems.size());
         Assert.assertEquals(true, retItems.contains(firstItem));
         Assert.assertEquals(true, retItems.contains(secondItem));
