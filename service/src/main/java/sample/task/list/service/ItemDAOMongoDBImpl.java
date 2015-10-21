@@ -6,7 +6,6 @@ import com.mongodb.*;
 import com.mongodb.util.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.task.list.service.ServiceConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
