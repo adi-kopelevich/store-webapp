@@ -7,7 +7,7 @@
 JAVA_OPTS="$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 
 # JVM arguments - GC options. using parallel CPU(s) for young gen & concurent mark and sweep for old gen)
-JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:+UseConcMarkSweepGC"
+JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:-PrintGCDetails -Xloggc:../logs/gc.log -XX:-UseGCLogFileRotation"
 
 # JVM arguments - print startup JVM argument
 JAVA_OPTS="$JAVA_OPTS -XX:+PrintCommandLineFlags"
