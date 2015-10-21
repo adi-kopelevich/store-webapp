@@ -64,16 +64,18 @@ public class EmbeddedServer {
         try (FileInputStream fis = new FileInputStream(getAppConfFilePath(appRootPath))) {
             Properties appProperties = new Properties();
             appProperties.load(fis);
-            for (String key : appProperties.stringPropertyNames()) {
-                System.setProperty(key, appProperties.getProperty(key));
-            }
+            appProperties.stringPropertyNames().stream()
+                    .map(key -> setAsEnvParam(appProperties, key))
+                    .count();
         } catch (Exception e) {
             String errorMsg = "Failed to process application conf file, path: " + getAppConfFilePath(appRootPath);
             LOGGER.error(errorMsg, e);
             throw new RuntimeException(errorMsg, e);
         }
+    }
 
-
+    private String setAsEnvParam(Properties props, String key) {
+        return System.setProperty(key, props.getProperty(key));
     }
 
     private void validateParams(int port, String appRootPath) {
