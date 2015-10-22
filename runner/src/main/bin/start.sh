@@ -10,11 +10,14 @@ mkdir -p -- "$gcLogFile"
 # Should be set in case  not set by env
 #JAVA_HOME=
 
+# JVM arguments - GC log options.
+JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFileRotation -Xloggc:$gcLogFile"
+
 # JVM arguments - remote debug argument
 JAVA_OPTS="$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 
-# JVM arguments - GC options. using parallel CPU(s) for young gen & concurent mark and sweep for old gen)
-JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFileRotation -Xloggc:$gcLogFile"
+# JVM arguments - GC options. using parallel CPU(s) for young (with desired pause time) & concurrent mark and sweep for old gen)
+JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:MaxGCPauseMillis=200 -XX:+UseConcMarkSweepGC"
 
 # JVM arguments - print startup JVM argument
 JAVA_OPTS="$JAVA_OPTS -XX:+PrintCommandLineFlags"
