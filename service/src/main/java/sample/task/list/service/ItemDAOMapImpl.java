@@ -16,7 +16,7 @@ public class ItemDAOMapImpl implements ItemDAO {
     //      - handling null keys which are allowed as contrast to regular hash map, as it  might be returned while iterating over them
     private final Map<Integer, TaskItem> itemsMap = new ConcurrentHashMap<>(); //thread safe...
 
-    private static final ItemDAOMapImpl INSTANCE = new ItemDAOMapImpl();
+    private static final  ItemDAOMapImpl INSTANCE = new ItemDAOMapImpl();
 
     // hide constructor
     private ItemDAOMapImpl() {

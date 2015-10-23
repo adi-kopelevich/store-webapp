@@ -28,91 +28,68 @@ public class ItemsResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public TaskList getAllItems() {
-        List<TaskItem> items = null;
         try {
-            items = new ItemsServiceImpl().getAllItems();
+            List<TaskItem> items = new ItemsServiceImpl().getAllItems();
+            return new TaskList(items);
         } catch (Exception e) {
-            logAndThrowServiceUnavailableException(e);
+            throw new TaskServiceUnavailableException(e);
         }
-        return new TaskList(items);
     }
 
     @GET
     @Path("/{paramId}")
     @Produces({MediaType.APPLICATION_JSON})
     public TaskItem getItem(@PathParam("paramId") int itemId) {
-        TaskItem item = null;
         try {
-            item = new ItemsServiceImpl().getItem(itemId);
+            return new ItemsServiceImpl().getItem(itemId);
         } catch (ItemNotFoundException itemNotFoundException) {
-            logAndThrowNotFoundException(itemId);
+            throw new TaskItemNotFoundException(itemId);
         } catch (Exception e) {
-            logAndThrowServiceUnavailableException(e);
+            throw new TaskServiceUnavailableException(e);
         }
-        return item;
     }
 
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response addItem(TaskItem taskItem) {
-        Response response = null;
         try {
             new ItemsServiceImpl().addItem(taskItem);
-            response = Response.created(uriInfo.getRequestUri()).build();
+            return Response.created(uriInfo.getRequestUri()).build();
         } catch (Exception e) {
-            logAndThrowServiceUnavailableException(e);
+            throw new TaskServiceUnavailableException(e);
         }
-        return response;
     }
 
     @DELETE
     @Path("/{paramId}")
     public Response removeItem(@PathParam("paramId") int itemId) {
-        Response response = null;
         try {
             new ItemsServiceImpl().removeItem(itemId);
-            response = Response.noContent().build();
+            return Response.noContent().build();
         } catch (Exception e) {
-            logAndThrowServiceUnavailableException(e);
+            throw new TaskServiceUnavailableException(e);
         }
-        return response;
     }
 
     @PUT
     @Consumes({MediaType.APPLICATION_JSON})
     public Response updateItem(TaskItem taskItem) {
-        Response response = null;
         try {
             new ItemsServiceImpl().updateItem(taskItem);
-            response = Response.ok().build();
+            return Response.ok().build();
         } catch (Exception e) {
-            logAndThrowServiceUnavailableException(e);
+            throw new TaskServiceUnavailableException(e);
         }
-        return response;
     }
 
     @DELETE
     public Response clearAll() {
-        Response response = null;
         try {
             new ItemsServiceImpl().clearAll();
-            response = Response.noContent().build();
+            return Response.noContent().build();
         } catch (Exception e) {
-            logAndThrowServiceUnavailableException(e);
+            throw new TaskServiceUnavailableException(e);
         }
-        return response;
-    }
-
-    private void logAndThrowServiceUnavailableException(Exception e) {
-        String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
-        LOGGER.error(errMsg, e);
-        throw new ServiceUnavailableException(errMsg);
-    }
-
-    private void logAndThrowNotFoundException(int itemId) {
-        String errMsg = Response.Status.NOT_FOUND + " - " + "Item wth ID: " + itemId;
-        LOGGER.error(errMsg);
-        throw new NotFoundException(errMsg);
     }
 
 }
