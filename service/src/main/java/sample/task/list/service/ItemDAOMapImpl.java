@@ -10,13 +10,10 @@ import java.util.stream.Collectors;
  */
 public class ItemDAOMapImpl implements ItemDAO {
 
-    // ConcurrentHashMap for handing concurrency,
-    // its drawbacks are:
-    //      - larger memory footprint compared to a regular has map and
-    //      - handling null keys which are allowed as contrast to regular hash map, as it  might be returned while iterating over them
-    private final Map<Integer, TaskItem> itemsMap = new ConcurrentHashMap<>(); //thread safe...
+    // ConcurrentHashMap for handing concurrency and ensure thread safety (non-null keys)
+    private final Map<Integer, TaskItem> itemsMap = new ConcurrentHashMap<>();
 
-    private static final  ItemDAOMapImpl INSTANCE = new ItemDAOMapImpl();
+    private static final ItemDAOMapImpl INSTANCE = new ItemDAOMapImpl();
 
     // hide constructor
     private ItemDAOMapImpl() {
@@ -30,9 +27,8 @@ public class ItemDAOMapImpl implements ItemDAO {
         return itemsMap.get(itemId);
     }
 
-    public List<TaskItem> getItems() {// ConcurrentHashMap might contain null keys
+    public List<TaskItem> getItems() {
         return itemsMap.entrySet().stream()
-                .filter(x -> x != null)
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
