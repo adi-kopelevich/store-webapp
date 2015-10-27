@@ -46,7 +46,7 @@ public class ItemsResourceIT {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 //        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
 //        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
@@ -83,7 +83,7 @@ public class ItemsResourceIT {
     }
 
     @Test
-    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown()  {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);
         int itemId = new Random().nextInt();
@@ -92,7 +92,7 @@ public class ItemsResourceIT {
     }
 
     @Test
-    public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
+    public void whenDeletingItemThenItIsNotRetrivable() {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);
 
@@ -118,7 +118,7 @@ public class ItemsResourceIT {
     }
 
     @Test
-    public void whenAddItemThenItIsRetrievable() throws Exception {
+    public void whenAddItemThenItIsRetrievable() {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);
 

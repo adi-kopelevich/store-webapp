@@ -2,7 +2,6 @@ package sample.task.list.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.task.list.service.ServiceConfiguration;
 
 import java.util.List;
 
@@ -14,6 +13,7 @@ public class ItemsServiceImpl implements ItemsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemsServiceImpl.class);
 
     private static final boolean IS_MONGO_ENABLED = ServiceConfiguration.isMongoEnabled();
+
     private final ItemDAO persistency;
 
     public ItemsServiceImpl() {

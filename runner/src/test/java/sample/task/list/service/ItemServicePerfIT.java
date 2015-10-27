@@ -9,7 +9,7 @@ public class ItemServicePerfIT {
     private static final String HOST = "localhost";
 
 //    @Test
-    public void whenAddItemThenItIsRetrievable() throws Exception {
+    public void whenAddItemThenItIsRetrievable() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         for (int i = 0; i < 1000000; i++) {
             itemsService.getAllItems();

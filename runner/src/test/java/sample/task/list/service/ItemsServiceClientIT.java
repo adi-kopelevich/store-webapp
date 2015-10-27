@@ -27,7 +27,7 @@ public class ItemsServiceClientIT {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 //        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
 //        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
@@ -64,7 +64,7 @@ public class ItemsServiceClientIT {
     }
 
     @Test
-    public void whenAddItemThenItIsRetrivable() throws Exception {
+    public void whenAddItemThenItIsRetrivable() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
 
         int itemId = new Random().nextInt();
@@ -84,7 +84,7 @@ public class ItemsServiceClientIT {
     }
 
     @Test
-    public void whenAddingMultiItemsThenTheyAreRetrivable() throws Exception {
+    public void whenAddingMultiItemsThenTheyAreRetrivable() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
 
         int firstItemId = new Random().nextInt();
@@ -113,14 +113,14 @@ public class ItemsServiceClientIT {
     }
 
     @Test(expected = ItemNotFoundException.class)
-    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() throws Exception {
+    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         itemsService.getItem(itemId);
     }
 
     @Test(expected = ItemNotFoundException.class)
-    public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
+    public void whenDeletingItemThenItIsNotRetrivable() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
@@ -136,7 +136,7 @@ public class ItemsServiceClientIT {
     }
 
     @Test
-    public void whenUpdatingAnItemThenChangesAreRetrivable() throws Exception {
+    public void whenUpdatingAnItemThenChangesAreRetrivable() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();

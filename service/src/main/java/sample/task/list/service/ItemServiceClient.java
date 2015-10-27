@@ -25,7 +25,7 @@ public class ItemServiceClient implements ItemsService {
     private static final String APP_PATH = "rest";
     private static final int MAX_PORT = 65535;
 
-    private final WebTarget webTarget;
+    private final WebTarget webTarget; //thread safe
 
     public ItemServiceClient(String protpcol, String hostname, int port, String context) {
         //init client

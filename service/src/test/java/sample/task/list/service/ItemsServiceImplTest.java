@@ -17,7 +17,7 @@ public class ItemsServiceImplTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void whenAddItemThenItIsRetrivable() throws Exception {
+    public void whenAddItemThenItIsRetrivable()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -42,7 +42,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test(expected = ItemNotFoundException.class)
-    public void whenGettingNotExistsThenNullIsReturned() throws Exception {
+    public void whenGettingNotExistsThenNullIsReturned()  {
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         Mockito.when(itemDAO.getItem(Mockito.anyInt())).thenReturn(null);
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
@@ -52,7 +52,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test(expected = ItemNotFoundException.class)
-    public void whenDeletingExistingItemAndRetriveThenItemThenNullIsReturned() throws Exception {
+    public void whenDeletingExistingItemAndRetriveThenItemThenNullIsReturned()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -76,7 +76,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenUpdateingAnItemThenChangesAreRetrivable() throws Exception {
+    public void whenUpdateingAnItemThenChangesAreRetrivable()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -105,7 +105,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenAddingMultiItemsThenAllItemsAreReturned() throws Exception {
+    public void whenAddingMultiItemsThenAllItemsAreReturned()  {
         int firstItemId = new Random().nextInt();
         String firstItemName = UUID.randomUUID().toString();
         String firstItemCategory = UUID.randomUUID().toString();
@@ -142,7 +142,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenGetItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
+    public void whenGetItemThrowExceptionThenItIsPropagatedToClient()  {
         int itemId = new Random().nextInt();
 
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
@@ -157,7 +157,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenPutItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
+    public void whenPutItemThrowExceptionThenItIsPropagatedToClient()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -178,7 +178,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenDeleteItemThrowExceptionThenItIsPropagatedToClient() throws Exception {
+    public void whenDeleteItemThrowExceptionThenItIsPropagatedToClient()  {
         int itemId = new Random().nextInt();
 
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);

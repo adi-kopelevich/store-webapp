@@ -18,17 +18,17 @@ public class ItemDAOMongoDBImplIT {
     private static final ItemDAO persistency = ItemDAOMongoDBImpl.getInstance();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         persistency.clear();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         persistency.clear();
     }
 
     @Test
-    public void whenAddItemThenItIsRetrivable() throws Exception {
+    public void whenAddItemThenItIsRetrivable() {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -48,14 +48,14 @@ public class ItemDAOMongoDBImplIT {
     }
 
     @Test
-    public void whenGettingNotExistsThenNullWillBeReturned() throws Exception {
+    public void whenGettingNotExistsThenNullWillBeReturned()  {
         int itemId = new Random().nextInt();
         TaskItem retItem = persistency.getItem(itemId);
         Assert.assertEquals(null, retItem);
     }
 
     @Test
-    public void whenDeletingItemThenItIsNotRetrivable() throws Exception {
+    public void whenDeletingItemThenItIsNotRetrivable()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -71,7 +71,7 @@ public class ItemDAOMongoDBImplIT {
     }
 
     @Test
-    public void whenUpdateingAnItemThenChangesAreRetrivable() throws Exception {
+    public void whenUpdateingAnItemThenChangesAreRetrivable()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -94,7 +94,7 @@ public class ItemDAOMongoDBImplIT {
     }
 
     @Test
-    public void whenAddingMultiItemsThenAllItemsAreReturned() throws Exception {
+    public void whenAddingMultiItemsThenAllItemsAreReturned()  {
         int firstItemId = new Random().nextInt();
         String firstItemName = UUID.randomUUID().toString();
         String firstItemCategory = UUID.randomUUID().toString();
