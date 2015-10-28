@@ -33,11 +33,20 @@ public class ItemsServiceImpl implements ItemsService {
     }
 
     public List<TaskItem> getAllItems() {
-        return persistency.getItems();
+        try {
+            return persistency.getItems();
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_GET_ALL, e);
+        }
     }
 
     public TaskItem getItem(int itemId) {
-        TaskItem taskItem = persistency.getItem(itemId);
+        TaskItem taskItem;
+        try {
+            taskItem = persistency.getItem(itemId);
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_GET_ITEM + itemId, e);
+        }
         if (taskItem == null) {
             throw new ItemServiceItemNotFoundException(itemId);
         }
@@ -45,19 +54,35 @@ public class ItemsServiceImpl implements ItemsService {
     }
 
     public void addItem(TaskItem taskItem) {
-        persistency.putItem(taskItem);
+        try {
+            persistency.putItem(taskItem);
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_ADD_ITEM + taskItem.toString(), e);
+        }
     }
 
     public void removeItem(int itemId) {
-        persistency.removeItem(itemId);
+        try {
+            persistency.removeItem(itemId);
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_REMOVE_ITEM + itemId, e);
+        }
     }
 
     public void updateItem(TaskItem taskItem) {
-        persistency.putItem(taskItem);
+        try {
+            persistency.putItem(taskItem);
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_UPDATE_ITEM + taskItem.toString(), e);
+        }
     }
 
     public void clearAll() {
-        persistency.clear();
+        try {
+            persistency.clear();
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_CLEAR_ALL, e);
+        }
     }
 
 

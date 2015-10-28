@@ -8,4 +8,8 @@ public class ItemServiceException extends RuntimeException {
     public ItemServiceException(String msg) {
         super(msg);
     }
+
+    public ItemServiceException(String msg, Exception e) {
+        super(msg, e);
+    }
 }

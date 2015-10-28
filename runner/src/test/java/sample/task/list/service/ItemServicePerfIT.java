@@ -10,7 +10,7 @@ public class ItemServicePerfIT {
 
 //    @Test
     public void whenAddItemThenItIsRetrievable() {
-        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
+        ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
         for (int i = 0; i < 1000000; i++) {
             itemsService.getAllItems();
             System.out.println(i);

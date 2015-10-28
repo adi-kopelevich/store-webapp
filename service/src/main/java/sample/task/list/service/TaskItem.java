@@ -1,6 +1,7 @@
 package sample.task.list.service;
 
 import java.util.List;
+
 public class TaskItem {
 
     private int id;
@@ -60,8 +61,17 @@ public class TaskItem {
         this.notes = notes;
     }
 
-    // for comparission over http client-->server
+    public String toString() {
+        return new StringBuilder().append("{")
+                .append("id: ").append(id).append(", ")
+                .append("name: ").append(name).append(", ")
+                .append("category: ").append(category).append(", ")
+                .append("reminder: ").append(reminder).append(", ")
+                .append("notes: ").append(notes).append("}")
+                .toString();
+    }
 
+    // for comparission over http client-->server
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

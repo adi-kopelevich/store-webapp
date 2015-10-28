@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by kopelevi on 04/09/2015.
  */
-public class ItemServiceClient implements ItemsService {
+public class ItemServiceClientImpl implements ItemsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemServiceClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemServiceClientImpl.class);
 
     private static final String DEFAULT_PROTOCOL = "http";
     private static final String DEFAULT_HOST = "localhost";
@@ -27,7 +27,7 @@ public class ItemServiceClient implements ItemsService {
 
     private final WebTarget webTarget; //thread safe
 
-    public ItemServiceClient(String protpcol, String hostname, int port, String context) {
+    public ItemServiceClientImpl(String protpcol, String hostname, int port, String context) {
         //init client
         try {
             String serviceURL = buildServiceURL(protpcol, hostname, port, context);
@@ -41,7 +41,7 @@ public class ItemServiceClient implements ItemsService {
         }
     }
 
-    public ItemServiceClient(String hostname, int port) {
+    public ItemServiceClientImpl(String hostname, int port) {
         this(DEFAULT_PROTOCOL, hostname, port, DEFAULT_CONTEXT);
     }
 
@@ -67,37 +67,59 @@ public class ItemServiceClient implements ItemsService {
 
 
     public List<TaskItem> getAllItems() {
-        Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
-        TaskList taskList = invocationBuilder.get(TaskList.class);
-        return taskList.getItems();
+        try {
+            Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
+            TaskList taskList = invocationBuilder.get(TaskList.class);
+            return taskList.getItems();
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_GET_ALL, e);
+        }
     }
 
     public TaskItem getItem(int itemId) {
         try {
             Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(DEFAULT_MEDIA_TYPE);
             return invocationBuilder.get(TaskItem.class);
-        }catch (NotFoundException notFoundException){
+        } catch (NotFoundException notFoundException) {
             throw new ItemServiceItemNotFoundException(itemId);
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_GET_ITEM + itemId, e);
         }
     }
 
     public void addItem(TaskItem item) {
-        Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
-        invocationBuilder.post(Entity.entity(item, DEFAULT_MEDIA_TYPE));
+        try {
+            Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
+            invocationBuilder.post(Entity.entity(item, DEFAULT_MEDIA_TYPE));
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_ADD_ITEM + item.toString(), e);
+        }
     }
 
     public void removeItem(int itemId) {
-        Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request();
-        invocationBuilder.delete();
+        try {
+            Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request();
+            invocationBuilder.delete();
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_REMOVE_ITEM + itemId, e);
+        }
     }
 
     public void updateItem(TaskItem item) {
-        Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
-        invocationBuilder.put(Entity.entity(item, DEFAULT_MEDIA_TYPE));
+        try {
+            Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
+            invocationBuilder.put(Entity.entity(item, DEFAULT_MEDIA_TYPE));
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_UPDATE_ITEM + item.toString(), e);
+        }
     }
 
     public void clearAll() {
-        Invocation.Builder invocationBuilder = webTarget.request();
-        invocationBuilder.delete();
+        try {
+            Invocation.Builder invocationBuilder = webTarget.request();
+            invocationBuilder.delete();
+        } catch (Exception e) {
+            throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_CLEAR_ALL, e);
+        }
     }
 }

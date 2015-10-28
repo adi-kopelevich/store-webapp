@@ -142,22 +142,22 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenGetItemThrowExceptionThenItIsPropagatedToClient()  {
+    public void whenGetItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException()  {
         int itemId = new Random().nextInt();
 
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         String throwableMsg = UUID.randomUUID().toString();
         Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).getItem(itemId);
 
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage(throwableMsg);
+        expectedException.expect(ItemServiceException.class);
+        expectedException.expectMessage("Failed to get item");
 
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.getItem(itemId);
     }
 
     @Test
-    public void whenPutItemThrowExceptionThenItIsPropagatedToClient()  {
+    public void whenPutItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
@@ -170,23 +170,23 @@ public class ItemsServiceImplTest {
         String throwableMsg = UUID.randomUUID().toString();
         Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).putItem(item);
 
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage(throwableMsg);
+        expectedException.expect(ItemServiceException.class);
+        expectedException.expectMessage("Failed to add item");
 
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.addItem(item);
     }
 
     @Test
-    public void whenDeleteItemThrowExceptionThenItIsPropagatedToClient()  {
+    public void whenDeleteItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException()  {
         int itemId = new Random().nextInt();
 
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         String throwableMsg = UUID.randomUUID().toString();
         Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).removeItem(itemId);
 
-        expectedException.expect(RuntimeException.class);
-        expectedException.expectMessage(throwableMsg);
+        expectedException.expect(ItemServiceException.class);
+        expectedException.expectMessage("Failed to remove item");
 
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.removeItem(itemId);

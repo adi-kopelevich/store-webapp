@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sample.task.list.server.EmbeddedServer;
-import sample.task.list.service.ItemServiceClient;
+import sample.task.list.service.ItemServiceClientImpl;
 import sample.task.list.service.ItemsService;
 import sample.task.list.service.TaskItem;
 
@@ -49,7 +49,7 @@ public class ItemsResourceIT {
     public void setUp() {
 //        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
 //        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
-        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
+        ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
         itemsService.clearAll();
     }
 
@@ -65,7 +65,7 @@ public class ItemsResourceIT {
     }
 
     private static void validateServerIsUp(final int numOfRetries, final int cycleIntervalInMillis) {
-        ItemsService itemsService = new ItemServiceClient(HOST, PORT);
+        ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
         // wait for server to load
         for (int i = 0; i < numOfRetries; i++) {
             try {
