@@ -19,7 +19,7 @@ public class TaskItemNotFoundException extends NotFoundException {
     }
 
     private static String getErrorMsg(int itemId) {
-        String errMsg = Response.Status.NOT_FOUND + " - " + "Item wth ID: " + itemId;
+        String errMsg = Response.Status.NOT_FOUND + " - " + "Item with ID: " + itemId;
         LOGGER.error(errMsg);
         return errMsg;
     }
