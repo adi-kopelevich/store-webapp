@@ -112,14 +112,14 @@ public class ItemsServiceClientIT {
         Assert.assertEquals(true, retItems.contains(secondItem));
     }
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test(expected = ItemNotFoundDAOException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();
         itemsService.getItem(itemId);
     }
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test(expected = ItemNotFoundDAOException.class)
     public void whenDeletingItemThenItIsNotRetrivable() {
         ItemsService itemsService = new ItemServiceClient(HOST, PORT);
         int itemId = new Random().nextInt();

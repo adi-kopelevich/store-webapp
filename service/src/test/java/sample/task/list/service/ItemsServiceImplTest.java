@@ -41,7 +41,7 @@ public class ItemsServiceImplTest {
         Assert.assertEquals(item.getNotes(), retItem.getNotes());
     }
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test(expected = ItemNotFoundDAOException.class)
     public void whenGettingNotExistsThenNullIsReturned()  {
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         Mockito.when(itemDAO.getItem(Mockito.anyInt())).thenReturn(null);
@@ -51,7 +51,7 @@ public class ItemsServiceImplTest {
         itemsService.getItem(itemId);
     }
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test(expected = ItemNotFoundDAOException.class)
     public void whenDeletingExistingItemAndRetriveThenItemThenNullIsReturned()  {
         int itemId = new Random().nextInt();
         String itemName = UUID.randomUUID().toString();
