@@ -36,7 +36,6 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
     }
 
     private DBCollection initDBCollection() {
-        DBCollection collection = null;
         try {
             String mongoHost = ServiceConfiguration.getMongoHost();
             String mongoPort = ServiceConfiguration.getMongoPort();
@@ -45,20 +44,20 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             MongoClient mongoClient = new MongoClient(mongoHost, Integer.valueOf(mongoPort));
             mongoClient.setWriteConcern(WriteConcern.ACKNOWLEDGED);
             DB db = mongoClient.getDB(DB_NAME);
-            collection = db.getCollection(COLLECTION_NAME);
+            DBCollection collection = db.getCollection(COLLECTION_NAME);
             LOGGER.debug("Initiated MongoDB collection= " + COLLECTION_NAME + ", with DB=" + DB_NAME);
             collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
             LOGGER.debug("Created unique index - " + UNIQUE_INDEX);
+            return collection;
         } catch (Exception e) {
-            logAndThrowErr("Failed to init MongoDB collection, aborting ItemDAL init...", e);
+            throw new ItemDAOException("Failed to init MongoDB collection, aborting ItemDAL init...", e);
         }
-        return collection;
     }
 
     @Override
     public TaskItem getItem(int itemId) {
-        TaskItem ret = null;
         try {
+            TaskItem ret;
             BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
             DBCursor queryResult = collection.find(searchQuery);
             if (queryResult.hasNext()) {
@@ -69,27 +68,26 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
                 ret = null;
                 LOGGER.debug("Failed to find object for query: " + searchQuery);
             }
+            return ret;
         } catch (Exception e) {
-            logAndThrowErr("Failed to get item with with ID: " + itemId, e);
+            throw new ItemDAOException("Failed to get item with with ID: " + itemId, e);
         }
-        return ret;
     }
 
     @Override
     public List<TaskItem> getItems() {
-        List<TaskItem> taskItems = null;
         try {
-            taskItems = new ArrayList<TaskItem>();
+            List<TaskItem> taskItems = new ArrayList<TaskItem>();
             DBCursor queryResult = collection.find();
             while (queryResult.hasNext()) {
                 String taskItemJsonFormat = queryResult.next().toString();
                 TaskItem taskItem = toTaskItem(taskItemJsonFormat);
                 taskItems.add(taskItem);
             }
+            return taskItems;
         } catch (Exception e) {
-            logAndThrowErr("Failed to get all items", e);
+            throw new ItemDAOException("Failed to get all items", e);
         }
-        return taskItems;
     }
 
     @Override
@@ -107,13 +105,13 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
                         LOGGER.debug("Item updated successfully: " + toDBObject(item).toString());
                     }
                 } else {
-                    logAndThrowErr("Failed to update, resource with ID: " + item.getId() + " was not found, probably removed by another thread...");
+                    throw new ItemDAOException("Failed to update, resource with ID: " + item.getId() + " was not found, probably removed by another thread...");
                 }
             } catch (Exception e) {
-                logAndThrowErr("Failed to update item with ID: " + item.getId(), e);
+                throw new ItemDAOException("Failed to update item with ID: " + item.getId(), e);
             }
         } catch (Exception e) {
-            logAndThrowErr("Failed to insert item with ID: " + item.getId(), e);
+            throw new ItemDAOException("Failed to insert item with ID: " + item.getId(), e);
         }
     }
 
@@ -123,7 +121,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
             collection.remove(searchQuery);
         } catch (Exception e) {
-            logAndThrowErr("Failed to delete item with ID: " + itemId, e);
+            throw new ItemDAOException("Failed to delete item with ID: " + itemId, e);
         }
     }
 
@@ -133,7 +131,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             collection.drop();
             collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
         } catch (Exception e) {
-            logAndThrowErr("Failed to clear collection  " + collection.getName(), e);
+            throw new ItemDAOException("Failed to clear collection  " + collection.getName(), e);
         }
     }
 
@@ -153,20 +151,6 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put(UNIQUE_INDEX, taskItemId);
         return searchQuery;
-    }
-
-    private void logAndThrowErr(String errMsg) {
-        logAndThrowErr(errMsg, null);
-    }
-
-    private void logAndThrowErr(String errMsg, Exception e) {
-        if (e == null) {
-            LOGGER.error(errMsg);
-            throw new RuntimeException(errMsg);
-        } else {
-            LOGGER.error(errMsg, e);
-            throw new RuntimeException(errMsg, e);
-        }
     }
 
 }
