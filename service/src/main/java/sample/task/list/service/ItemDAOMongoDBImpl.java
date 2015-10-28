@@ -86,7 +86,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             }
             return taskItems;
         } catch (Exception e) {
-            throw new ItemDAOException("Failed to get all items", e);
+            throw new ItemDAOException("Failed to get all items from DB", e);
         }
     }
 
@@ -121,7 +121,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
             collection.remove(searchQuery);
         } catch (Exception e) {
-            throw new ItemDAOException("Failed to delete item with ID: " + itemId, e);
+            throw new ItemDAOException("Failed to delete item with ID from DB: " + itemId, e);
         }
     }
 
@@ -131,7 +131,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             collection.drop();
             collection.createIndex(new BasicDBObject(UNIQUE_INDEX, 1), new BasicDBObject("unique", true));
         } catch (Exception e) {
-            throw new ItemDAOException("Failed to clear collection  " + collection.getName(), e);
+            throw new ItemDAOException("Failed to clear collection " + collection.getName(), e);
         }
     }
 
