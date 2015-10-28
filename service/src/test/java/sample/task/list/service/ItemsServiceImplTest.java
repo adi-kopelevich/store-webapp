@@ -150,7 +150,7 @@ public class ItemsServiceImplTest {
         Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).getItem(itemId);
 
         expectedException.expect(ItemServiceException.class);
-        expectedException.expectMessage("Failed to get item");
+        expectedException.expectMessage(ItemServiceErrorMessages.FAILED_TO_GET_ITEM);
 
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.getItem(itemId);
@@ -171,7 +171,7 @@ public class ItemsServiceImplTest {
         Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).putItem(item);
 
         expectedException.expect(ItemServiceException.class);
-        expectedException.expectMessage("Failed to add item");
+        expectedException.expectMessage(ItemServiceErrorMessages.FAILED_TO_ADD_ITEM);
 
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.addItem(item);
@@ -186,7 +186,7 @@ public class ItemsServiceImplTest {
         Mockito.doThrow(new RuntimeException(throwableMsg)).when(itemDAO).removeItem(itemId);
 
         expectedException.expect(ItemServiceException.class);
-        expectedException.expectMessage("Failed to remove item");
+        expectedException.expectMessage(ItemServiceErrorMessages.FAILED_TO_REMOVE_ITEM);
 
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.removeItem(itemId);
