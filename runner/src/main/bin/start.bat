@@ -13,11 +13,14 @@ rem JAVA_HOME=
 rem JVM arguments - GC log options
 set "JAVA_OPTS=%JAVA_OPTS% -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFileRotation -Xloggc:%gcLogFile%"
 
-rem JVM arguments - remote debug argument
-set "JAVA_OPTS=%JAVA_OPTS% -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
-
 rem JVM arguments - GC options. using parallel CPU(s) for young gen (with desired pause time) & concurrent mark and sweep for old gen
 set "JAVA_OPTS=%JAVA_OPTS% -XX:+UseParNewGC -XX:MaxGCPauseMillis=200 -XX:+UseConcMarkSweepGC"
+
+rem JVM arguments - Heap dump on OutOfMemory.
+set "JAVA_OPTS=%JAVA_OPTS% -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=%logsDir%"
+
+rem JVM arguments - remote debug argument
+set "JAVA_OPTS=%JAVA_OPTS% -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 
 rem JVM arguments - enable jmx remote access
 set "JAVA_OPTS=%JAVA_OPTS% -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false
