@@ -3,9 +3,9 @@ package sample.task.list.service;
 /**
  * Created by kopelevi on 19/10/2015.
  */
-public class ItemNotFoundDAOException extends ItemDAOException {
+public class ItemServiceItemNotFoundException extends RuntimeException {
 
-    public ItemNotFoundDAOException(int itemId) {
+    public ItemServiceItemNotFoundException(int itemId) {
         super("Item with ID: " + itemId + ", was not found.");
     }
 }

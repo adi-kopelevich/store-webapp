@@ -2,7 +2,7 @@ package sample.task.list.rest.resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sample.task.list.service.ItemNotFoundDAOException;
+import sample.task.list.service.ItemServiceItemNotFoundException;
 import sample.task.list.service.ItemsServiceImpl;
 import sample.task.list.service.TaskItem;
 import sample.task.list.service.TaskList;
@@ -42,7 +42,7 @@ public class ItemsResource {
     public TaskItem getItem(@PathParam("paramId") int itemId) {
         try {
             return new ItemsServiceImpl().getItem(itemId);
-        } catch (ItemNotFoundDAOException itemNotFoundDAOException) {
+        } catch (ItemServiceItemNotFoundException itemServiceItemNotFoundException) {
             throw new TaskItemNotFoundException(itemId);
         } catch (Exception e) {
             throw new TaskServiceUnavailableException(e);

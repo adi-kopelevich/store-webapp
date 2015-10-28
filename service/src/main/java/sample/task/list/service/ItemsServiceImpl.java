@@ -39,7 +39,7 @@ public class ItemsServiceImpl implements ItemsService {
     public TaskItem getItem(int itemId) {
         TaskItem taskItem = persistency.getItem(itemId);
         if (taskItem == null) {
-            throw new ItemNotFoundDAOException(itemId);
+            throw new ItemServiceItemNotFoundException(itemId);
         }
         return taskItem;
     }

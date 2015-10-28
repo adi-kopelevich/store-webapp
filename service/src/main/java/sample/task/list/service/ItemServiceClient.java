@@ -77,7 +77,7 @@ public class ItemServiceClient implements ItemsService {
             Invocation.Builder invocationBuilder = webTarget.path(String.valueOf(itemId)).request(DEFAULT_MEDIA_TYPE);
             return invocationBuilder.get(TaskItem.class);
         }catch (NotFoundException notFoundException){
-            throw new ItemNotFoundDAOException(itemId);
+            throw new ItemServiceItemNotFoundException(itemId);
         }
     }
 
