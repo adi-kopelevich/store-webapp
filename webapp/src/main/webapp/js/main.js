@@ -66,8 +66,8 @@ $(document).ready(function () {
         myItem.category = "home";
         // set a reminder to a week from now
         var aWeekFromNow = new Date();
-        aWeekFromNow.setDate(aWeekFromNow.getDate()+7);
-        myItem.reminder = aWeekFromNow.getTime();
+        aWeekFromNow.setDate(aWeekFromNow.getDate()+7)
+        myItem.reminder = aWeekFromNow.getTime(); // the time in millis (UTC)
         myItem.notes = ["note1", "note2"];
         return myItem;
     }
