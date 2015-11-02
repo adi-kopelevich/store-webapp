@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class ItemDAOMongoDBImpl implements ItemDAO {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDAOMongoDBImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDAOMongoDBImpl.class.getName());
 
     private static final String DB_NAME = "taskLists";
     private static final String COLLECTION_NAME = "items";

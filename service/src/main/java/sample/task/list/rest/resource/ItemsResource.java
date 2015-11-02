@@ -20,7 +20,7 @@ import java.util.List;
 @Path("/items")
 public class ItemsResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemsResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemsResource.class.getName());
 
     @Context
     UriInfo uriInfo;

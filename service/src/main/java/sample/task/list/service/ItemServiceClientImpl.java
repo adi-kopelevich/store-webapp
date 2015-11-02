@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class ItemServiceClientImpl implements ItemsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemServiceClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemServiceClientImpl.class.getName());
 
     private static final String DEFAULT_PROTOCOL = "http";
     private static final String DEFAULT_HOST = "localhost";

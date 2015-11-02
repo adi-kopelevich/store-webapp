@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ServiceConfiguration {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceConfiguration.class.getName());
 
     private static final String MONGO_HOST_ENV_KEY = "mongo.host";
     private static final String MONGO_PORT_ENV_KEY = "mongo.port";

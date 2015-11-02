@@ -22,7 +22,7 @@ import java.util.Properties;
  */
 public class EmbeddedServer {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(EmbeddedServer.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(EmbeddedServer.class.getName());
 
     private static final int DEFAULT_PORT = 8080;
     private static final int HTTP_IDLE_TIMEOUT = 30000;

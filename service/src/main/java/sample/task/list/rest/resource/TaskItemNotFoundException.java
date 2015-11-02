@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 public class TaskItemNotFoundException extends NotFoundException {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskItemNotFoundException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskItemNotFoundException.class.getName());
 
     public TaskItemNotFoundException(int itemId) {
         super(getErrorMsg(itemId));

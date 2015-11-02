@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ItemsServiceImpl implements ItemsService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemsServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemsServiceImpl.class.getName());
 
     private static final boolean IS_MONGO_ENABLED = ServiceConfiguration.isMongoEnabled();
 

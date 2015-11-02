@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
  */
 public class TaskServiceUnavailableException extends ServiceUnavailableException {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskServiceUnavailableException.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskServiceUnavailableException.class.getName());
 
     public TaskServiceUnavailableException(Exception e) {
         super(getErrorMsg(e));
