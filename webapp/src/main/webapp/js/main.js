@@ -61,7 +61,7 @@ $(document).ready(function () {
 
     function createItemObject(name) {
         var myItem = new Object();
-        myItem.id = Math.floor((Math.random() * 1000) + 1);
+        myItem.id = Math.floor((Math.random() * 1000) + 1); // positive id
         myItem.name = name;
         myItem.category = "home";
         // set a reminder to a week from now
