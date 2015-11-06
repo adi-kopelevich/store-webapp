@@ -6,6 +6,6 @@ package sample.task.list.service;
 public class ItemServiceItemNotFoundException extends ItemServiceException {
 
     public ItemServiceItemNotFoundException(int itemId) {
-        super("Item with ID: " + itemId + ", was not found.");
+        super(ItemServiceErrorMessages.ITEM_WITH_GIVEN_ID_WAS_NOT_FOUND + itemId);
     }
 }
