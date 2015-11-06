@@ -28,7 +28,7 @@ public class ItemServicePerfIT {
                 @Override
                 public void run() {
                     System.out.println(Thread.currentThread().getName() + ": started...");
-                    int itemId = new Random().nextInt();
+                    int itemId = getPositiveRandom();
                     String itemName = UUID.randomUUID().toString();
                     String itemCategory = UUID.randomUUID().toString();
                     long itemReminder = new Random().nextLong();
@@ -53,6 +53,10 @@ public class ItemServicePerfIT {
         } finally {
             itemsService.clearAll();
         }
+    }
+
+    private int getPositiveRandom() {
+        return new Random().nextInt(Integer.SIZE - 1);
     }
 
 }

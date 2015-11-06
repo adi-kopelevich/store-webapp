@@ -1,9 +1,7 @@
 package sample.task.list.service;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExpectedException;
 import sample.task.list.server.EmbeddedServer;
 
 import java.util.Arrays;
@@ -15,6 +13,9 @@ import java.util.UUID;
  * Created by kopelevi on 04/09/2015.
  */
 public class ItemsServiceClientIT {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     private static final String SERVER_ROOT = "./target/tmp";
     private static final int PORT = 8888;
@@ -67,7 +68,7 @@ public class ItemsServiceClientIT {
     public void whenAddItemThenItIsRetrivable() {
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
 
-        int itemId = new Random().nextInt();
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -87,13 +88,13 @@ public class ItemsServiceClientIT {
     public void whenAddingMultiItemsThenTheyAreRetrivable() {
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
 
-        int firstItemId = new Random().nextInt();
+        int firstItemId = getPositiveRandom();
         String firstItemName = UUID.randomUUID().toString();
         String firstItemCategory = UUID.randomUUID().toString();
         long firstItemReminder = new Random().nextLong();
         List<String> firstItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        int secondItemId = firstItemId + new Random().nextInt();
+        int secondItemId = getPositiveRandom();
         String secondItemName = UUID.randomUUID().toString();
         String secondItemCategory = UUID.randomUUID().toString();
         long secondItemReminder = new Random().nextLong();
@@ -115,14 +116,14 @@ public class ItemsServiceClientIT {
     @Test(expected = ItemServiceItemNotFoundException.class)
     public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() {
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
-        int itemId = new Random().nextInt();
+        int itemId = getPositiveRandom();
         itemsService.getItem(itemId);
     }
 
     @Test(expected = ItemServiceItemNotFoundException.class)
     public void whenDeletingItemThenItIsNotRetrivable() {
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
-        int itemId = new Random().nextInt();
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -138,7 +139,7 @@ public class ItemsServiceClientIT {
     @Test
     public void whenUpdatingAnItemThenChangesAreRetrivable() {
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
-        int itemId = new Random().nextInt();
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -156,6 +157,27 @@ public class ItemsServiceClientIT {
         Assert.assertEquals(updatedItem.getCategory(), retItem.getCategory());
         Assert.assertEquals(updatedItem.getReminder(), retItem.getReminder());
         Assert.assertEquals(updatedItem.getNotes(), retItem.getNotes());
+    }
+
+//    @Test
+//    public void whenGivingNegativeTaskIdThenItemServiceException() {
+//        ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
+//        int itemId = getPositiveRandom() * -1;
+//        String itemName = UUID.randomUUID().toString();
+//        String itemCategory = UUID.randomUUID().toString();
+//        long itemReminder = new Random().nextLong();
+//        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+//
+//        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
+//
+//        expectedException.expect(ItemServiceInvalidParamException.class);
+//        expectedException.expectMessage(ItemServiceErrorMessages.INVALID_PARAM_NON_POSITIVE_ID);
+//
+//        itemsService.addItem(item);
+//    }
+
+    private int getPositiveRandom() {
+        return new Random().nextInt(Integer.MAX_VALUE) + 1;
     }
 
 }

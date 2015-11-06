@@ -17,6 +17,10 @@ public class ItemsServiceImpl implements ItemsService {
     private final ItemDAO persistency;
 
     public ItemsServiceImpl() {
+        this.persistency = getItemDAO();
+    }
+
+    private ItemDAO getItemDAO() {
         ItemDAO itemDAO;
         if (IS_MONGO_ENABLED) {
             LOGGER.debug("MongoDB conf is set to enabled, going to use mongoDB store...");
@@ -25,7 +29,7 @@ public class ItemsServiceImpl implements ItemsService {
             LOGGER.debug("MongoDB conf is set to disabled, going to use local map store...");
             itemDAO = ItemDAOMapImpl.getInstance();
         }
-        this.persistency = itemDAO;
+        return itemDAO;
     }
 
     protected ItemsServiceImpl(ItemDAO itemDAO) {
@@ -54,6 +58,7 @@ public class ItemsServiceImpl implements ItemsService {
     }
 
     public void addItem(TaskItem taskItem) {
+        validateTaskItem(taskItem);
         try {
             persistency.putItem(taskItem);
         } catch (Exception e) {
@@ -70,6 +75,7 @@ public class ItemsServiceImpl implements ItemsService {
     }
 
     public void updateItem(TaskItem taskItem) {
+        validateTaskItem(taskItem);
         try {
             persistency.putItem(taskItem);
         } catch (Exception e) {
@@ -85,5 +91,11 @@ public class ItemsServiceImpl implements ItemsService {
         }
     }
 
+    private void validateTaskItem(TaskItem taskItem) {
+        int taskItemId = taskItem.getId();
+        if (taskItemId <= 0) {
+            throw new ItemServiceInvalidParamException(ItemServiceErrorMessages.INVALID_PARAM_NON_POSITIVE_ID + taskItemId);
+        }
+    }
 
 }

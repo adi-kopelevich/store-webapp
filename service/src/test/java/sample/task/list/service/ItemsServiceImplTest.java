@@ -17,8 +17,8 @@ public class ItemsServiceImplTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void whenAddItemThenItIsRetrivable()  {
-        int itemId = new Random().nextInt();
+    public void whenAddItemThenItIsRetrivable() {
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -42,18 +42,18 @@ public class ItemsServiceImplTest {
     }
 
     @Test(expected = ItemServiceItemNotFoundException.class)
-    public void whenGettingNotExistsThenNullIsReturned()  {
+    public void whenGettingNotExistsThenNullIsReturned() {
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         Mockito.when(itemDAO.getItem(Mockito.anyInt())).thenReturn(null);
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
 
-        int itemId = new Random().nextInt();
+        int itemId = getPositiveRandom();
         itemsService.getItem(itemId);
     }
 
     @Test(expected = ItemServiceItemNotFoundException.class)
-    public void whenDeletingExistingItemAndRetriveThenItemThenNullIsReturned()  {
-        int itemId = new Random().nextInt();
+    public void whenDeletingExistingItemAndRetriveThenItemThenNullIsReturned() {
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -76,8 +76,8 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenUpdateingAnItemThenChangesAreRetrivable()  {
-        int itemId = new Random().nextInt();
+    public void whenUpdateingAnItemThenChangesAreRetrivable() {
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -105,14 +105,14 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenAddingMultiItemsThenAllItemsAreReturned()  {
-        int firstItemId = new Random().nextInt();
+    public void whenAddingMultiItemsThenAllItemsAreReturned() {
+        int firstItemId = getPositiveRandom();
         String firstItemName = UUID.randomUUID().toString();
         String firstItemCategory = UUID.randomUUID().toString();
         long firstItemReminder = new Random().nextLong();
         List<String> firstItemTags = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 
-        int secondItemId = firstItemId + new Random().nextInt();
+        int secondItemId = getPositiveRandom();
         String secondItemName = UUID.randomUUID().toString();
         String secondItemCategory = UUID.randomUUID().toString();
         long secondItemReminder = new Random().nextLong();
@@ -142,7 +142,7 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenGetItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException()  {
+    public void whenGetItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException() {
         int itemId = new Random().nextInt();
 
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
@@ -157,8 +157,8 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenPutItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException()  {
-        int itemId = new Random().nextInt();
+    public void whenPutItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException() {
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -178,8 +178,8 @@ public class ItemsServiceImplTest {
     }
 
     @Test
-    public void whenDeleteItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException()  {
-        int itemId = new Random().nextInt();
+    public void whenDeleteItemThrowExceptionThenItIsPropagatedToClientAsItemServiceException() {
+        int itemId = getPositiveRandom();
 
         ItemDAO itemDAO = Mockito.mock(ItemDAO.class);
         String throwableMsg = UUID.randomUUID().toString();
@@ -190,6 +190,27 @@ public class ItemsServiceImplTest {
 
         ItemsService itemsService = new ItemsServiceImpl(itemDAO);
         itemsService.removeItem(itemId);
+    }
+
+    @Test
+    public void whenGivingNegativeTaskIdThenItemServiceException() {
+        int itemId = getPositiveRandom() * -1;
+        String itemName = UUID.randomUUID().toString();
+        String itemCategory = UUID.randomUUID().toString();
+        long itemReminder = new Random().nextLong();
+        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
+
+        expectedException.expect(ItemServiceInvalidParamException.class);
+        expectedException.expectMessage(ItemServiceErrorMessages.INVALID_PARAM_NON_POSITIVE_ID);
+
+        ItemsService itemsService = new ItemsServiceImpl();
+        itemsService.addItem(item);
+    }
+
+    private int getPositiveRandom() {
+        return new Random().nextInt(Integer.MAX_VALUE) + 1;
     }
 
 }

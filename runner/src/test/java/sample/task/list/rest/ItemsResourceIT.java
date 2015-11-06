@@ -6,9 +6,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import sample.task.list.server.EmbeddedServer;
-import sample.task.list.service.ItemServiceClientImpl;
-import sample.task.list.service.ItemsService;
-import sample.task.list.service.TaskItem;
+import sample.task.list.service.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -83,7 +81,7 @@ public class ItemsResourceIT {
     }
 
     @Test
-    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown()  {
+    public void whenGettingNotExistsThenNotFoundExecptionWillBeThrown() {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);
         int itemId = new Random().nextInt();
@@ -96,7 +94,7 @@ public class ItemsResourceIT {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);
 
-        int itemId = new Random().nextInt();
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -122,7 +120,7 @@ public class ItemsResourceIT {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
         WebTarget webTarget = client.target(RESOURCE_URL);
 
-        int itemId = new Random().nextInt();
+        int itemId = getPositiveRandom();
         String itemName = UUID.randomUUID().toString();
         String itemCategory = UUID.randomUUID().toString();
         long itemReminder = new Random().nextLong();
@@ -145,5 +143,26 @@ public class ItemsResourceIT {
         Assert.assertEquals(item.getNotes(), retItem.getNotes());
     }
 
+    @Test
+    public void whenAddItemWithNegativeIdThenItemServiceException() {
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).build();
+        WebTarget webTarget = client.target(RESOURCE_URL);
+
+        int itemId = getPositiveRandom() * -1;
+        String itemName = UUID.randomUUID().toString();
+        String itemCategory = UUID.randomUUID().toString();
+        long itemReminder = new Random().nextLong();
+        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
+
+        // add object and verify status
+        Response postResponse = webTarget.request().post(Entity.entity(item, MEDIA_TYPE));
+        Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), postResponse.getStatus());
+    }
+
+    private int getPositiveRandom() {
+        return new Random().nextInt(Integer.MAX_VALUE) + 1;
+    }
 
 }

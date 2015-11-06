@@ -1,9 +1,6 @@
 package sample.task.list.rest.resource;
 
-import sample.task.list.service.ItemServiceItemNotFoundException;
-import sample.task.list.service.ItemsServiceImpl;
-import sample.task.list.service.TaskItem;
-import sample.task.list.service.TaskList;
+import sample.task.list.service.*;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -48,6 +45,8 @@ public class ItemsResource {
         try {
             new ItemsServiceImpl().addItem(taskItem);
             return Response.created(uriInfo.getRequestUri()).build();
+        } catch (ItemServiceInvalidParamException itemServiceInvalidParamException) {
+            throw new ItemInvalidException(itemServiceInvalidParamException.getMessage());
         } catch (Exception e) {
             throw new ItemsServiceUnavailableException(e);
         }
@@ -70,6 +69,8 @@ public class ItemsResource {
         try {
             new ItemsServiceImpl().updateItem(taskItem);
             return Response.ok().build();
+        } catch (ItemServiceInvalidParamException itemServiceInvalidParamException) {
+            throw new ItemInvalidException(itemServiceInvalidParamException.getMessage());
         } catch (Exception e) {
             throw new ItemsServiceUnavailableException(e);
         }
