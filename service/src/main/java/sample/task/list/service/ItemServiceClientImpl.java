@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -88,11 +89,16 @@ public class ItemServiceClientImpl implements ItemsService {
     }
 
     public void addItem(TaskItem item) {
+        Response response;
         try {
             Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
-            invocationBuilder.post(Entity.entity(item, DEFAULT_MEDIA_TYPE));
+            response = invocationBuilder.post(Entity.entity(item, DEFAULT_MEDIA_TYPE));
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_ADD_ITEM + item.toString(), e);
+        }
+
+        if (Response.Status.BAD_REQUEST.getStatusCode() == response.getStatus()) {
+            throw new ItemServiceInvalidParamException(response.getStatusInfo().getReasonPhrase());
         }
     }
 
@@ -106,11 +112,16 @@ public class ItemServiceClientImpl implements ItemsService {
     }
 
     public void updateItem(TaskItem item) {
+        Response response;
         try {
             Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
-            invocationBuilder.put(Entity.entity(item, DEFAULT_MEDIA_TYPE));
+            response = invocationBuilder.put(Entity.entity(item, DEFAULT_MEDIA_TYPE));
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_UPDATE_ITEM + item.toString(), e);
+        }
+
+        if (Response.Status.BAD_REQUEST.getStatusCode() == response.getStatus()) {
+            throw new ItemServiceInvalidParamException(response.getStatusInfo().getReasonPhrase());
         }
     }
 

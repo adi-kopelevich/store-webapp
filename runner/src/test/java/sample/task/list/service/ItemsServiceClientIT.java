@@ -159,22 +159,22 @@ public class ItemsServiceClientIT {
         Assert.assertEquals(updatedItem.getNotes(), retItem.getNotes());
     }
 
-//    @Test
-//    public void whenGivingNegativeTaskIdThenItemServiceException() {
-//        ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
-//        int itemId = getPositiveRandom() * -1;
-//        String itemName = UUID.randomUUID().toString();
-//        String itemCategory = UUID.randomUUID().toString();
-//        long itemReminder = new Random().nextLong();
-//        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-//
-//        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
-//
-//        expectedException.expect(ItemServiceInvalidParamException.class);
+    @Test
+    public void whenGivingNegativeTaskIdThenItemServiceException() {
+        ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
+        int itemId = getPositiveRandom() * -1;
+        String itemName = UUID.randomUUID().toString();
+        String itemCategory = UUID.randomUUID().toString();
+        long itemReminder = new Random().nextLong();
+        List<String> itemNotes = Arrays.asList(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+
+        TaskItem item = new TaskItem(itemId, itemName, itemCategory, itemReminder, itemNotes);
+
+        expectedException.expect(ItemServiceInvalidParamException.class);
 //        expectedException.expectMessage(ItemServiceErrorMessages.INVALID_PARAM_NON_POSITIVE_ID);
-//
-//        itemsService.addItem(item);
-//    }
+
+        itemsService.addItem(item);
+    }
 
     private int getPositiveRandom() {
         return new Random().nextInt(Integer.MAX_VALUE) + 1;
