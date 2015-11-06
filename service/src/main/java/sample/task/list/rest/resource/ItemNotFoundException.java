@@ -11,7 +11,6 @@ import javax.ws.rs.core.Response;
  */
 public class ItemNotFoundException extends NotFoundException {
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemNotFoundException.class.getName());
 
     public ItemNotFoundException(int itemId) {
