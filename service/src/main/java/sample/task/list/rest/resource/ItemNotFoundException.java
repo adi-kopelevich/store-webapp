@@ -9,12 +9,12 @@ import javax.ws.rs.core.Response;
 /**
  * Created by kopelevi on 23/10/2015.
  */
-public class TaskItemNotFoundException extends NotFoundException {
+public class ItemNotFoundException extends NotFoundException {
 
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskItemNotFoundException.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemNotFoundException.class.getName());
 
-    public TaskItemNotFoundException(int itemId) {
+    public ItemNotFoundException(int itemId) {
         super(getErrorMsg(itemId));
     }
 

@@ -9,11 +9,11 @@ import javax.ws.rs.core.Response;
 /**
  * Created by kopelevi on 23/10/2015.
  */
-public class TaskServiceUnavailableException extends ServiceUnavailableException {
+public class ItemsServiceUnavailableException extends ServiceUnavailableException {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskServiceUnavailableException.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemsServiceUnavailableException.class.getName());
 
-    public TaskServiceUnavailableException(Exception e) {
+    public ItemsServiceUnavailableException(Exception e) {
         super(getErrorMsg(e));
     }
 
