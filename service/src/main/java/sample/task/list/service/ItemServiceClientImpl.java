@@ -70,8 +70,8 @@ public class ItemServiceClientImpl implements ItemsService {
     public List<TaskItem> getAllItems() {
         try {
             Invocation.Builder invocationBuilder = webTarget.request(DEFAULT_MEDIA_TYPE);
-            TaskList taskList = invocationBuilder.get(TaskList.class);
-            return taskList.getItems();
+            TaskItems taskItems = invocationBuilder.get(TaskItems.class);
+            return taskItems.getItems();
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_GET_ALL, e);
         }

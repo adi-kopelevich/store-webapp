@@ -17,10 +17,10 @@ public class ItemsResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public TaskList getAllItems() {
+    public TaskItems getAllItems() {
         try {
             List<TaskItem> items = new ItemsServiceImpl().getAllItems();
-            return new TaskList(items);
+            return new TaskItems(items);
         } catch (Exception e) {
             throw new ItemsServiceUnavailableException(e);
         }
