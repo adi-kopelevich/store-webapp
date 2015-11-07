@@ -41,7 +41,8 @@
         </fileSet>
 
     </fileSets>
-    <!-- lib dir -->
+
+    <!-- copy runner dependencies to lib dir -->
     <dependencySets>
         <dependencySet>
             <outputDirectory>/${webapp.dir}/WEB-INF/lib</outputDirectory>
