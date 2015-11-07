@@ -14,10 +14,10 @@ public class ItemsServiceImpl implements ItemsService {
 
     private static final boolean IS_MONGO_ENABLED = ServiceConfiguration.isMongoEnabled();
 
-    private final ItemDAO persistency;
+    private final ItemDAO itemDAO;
 
     public ItemsServiceImpl() {
-        this.persistency = getItemDAO();
+        this.itemDAO = getItemDAO();
     }
 
     private ItemDAO getItemDAO() {
@@ -32,13 +32,14 @@ public class ItemsServiceImpl implements ItemsService {
         return itemDAO;
     }
 
+    // mainly for testing purposes
     protected ItemsServiceImpl(ItemDAO itemDAO) {
-        this.persistency = itemDAO;
+        this.itemDAO = itemDAO;
     }
 
     public List<TaskItem> getAllItems() {
         try {
-            return persistency.getItems();
+            return itemDAO.getItems();
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_GET_ALL, e);
         }
@@ -47,7 +48,7 @@ public class ItemsServiceImpl implements ItemsService {
     public TaskItem getItem(int itemId) {
         TaskItem taskItem;
         try {
-            taskItem = persistency.getItem(itemId);
+            taskItem = itemDAO.getItem(itemId);
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_GET_ITEM + itemId, e);
         }
@@ -60,7 +61,7 @@ public class ItemsServiceImpl implements ItemsService {
     public void addItem(TaskItem taskItem) {
         validateTaskItem(taskItem);
         try {
-            persistency.putItem(taskItem);
+            itemDAO.putItem(taskItem);
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_ADD_ITEM + taskItem.toString(), e);
         }
@@ -68,7 +69,7 @@ public class ItemsServiceImpl implements ItemsService {
 
     public void removeItem(int itemId) {
         try {
-            persistency.removeItem(itemId);
+            itemDAO.removeItem(itemId);
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_REMOVE_ITEM + itemId, e);
         }
@@ -77,7 +78,7 @@ public class ItemsServiceImpl implements ItemsService {
     public void updateItem(TaskItem taskItem) {
         validateTaskItem(taskItem);
         try {
-            persistency.putItem(taskItem);
+            itemDAO.putItem(taskItem);
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_UPDATE_ITEM + taskItem.toString(), e);
         }
@@ -85,7 +86,7 @@ public class ItemsServiceImpl implements ItemsService {
 
     public void clearAll() {
         try {
-            persistency.clear();
+            itemDAO.clear();
         } catch (Exception e) {
             throw new ItemServiceException(ItemServiceErrorMessages.FAILED_TO_CLEAR_ALL, e);
         }
