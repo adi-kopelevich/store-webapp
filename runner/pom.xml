@@ -10,6 +10,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>task-list-runner</artifactId>
+    <description>Generates the artifacts to hold the complete application folder with all required modules</description>
+    <packaging>jar</packaging>
 
     <properties>
         <tmp.dir>tmp</tmp.dir>
@@ -82,7 +84,7 @@
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
-
+        <!-- Generated manifest to main jar -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -91,14 +93,15 @@
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix></classpathPrefix>
+                            <classpathPrefix></classpathPrefix>  <!-- Running within the classpath -->
                             <mainClass>sample.task.list.server.ServiceLauncher</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
-            <!-- break dependencies to tmp dir -->
+            <!-- Extract dependencies to folders under tmp dir -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -133,7 +136,7 @@
                 </executions>
             </plugin>
 
-            <!-- assembly from tmp -->
+            <!-- Assemble final app structure on top of tmp dir -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
