@@ -71,7 +71,7 @@ public class TaskItem {
                 .toString();
     }
 
-    // mainly for comparison within a collection
+    // mainly for comparison and order within a collection
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
