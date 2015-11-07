@@ -17,7 +17,7 @@ public class ItemsServiceClientIT {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private static final String SERVER_ROOT = "./target/tmp";
+    private static final String SERVER_ROOT = "./runner/target/tmp";
     private static final int PORT = 8888;
     private static final String HOST = "localhost";
 
@@ -29,8 +29,8 @@ public class ItemsServiceClientIT {
 
     @Before
     public void setUp() {
-//        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
-//        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
+//        itemsService = new ItemServiceClientImpl("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
+//                ItemsService itemsService = new ItemServiceClientImpl("ec2-54-165-228-48.compute-1.amazonaws.com", 8080);  // Amazon WS
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
         itemsService.clearAll();
     }

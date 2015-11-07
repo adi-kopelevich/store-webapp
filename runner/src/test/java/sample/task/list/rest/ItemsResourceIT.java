@@ -24,7 +24,7 @@ import java.util.UUID;
  */
 public class ItemsResourceIT {
 
-    private static final String SERVER_ROOT = "./target/tmp";
+    private static final String SERVER_ROOT = "./runner/target/tmp";
     private static final String PROTOCOL = "http";
     private static final String HOST = "localhost";
     private static final int PORT = 8888;
@@ -46,7 +46,7 @@ public class ItemsResourceIT {
     @Before
     public void setUp() {
 //        itemsService = new ItemServiceClient("https", "powerful-woodland-5357.herokuapp.com", "", "");  // Heroku
-//        itemsService = new ItemServiceClient("http", "ec2-54-165-228-48.compute-1.amazonaws.com", "8080", "task-list");  // Amazon WS
+//        ItemsService itemsService = new ItemServiceClientImpl("ec2-54-165-228-48.compute-1.amazonaws.com", 8080);  // Amazon WS
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
         itemsService.clearAll();
     }
