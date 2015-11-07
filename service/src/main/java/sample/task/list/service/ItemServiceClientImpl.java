@@ -48,7 +48,7 @@ public class ItemServiceClientImpl implements ItemsService {
 
     private String buildServiceURL(String protocol, String hostname, int port, String context) {
         StringBuffer serviceURL = new StringBuffer(protocol).append("://").append(hostname);
-
+        // validate and concat port
         if (port > 0 && port <= MAX_PORT) {
             serviceURL.append(":").append(port);
         } else {
@@ -56,11 +56,11 @@ public class ItemServiceClientImpl implements ItemsService {
             LOGGER.error(msg);
             throw new IllegalArgumentException(msg);
         }
-
+        // handle context
         if (context != null && !context.isEmpty()) {
             serviceURL.append("/").append(context);
         }
-
+        // concat rest app and resource path
         serviceURL.append("/").append(APP_PATH).append("/").append(RESOUCEE);
 
         return serviceURL.toString();
