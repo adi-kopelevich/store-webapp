@@ -20,10 +20,11 @@ public class ItemServicePerfIT {
 
     @Test
     public void whenAddItemThenItIsRetrievable() {
+//        ItemsService itemsService = new ItemServiceClientImpl("ec2-54-165-228-48.compute-1.amazonaws.com", 8080);  // Amazon WS
         ItemsService itemsService = new ItemServiceClientImpl(HOST, PORT);
         itemsService.clearAll();
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -56,7 +57,7 @@ public class ItemServicePerfIT {
     }
 
     private int getPositiveRandom() {
-        return new Random().nextInt(Integer.SIZE - 1);
+        return new Random().nextInt(Integer.MAX_VALUE) + 1;
     }
 
 }
