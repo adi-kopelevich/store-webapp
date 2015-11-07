@@ -17,7 +17,7 @@ JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFi
 JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:MaxGCPauseMillis=200 -XX:+UseConcMarkSweepGC"
 
 # JVM arguments - Heap dump on OutOfMemory.
-JAVA_OPTS=$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$logsDir"
+JAVA_OPTS="$JAVA_OPTS -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$logsDir"
 
 # JVM arguments - remote debug argument
 JAVA_OPTS="$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
