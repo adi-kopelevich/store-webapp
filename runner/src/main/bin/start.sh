@@ -11,7 +11,7 @@ mkdir -p -- "$gcLogFile"
 #JAVA_HOME=
 
 # JVM arguments - GC log options.
-JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFileRotation -Xloggc:$gcLogFile"
+JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=5M -Xloggc:$gcLogFile"
 
 # JVM arguments - GC options. using parallel CPU(s) for young (with desired pause time) & concurrent mark and sweep for old gen)
 JAVA_OPTS="$JAVA_OPTS -XX:+UseParNewGC -XX:MaxGCPauseMillis=200 -XX:+UseConcMarkSweepGC"

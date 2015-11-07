@@ -11,7 +11,7 @@ rem Should be set in case  not set by env
 rem JAVA_HOME=
 
 rem JVM arguments - GC log options
-set "JAVA_OPTS=%JAVA_OPTS% -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFileRotation -Xloggc:%gcLogFile%"
+set "JAVA_OPTS=%JAVA_OPTS% -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:-UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=5M -Xloggc:%gcLogFile%"
 
 rem JVM arguments - GC options. using parallel CPU(s) for young gen (with desired pause time) & concurrent mark and sweep for old gen
 set "JAVA_OPTS=%JAVA_OPTS% -XX:+UseParNewGC -XX:MaxGCPauseMillis=200 -XX:+UseConcMarkSweepGC"
