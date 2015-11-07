@@ -58,7 +58,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
     public TaskItem getItem(int itemId) {
         try {
             TaskItem ret;
-            BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
+            BasicDBObject searchQuery = getSearchQueryForItemId(itemId);
             DBCursor queryResult = collection.find(searchQuery);
             if (queryResult.hasNext()) {
                 DBObject retObj = queryResult.next();
@@ -99,7 +99,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
             }
         } catch (DuplicateKeyException duplicateKeyException) {
             try {
-                WriteResult result = collection.update(getUniqueContactSearchQuery(item.getId()), toDBObject(item));
+                WriteResult result = collection.update(getSearchQueryForItemId(item.getId()), toDBObject(item));
                 if (result.getN() == 1) {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("Item updated successfully: " + toDBObject(item).toString());
@@ -118,7 +118,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
     @Override
     public void removeItem(int itemId) {
         try {
-            BasicDBObject searchQuery = getUniqueContactSearchQuery(itemId);
+            BasicDBObject searchQuery = getSearchQueryForItemId(itemId);
             collection.remove(searchQuery);
         } catch (Exception e) {
             throw new ItemDAOException("Failed to delete item with ID from DB: " + itemId, e);
@@ -147,7 +147,7 @@ public class ItemDAOMongoDBImpl implements ItemDAO {
                 .readValue(taskItemJson, TaskItem.class);
     }
 
-    private BasicDBObject getUniqueContactSearchQuery(int taskItemId) {
+    private BasicDBObject getSearchQueryForItemId(int taskItemId) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put(UNIQUE_INDEX, taskItemId);
         return searchQuery;
