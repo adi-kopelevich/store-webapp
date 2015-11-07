@@ -5,7 +5,7 @@ logsDir=../logs
 gcLogFile=$logsDir/gc.log
 
 # Create the logs directory
-mkdir -p -- "$gcLogFile"
+mkdir -p -- "$logsDir"
 
 # Should be set in case  not set by env
 #JAVA_HOME=
