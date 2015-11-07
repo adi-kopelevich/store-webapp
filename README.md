@@ -30,9 +30,9 @@ Getting started...
 
 ### Run application using bash scripts (instructions are for Linux...) 
 
-1. $ mkdir app
-2. $ tar -xvf ./runner/task-list-app-1.0-SNAPSHOT.tar.gz --directory ./app
-3. $ ./app/bin/start.sh 
+1. $ cd /task-list-app/runner/target/task-list-app-1.0-SNAPSHOT
+2. $ ./bin/start.sh 
+(An alternative is to use the runner/target/task-list-app-1.0-SNAPSHOT.tar.gz to export to a desired location)
 
 #### Please note:
 In case you want the application to work In-memory instead of using a mongoDB instance for persistence, 
