@@ -5,14 +5,14 @@ import java.util.List;
 /**
  * Created by kopelevi on 16/10/2015.
  */
-public class TaskList {
+public class TaskItems {
 
     private List<TaskItem> items;
 
-    public TaskList() { //for serialization
+    public TaskItems() { //for serialization
     }
 
-    public TaskList(List<TaskItem> items) { //for serialization
+    public TaskItems(List<TaskItem> items) { //for serialization
         this.items = items;
     }
 
