@@ -47,7 +47,7 @@
     -->
     <Get name="ThreadPool">
         <Set name="minThreads" type="int">
-            <Property name="jetty.threadPool.minThreads" deprecated="threads.min" default="10"/>
+            <Property name="jetty.threadPool.minThreads" deprecated="threads.min" default="20"/>
         </Set>
         <Set name="maxThreads" type="int">
             <Property name="jetty.threadPool.maxThreads" deprecated="threads.max" default="200"/>
