@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>task-list-conf</artifactId>
+    <description>Generates conf directory, where general configuration can be managed (jetty, log4j, mongoDB, etc')</description>
     <packaging>pom</packaging>
 
     <build>
