@@ -40,11 +40,7 @@ public class ItemDAOMongoDBImplIT {
         persistency.putItem(item);
         TaskItem retItem = persistency.getItem(itemId);
 
-        Assert.assertEquals(item.getId(), retItem.getId());
-        Assert.assertEquals(item.getName(), retItem.getName());
-        Assert.assertEquals(item.getCategory(), retItem.getCategory());
-        Assert.assertEquals(item.getReminder(), retItem.getReminder());
-        Assert.assertEquals(item.getNotes(), retItem.getNotes());
+        Assert.assertEquals(item, retItem);
     }
 
     @Test
@@ -86,11 +82,7 @@ public class ItemDAOMongoDBImplIT {
 
         TaskItem retItem = persistency.getItem(itemId);
 
-        Assert.assertEquals(updatedItem.getId(), retItem.getId());
-        Assert.assertEquals(updatedItem.getName(), retItem.getName());
-        Assert.assertEquals(updatedItem.getCategory(), retItem.getCategory());
-        Assert.assertEquals(updatedItem.getReminder(), retItem.getReminder());
-        Assert.assertEquals(updatedItem.getNotes(), retItem.getNotes());
+        Assert.assertEquals(updatedItem, retItem);
     }
 
     @Test

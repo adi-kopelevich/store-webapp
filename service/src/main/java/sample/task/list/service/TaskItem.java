@@ -71,7 +71,7 @@ public class TaskItem {
                 .toString();
     }
 
-    // for comparission over http client-->server
+    // mainly for comparison within a collection
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

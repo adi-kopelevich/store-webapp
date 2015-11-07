@@ -136,11 +136,7 @@ public class ItemsResourceIT {
         Assert.assertEquals(Response.Status.OK.getStatusCode(), getResponse.getStatus());
 
         TaskItem retItem = getResponse.readEntity(TaskItem.class);
-        Assert.assertEquals(item.getId(), retItem.getId());
-        Assert.assertEquals(item.getName(), retItem.getName());
-        Assert.assertEquals(item.getCategory(), retItem.getCategory());
-        Assert.assertEquals(item.getReminder(), retItem.getReminder());
-        Assert.assertEquals(item.getNotes(), retItem.getNotes());
+        Assert.assertEquals(item, retItem);
     }
 
     @Test
