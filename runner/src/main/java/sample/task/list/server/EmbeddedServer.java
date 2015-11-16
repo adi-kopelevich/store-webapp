@@ -111,7 +111,7 @@ public class EmbeddedServer {
         try (FileInputStream fis = new FileInputStream(getAppConfFilePath(appRootPath))) {
             Properties appProperties = new Properties();
             appProperties.load(fis);
-            appProperties.stringPropertyNames().stream()
+            appProperties.stringPropertyNames().stream().parallel()
                     .map(key -> System.setProperty(key, appProperties.getProperty(key)))
                     .count();
         } catch (Exception e) {

@@ -28,7 +28,7 @@ public class ItemDAOMapImpl implements ItemDAO {
     }
 
     public List<TaskItem> getItems() {
-        return itemsMap.entrySet().stream()
+        return itemsMap.entrySet().stream().parallel()
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
