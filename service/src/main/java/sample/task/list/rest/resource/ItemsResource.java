@@ -1,5 +1,7 @@
 package sample.task.list.rest.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import sample.task.list.service.*;
 
 import javax.ws.rs.*;
@@ -15,6 +17,8 @@ import java.util.List;
 @Path("/items")
 public class ItemsResource {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemsResource.class.getName());
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public TaskItems getAllItems() {
@@ -22,7 +26,9 @@ public class ItemsResource {
             List<TaskItem> items = new ItemsServiceImpl().getAllItems();
             return new TaskItems(items);
         } catch (Exception e) {
-            throw new ItemsServiceUnavailableException(e);
+            String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
+            LOGGER.error(errMsg, e);
+            throw new ServiceUnavailableException(errMsg);
         }
     }
 
@@ -33,9 +39,13 @@ public class ItemsResource {
         try {
             return new ItemsServiceImpl().getItem(itemId);
         } catch (ItemServiceItemNotFoundException itemServiceItemNotFoundException) {
-            throw new ItemNotFoundException(itemId);
+            String errMsg = Response.Status.NOT_FOUND + " - " + "Item with ID: " + itemId;
+            LOGGER.error(errMsg, itemServiceItemNotFoundException);
+            throw new NotFoundException(errMsg, itemServiceItemNotFoundException);
         } catch (Exception e) {
-            throw new ItemsServiceUnavailableException(e);
+            String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
+            LOGGER.error(errMsg, e);
+            throw new ServiceUnavailableException(errMsg);
         }
     }
 
@@ -46,9 +56,13 @@ public class ItemsResource {
             new ItemsServiceImpl().addItem(taskItem);
             return Response.created(uriInfo.getRequestUri()).build();
         } catch (ItemServiceInvalidParamException itemServiceInvalidParamException) {
-            throw new ItemInvalidException(itemServiceInvalidParamException.getMessage());
+            String errMsg = Response.Status.BAD_REQUEST + " - " + itemServiceInvalidParamException.getMessage();
+            LOGGER.error(errMsg, itemServiceInvalidParamException);
+            throw new BadRequestException(errMsg);
         } catch (Exception e) {
-            throw new ItemsServiceUnavailableException(e);
+            String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
+            LOGGER.error(errMsg, e);
+            throw new ServiceUnavailableException(errMsg);
         }
     }
 
@@ -59,7 +73,9 @@ public class ItemsResource {
             new ItemsServiceImpl().removeItem(itemId);
             return Response.noContent().build();
         } catch (Exception e) {
-            throw new ItemsServiceUnavailableException(e);
+            String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
+            LOGGER.error(errMsg, e);
+            throw new ServiceUnavailableException(errMsg);
         }
     }
 
@@ -70,9 +86,13 @@ public class ItemsResource {
             new ItemsServiceImpl().updateItem(taskItem);
             return Response.ok().build();
         } catch (ItemServiceInvalidParamException itemServiceInvalidParamException) {
-            throw new ItemInvalidException(itemServiceInvalidParamException.getMessage());
+            String errMsg = Response.Status.BAD_REQUEST + " - " + itemServiceInvalidParamException.getMessage();
+            LOGGER.error(errMsg, itemServiceInvalidParamException);
+            throw new BadRequestException(errMsg, itemServiceInvalidParamException);
         } catch (Exception e) {
-            throw new ItemsServiceUnavailableException(e);
+            String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
+            LOGGER.error(errMsg, e);
+            throw new ServiceUnavailableException(errMsg);
         }
     }
 
@@ -82,7 +102,9 @@ public class ItemsResource {
             new ItemsServiceImpl().clearAll();
             return Response.noContent().build();
         } catch (Exception e) {
-            throw new ItemsServiceUnavailableException(e);
+            String errMsg = Response.Status.SERVICE_UNAVAILABLE + " - " + e.getMessage();
+            LOGGER.error(errMsg, e);
+            throw new ServiceUnavailableException(errMsg);
         }
     }
 
